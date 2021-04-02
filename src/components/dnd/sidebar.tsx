@@ -6,19 +6,35 @@ const sidebar = () => {
     };
 
     return (
-        <aside>
-            <div className="description">Operators</div>
-
-            <div className="s3" onDragStart={(event) => onDragStart(event, 'S3')} draggable>
-                AWS S3
-            </div>
-            <div className="kafka" onDragStart={(event) => onDragStart(event, 'Kafka')} draggable>
-                Kafka
-            </div>
-            <div className="elasticsearch" onDragStart={(event) => onDragStart(event, 'Elasticsearch')} draggable>
-                Elasticsearch
-            </div>
-        </aside>
+        <div className="sidebar">
+            <table className={"sidebar-table"}>
+                <th>Operators</th>
+                <tr>
+                        <td>
+                            <div className="s3" onDragStart={(event) => onDragStart(event, 'S3')} draggable/>
+                        </td>
+                        <td>
+                            <span>AWS S3</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div className="kafka" onDragStart={(event) => onDragStart(event, 'Kafka')} draggable/>
+                        </td>
+                        <td>
+                            <span>Kafka</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div className="elasticsearch" onDragStart={(event) => onDragStart(event, 'Elasticsearch')} draggable/>
+                        </td>
+                        <td>
+                            <span>Elasticsearch</span>
+                        </td>
+                    </tr>
+                </table>
+        </div>
     );
 };
 export default sidebar;

@@ -75,7 +75,7 @@ const DnDFlow = () => {
                         onDragOver={onDragOver}
                         nodeTypes={nodeTypes}
                     >
-                        <Controls />
+                    <Controls />
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>

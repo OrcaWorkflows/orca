@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 
@@ -16,20 +16,11 @@ const routes = [
 ];
 
 const Header = withRouter(({ history, location }) => {
-    const onChange = (event: ChangeEvent<HTMLSelectElement>) => history.push(event.target.value);
-
     return (
-        <header>
-            <a className="logo" href="assets/orca.jpeg">
-        ORCA
-    </a>
-    <select defaultValue={location.pathname} onChange={onChange}>
-        {routes.map((route) => (
-                <option value={route.path} key={route.path}>
-            {route.path === '/' ? 'orca workflow manager' : route.path.substr(1, route.path.length)}
-            </option>
-))}
-    </select>
+    <header>
+        <a className="logo">
+            ORCA Workflow Manager
+        </a>
     </header>
 );
 });

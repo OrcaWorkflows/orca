@@ -2,6 +2,7 @@
     flex-direction: column;
     display: flex;
     height: 100%;
+    background: #121817;
 }
 
 .dndflow aside {
@@ -13,60 +14,6 @@
 
 .dndflow aside .description {
     margin-bottom: 10px;
-}
-
-.s3 {
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 8px;
-
-    background: #ffb84d;
-    text-align: center;
-
-    font: 15px Arial, sans-serif;
-}
-
-.kafka {
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 8px;
-
-    background: #A4A4A4;
-    text-align: center;
-
-    font: 15px Arial, sans-serif;
-}
-
-.elasticsearch {
-    border-radius: 50%;
-    height: 36px;
-    padding: 8px;
-
-    background: #66e0ff;
-    text-align: center;
-    font: 15px Arial, sans-serif;
-}
-
-.dndflow .dndnode.s3 {
-    height: 20px;
-    padding: 4px;
-    border: 1px solid #ffb84d;
-    border-radius: 2px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: grab;
-}
-
-.dndflow .dndnode.kafka {
-    border-color: #000000;
-}
-
-.dndflow .dndnode.elasticsearch {
-    border-color: #00ace6;
 }
 
 .dndflow .reactflow-wrapper {
@@ -84,3 +31,68 @@
         max-width: 250px;
     }
 }
+
+
+.s3 {
+    width: 36px;
+    height: 36px;
+    padding: 10px;
+
+    background-image: url("../../assets/s3.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.kafka {
+    width: 36px;
+    height: 36px;
+    padding: 10px;
+
+    background-image: url("../../assets/kafka.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.elasticsearch {
+    width: 36px;
+    height: 36px;
+    padding: 10px;
+
+    background-image: url("../../assets/elasticsearch.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.sidebar {
+    background-color: #cac9c9;
+    border-right: 1px solid #eee;
+    padding: 0 0;
+    width: 300px;
+}
+
+.sidebar-table {
+    width: 100%;
+    vertical-align: top;
+    border-collapse: collapse;
+    overflow: auto;
+}
+
+.tr, td{
+    height: 50px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.tr {
+    border: 1px solid black;
+}
+
+.th {
+    height: 70px;
+    text-align: left;
+}
+
+
