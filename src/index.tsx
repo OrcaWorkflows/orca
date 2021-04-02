@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
-
+import {BrowserRouter as Router, Route, Switch, withRouter} from 'react-router-dom';
 
 import DragNDrop from './components/dnd/index';
-
 
 import './index.css';
 
@@ -15,24 +13,24 @@ const routes = [
     }
 ];
 
-const Header = withRouter(({ history, location }) => {
+const Header = withRouter(({history, location}) => {
     return (
-    <header>
-        <a className="logo">
-            ORCA Workflow Manager
-        </a>
-    </header>
-);
+        <header>
+            <span className="logo">
+                ORCA
+            </span>
+        </header>
+    );
 });
 
 ReactDOM.render(
     <Router forceRefresh={true}>
-        <Header />
+        <Header/>
         <Switch>
             {routes.map((route) => (
-                    <Route exact path={route.path} render={() => <route.component />} key={route.path} />
-))}
-</Switch>
-</Router>,
-document.getElementById('root')
+                <Route exact path={route.path} render={() => <route.component/>} key={route.path}/>
+            ))}
+        </Switch>
+    </Router>,
+    document.getElementById('root')
 );

@@ -17,16 +17,20 @@ body,
 
 header {
     padding: 10px;
-    border-bottom: 1px solid #eee;
     display: flex;
     font-weight: 700;
     align-items: center;
+    background: #8dadad;
+    height: 50px;
 }
 
 .logo {
     text-decoration: none;
     display: block;
     line-height: 1;
+    text-align: right;
+    color: black;
+    width: 100%;
 }
 
 header a,
@@ -80,3 +84,12 @@ header select {
         display: block;
     }
 }
+
+.header-table {
+    width: 100%;
+    vertical-align: top;
+    border-collapse: collapse;
+    overflow: auto;
+}
+
+

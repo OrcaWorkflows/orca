@@ -94,9 +94,10 @@
     border: 1px solid black;
 }
 
-.th {
-    height: 70px;
-    text-align: left;
+.title {
+    text-align: center;
+    font-weight: bold;
+    width: 50px;
 }
 
 

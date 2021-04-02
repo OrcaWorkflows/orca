@@ -43,12 +43,12 @@ const DnDFlow = () => {
 
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
-            const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
+            const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
             const newNode: Node = {
                 id: `${type}`,
                 type,
                 position,
-                data: { label: `${type}` },
+                data: {label: `${type}`},
             };
 
             setElements((es) => es.concat(newNode));
@@ -64,7 +64,7 @@ const DnDFlow = () => {
     return (
         <div className="dndflow">
             <ReactFlowProvider>
-                <Sidebar />
+                <Sidebar/>
                 <div className="reactflow-wrapper">
                     <ReactFlow
                         elements={elements}
@@ -75,7 +75,7 @@ const DnDFlow = () => {
                         onDragOver={onDragOver}
                         nodeTypes={nodeTypes}
                     >
-                    <Controls />
+                        <Controls/>
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>

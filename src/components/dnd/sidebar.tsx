@@ -8,7 +8,7 @@ const sidebar = () => {
     return (
         <div className="sidebar">
             <table className={"sidebar-table"}>
-                <th>Operators</th>
+                <div className={"title"}>Operators</div>
                 <tr>
                         <td>
                             <div className="s3" onDragStart={(event) => onDragStart(event, 'S3')} draggable/>
