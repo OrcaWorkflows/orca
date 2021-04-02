@@ -1,0 +1,86 @@
+.dndflow {
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+}
+
+.dndflow aside {
+    border-right: 1px solid #eee;
+    padding: 15px 10px;
+    font-size: 12px;
+    background: #fcfcfc;
+}
+
+.dndflow aside .description {
+    margin-bottom: 10px;
+}
+
+.s3 {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #ffb84d;
+    text-align: center;
+
+    font: 15px Arial, sans-serif;
+}
+
+.kafka {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #A4A4A4;
+    text-align: center;
+
+    font: 15px Arial, sans-serif;
+}
+
+.elasticsearch {
+    border-radius: 50%;
+    height: 36px;
+    padding: 8px;
+
+    background: #66e0ff;
+    text-align: center;
+    font: 15px Arial, sans-serif;
+}
+
+.dndflow .dndnode.s3 {
+    height: 20px;
+    padding: 4px;
+    border: 1px solid #ffb84d;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+}
+
+.dndflow .dndnode.kafka {
+    border-color: #000000;
+}
+
+.dndflow .dndnode.elasticsearch {
+    border-color: #00ace6;
+}
+
+.dndflow .reactflow-wrapper {
+    flex-grow: 1;
+    height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .dndflow {
+        flex-direction: row;
+    }
+
+    .dndflow aside {
+        width: 20%;
+        max-width: 250px;
+    }
+}
