@@ -1,14 +1,14 @@
-import React, { useState, DragEvent } from 'react';
+import React, {DragEvent, useState} from 'react';
 import ReactFlow, {
-    ReactFlowProvider,
     addEdge,
-    removeElements,
+    ArrowHeadType, Connection,
     Controls,
-    OnLoadParams,
-    Elements,
-    Connection,
     Edge,
+    Elements,
     Node,
+    OnLoadParams,
+    ReactFlowProvider,
+    removeElements,
 } from 'react-flow-renderer';
 
 import Sidebar from './sidebar';
@@ -30,9 +30,11 @@ const DnDFlow = () => {
     const [elements, setElements] = useState<Elements>(initialElements);
 
     const onConnect = (params: Edge | Connection) => {
-        setElements((els) => addEdge(params, els));
-        console.log(params);
+        (params as Edge).animated = true;
+        (params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
+        setElements((elements) => addEdge(params, elements));
     }
+    console.log(elements);
     const onElementsRemove = (elementsToRemove: Elements) => setElements((els) => removeElements(elementsToRemove, els));
     const onLoad = (_reactFlowInstance: OnLoadParams) => setReactFlowInstance(_reactFlowInstance);
 
