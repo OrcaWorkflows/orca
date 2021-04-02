@@ -41,8 +41,7 @@
 
 .operator-handle {
     box-sizing: inherit;
-    padding: 0px;
-    margin: 70px 0 70px;
+    padding: 0;
 }
 
 .s3 {
