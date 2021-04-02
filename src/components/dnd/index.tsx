@@ -35,7 +35,7 @@ const DnDFlow = () => {
         setElements((elements) => addEdge(params, elements));
     }
     console.log(elements);
-    const onElementsRemove = (elementsToRemove: Elements) => setElements((els) => removeElements(elementsToRemove, els));
+    const onElementsRemove = (elementsToRemove: Elements) => setElements((elements) => removeElements(elementsToRemove, elements));
     const onLoad = (_reactFlowInstance: OnLoadParams) => setReactFlowInstance(_reactFlowInstance);
 
     const onDrop = (event: DragEvent) => {
