@@ -12,6 +12,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 import Sidebar from './sidebar';
+import TopBar from './topbar';
 
 import './dnd.css';
 import S3 from "../nodes/S3";
@@ -43,12 +44,12 @@ const DnDFlow = () => {
 
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
-            const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
+            const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
             const newNode: Node = {
                 id: `${type}`,
                 type,
                 position,
-                data: {label: `${type}`},
+                data: { label: `${type}` },
             };
 
             setElements((es) => es.concat(newNode));
@@ -66,6 +67,7 @@ const DnDFlow = () => {
             <ReactFlowProvider>
                 <Sidebar/>
                 <div className="reactflow-wrapper">
+                    <TopBar/>
                     <ReactFlow
                         elements={elements}
                         onConnect={onConnect}
@@ -75,7 +77,7 @@ const DnDFlow = () => {
                         onDragOver={onDragOver}
                         nodeTypes={nodeTypes}
                     >
-                        <Controls/>
+                    <Controls />
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
