@@ -50,7 +50,7 @@
 
 .dndflow .reactflow-wrapper {
     flex-grow: 1;
-    height: 95%;
+    height: 93%;
 }
 
 @media screen and (min-width: 768px) {
