@@ -2,7 +2,14 @@
     flex-direction: column;
     display: flex;
     height: 100%;
-    background: #121817;
+    background: #5a5a5a;
+}
+
+.sidebar {
+    background-color: #464646;
+    border-right: 1px solid #eee;
+    padding: 0 0;
+    width: 300px;
 }
 
 .dndflow aside {
@@ -32,6 +39,11 @@
     }
 }
 
+.operator-handle {
+    box-sizing: inherit;
+    padding: 0px;
+    margin: 70px 0 70px;
+}
 
 .s3 {
     width: 36px;
@@ -64,13 +76,6 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-}
-
-.sidebar {
-    background-color: #cac9c9;
-    border-right: 1px solid #eee;
-    padding: 0 0;
-    width: 300px;
 }
 
 .sidebar-table {

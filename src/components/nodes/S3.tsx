@@ -10,9 +10,9 @@ const onConnect = (params: Connection | Edge) => console.log('handle onConnect',
 const S3: FC<NodeProps> = ({ data }) => {
     return (
         <>
-            <Handle type="target" position={Position.Top} id="operator_target" style={targetHandleStyle} onConnect={onConnect} />
-            <span className="s3">{data.label}</span>
-            <Handle type="source" position={Position.Bottom} id="operator_source" style={sourceHandleStyleA} />
+            <Handle className={"operator-handle"}  type="target" position={Position.Top} id="operator_target" style={targetHandleStyle} onConnect={onConnect} />
+            <div className="s3"/>
+            <Handle className={"operator-handle"} type="source" position={Position.Bottom} id="operator_source" style={sourceHandleStyleA} />
         </>
 );
 };
