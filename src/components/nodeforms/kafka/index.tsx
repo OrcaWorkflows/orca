@@ -19,7 +19,8 @@ const KafkaForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            showKafkaForm: showKafkaForm
+            showKafkaForm: showKafkaForm,
+            hideKafkaForm: hideKafkaForm
         };
     });
 

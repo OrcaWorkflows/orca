@@ -19,7 +19,8 @@ const S3Form = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            showS3Form: showS3Form
+            showS3Form: showS3Form,
+            hideS3Form: hideS3Form
         };
     });
 

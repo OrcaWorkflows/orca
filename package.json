@@ -11,6 +11,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-flow-renderer": "9.4.2",
+    "react-notifications": "^1.7.2",
+    "react-notifications-component": "^3.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "styled-components": "^5.2.3",
@@ -21,6 +23,7 @@
     "@types/localforage": "0.0.34",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "@types/react-notifications-component": "^3.1.0",
     "@types/react-router-dom": "^5.1.7"
   },
   "scripts": {

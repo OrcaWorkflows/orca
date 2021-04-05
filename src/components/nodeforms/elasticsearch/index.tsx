@@ -1,5 +1,6 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
+
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 
@@ -19,7 +20,8 @@ const ESForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            showESForm: showESForm
+            showESForm: showESForm,
+            hideEsForm: hideESForm
         };
     });
 
