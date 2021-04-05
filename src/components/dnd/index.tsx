@@ -1,11 +1,10 @@
-import React, {DragEvent, useState} from 'react';
+import React, {DragEvent, useRef, useState} from 'react';
 import ReactFlow, {
     addEdge,
     ArrowHeadType, Connection,
     Controls,
     Edge,
-    Elements,
-    Node,
+    Elements, Node,
     OnLoadParams,
     ReactFlowProvider,
     removeElements,
@@ -18,6 +17,9 @@ import './dnd.css';
 import S3 from "../nodes/S3";
 import KAFKA from "../nodes/KAFKA";
 import ELASTICSEARCH from "../nodes/ELASTICSEARCH";
+import S3Form from "../nodeforms/s3";
+import KafkaForm from "../nodeforms/kafka";
+import ESForm from "../nodeforms/elasticsearch";
 
 const initialElements: Elements | (() => Elements) = [];
 
@@ -27,6 +29,7 @@ const onDragOver = (event: DragEvent) => {
 };
 
 const DnDFlow = () => {
+
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
     const [elements, setElements] = useState<Elements>(initialElements);
 
@@ -44,12 +47,12 @@ const DnDFlow = () => {
 
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
-            const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
+            const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
             const newNode: Node = {
                 id: `${type}`,
                 type,
                 position,
-                data: { label: `${type}` },
+                data: {label: `${type}`},
             };
 
             setElements((es) => es.concat(newNode));
@@ -62,9 +65,30 @@ const DnDFlow = () => {
         Elasticsearch: ELASTICSEARCH,
     };
 
+    const refS3 = useRef<HTMLDivElement>(null);
+    const refKafka = useRef<HTMLDivElement>(null);
+    const refES = useRef<HTMLDivElement>(null);
+
+    const handleClick = (element: any) => {
+        const nodeS3 = refS3.current as any;
+        const nodeKafka = refKafka.current as any;
+        const nodeES = refES.current as any;
+        console.log(element);
+        if (element.target.nextElementSibling != null){
+            const node_type = element.target.nextElementSibling.dataset.nodeid;
+            if (node_type === "S3") {
+                nodeS3.showS3Form();
+            } else if (node_type === "Kafka") {
+                nodeKafka.showKafkaForm();
+            } else if (node_type === "Elasticsearch") {
+                nodeES.showESForm();
+            }
+        }
+    };
+
     return (
-        <div className="dndflow">
-            <ReactFlowProvider>
+        <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
+            <ReactFlowProvider >
                 <Sidebar/>
                 <div className="reactflow-wrapper">
                     <TopBar/>
@@ -76,11 +100,15 @@ const DnDFlow = () => {
                         onDrop={onDrop}
                         onDragOver={onDragOver}
                         nodeTypes={nodeTypes}
+                        onContextMenu={handleClick}
                     >
-                    <Controls />
+                        <Controls/>
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
+            <S3Form ref={refS3}/>
+            <KafkaForm ref={refKafka}/>
+            <ESForm ref={refES}/>
         </div>
     );
 };

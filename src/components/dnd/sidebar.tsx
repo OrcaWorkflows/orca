@@ -1,4 +1,5 @@
 import React from 'react';
+
 const sidebar = () => {
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -8,10 +9,11 @@ const sidebar = () => {
     return (
         <div className="sidebar">
             <table className={"sidebar-table"}>
-
-                <tr>
+                <tbody>
+                    <tr>
                         <td>
-                            <div className="s3" onDragStart={(event) => onDragStart(event, 'S3')} draggable/>
+                            <div className="s3" onDragStart={(event) => onDragStart(event, 'S3')}
+                                 draggable/>
                         </td>
                         <td>
                             <span>AWS S3</span>
@@ -27,13 +29,15 @@ const sidebar = () => {
                     </tr>
                     <tr>
                         <td>
-                            <div className="elasticsearch" onDragStart={(event) => onDragStart(event, 'Elasticsearch')} draggable/>
+                            <div className="elasticsearch" onDragStart={(event) => onDragStart(event, 'Elasticsearch')}
+                                 draggable/>
                         </td>
                         <td>
                             <span>Elasticsearch</span>
                         </td>
                     </tr>
-                </table>
+                </tbody>
+            </table>
         </div>
     );
 };
