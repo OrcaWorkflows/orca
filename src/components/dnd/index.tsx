@@ -75,7 +75,6 @@ const DnDFlow = () => {
         const nodeS3 = refS3.current as any;
         const nodeKafka = refKafka.current as any;
         const nodeES = refES.current as any;
-        console.log(element);
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
             if (node_type === "S3") {

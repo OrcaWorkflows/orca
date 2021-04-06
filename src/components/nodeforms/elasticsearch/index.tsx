@@ -3,7 +3,7 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
-import {delayNotification} from "../helper";
+import {delayNotification, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 
 const ESForm = forwardRef((props, ref) => {
@@ -32,17 +32,16 @@ const ESForm = forwardRef((props, ref) => {
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        console.log({ values, actions });
         console.log(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success');
+        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideESForm());
     };
 
     return (
         <div className={"container"} hidden={state}>
             <NotificationContainer/>
-            <label className={"label"}>Please Enter Elasticsearch Configurations</label>
+            <label className={"label"}>Elasticsearch Configurations</label>
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}

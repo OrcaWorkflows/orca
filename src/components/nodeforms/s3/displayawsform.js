@@ -7,7 +7,7 @@ import {
     isRequired
 } from "../validatefields";
 
-export default ({ handleSubmit, submitCount }) => (
+const display = () => ({ handleSubmit, submitCount }) => (
     <Form className="form-container" onSubmit={handleSubmit}>
         <Field
             component={AntInput}
@@ -41,3 +41,4 @@ export default ({ handleSubmit, submitCount }) => (
         </button>
     </Form>
 );
+export default display();

@@ -3,7 +3,7 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {delayNotification} from "../helper";
+import {delayNotification, timeoutMillis} from "../helper";
 
 const KafkaForm = forwardRef((props, ref) => {
     const [state, setState] = useState(true)
@@ -31,17 +31,16 @@ const KafkaForm = forwardRef((props, ref) => {
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        console.log({ values, actions });
         console.log(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success');
+        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideKafkaForm());
     };
 
     return (
         <div className={"container"} hidden={state}>
             <NotificationContainer/>
-            <label className={"label"}>Please Enter Kafka Configurations</label>
+            <label className={"label"}>Kafka Configurations</label>
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}
