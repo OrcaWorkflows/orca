@@ -20,7 +20,6 @@ import ELASTICSEARCH from "../nodes/ELASTICSEARCH";
 import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
@@ -93,7 +92,6 @@ const DnDFlow = () => {
                 nodeS3.hideS3Form();
             }
         }
-        NotificationManager.success('Successfully Saved Configurations', 'Success');
     };
 
     return (
@@ -116,10 +114,11 @@ const DnDFlow = () => {
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
-            <S3Form ref={refS3}/>
-            <KafkaForm ref={refKafka}/>
-            <ESForm ref={refES}/>
-            <NotificationContainer/>
+            <div className={"forms"}>
+                <S3Form ref={refS3}/>
+                <KafkaForm ref={refKafka}/>
+                <ESForm ref={refES}/>
+            </div>
         </div>
     );
 };

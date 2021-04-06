@@ -2,6 +2,7 @@
   position: relative;
   top: 25px;
   width: 33.33333333%;
+  padding: 10px;
 }
 
 .ant-form-item-control-wrapper {
@@ -11,21 +12,28 @@
   padding: 10px;
 }
 
+.label {
+  color: white;
+}
+
 .container {
   vertical-align: top;
   border-collapse: collapse;
   overflow: auto;
+  width: 300px;
   background-color: #464646;
 }
 
 .form-container {
   text-align: left;
-  margin: 10px 10px;
+  margin: 10px 10px 10px;
 }
 
 .field-container {
   height: 65px;
   padding: 10px;
+  float: right;
+  margin: 10px 10px 10px;
 }
 
 .submit-container {

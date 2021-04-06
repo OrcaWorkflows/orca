@@ -124,4 +124,9 @@
     font-weight: bold;
 }
 
+.forms {
+    border-right-width: 0;
+    border-right-style: solid;
+    padding-right: 20px
+}
 

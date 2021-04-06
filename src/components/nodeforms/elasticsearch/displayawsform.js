@@ -5,7 +5,7 @@ import {
 } from "../createantfields";
 import {
     isRequired
-} from "./validatefields";
+} from "../validatefields";
 
 export default ({ handleSubmit, submitCount }) => (
     <Form className="form-container" onSubmit={handleSubmit}>
