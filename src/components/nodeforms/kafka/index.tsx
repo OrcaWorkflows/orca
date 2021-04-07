@@ -6,7 +6,8 @@ import {NotificationContainer, NotificationManager} from "react-notifications";
 import {delayNotification, timeoutMillis} from "../helper";
 
 const KafkaForm = forwardRef((props, ref) => {
-    const [state, setState] = useState(true)
+    const [state, setState] = useState(true);
+    const [KafkaFormValues, setKafkaFormValues] = useState({});
 
     const hideKafkaForm = () => {
         setState(true);
@@ -19,10 +20,15 @@ const KafkaForm = forwardRef((props, ref) => {
             setState(false);
     }
 
+    const getKafkaFormValues = () => {
+        return KafkaFormValues;
+    }
+
     useImperativeHandle(ref, () => {
         return {
             showKafkaForm: showKafkaForm,
-            hideKafkaForm: hideKafkaForm
+            hideKafkaForm: hideKafkaForm,
+            getFormValues: getKafkaFormValues
         };
     });
 
@@ -32,6 +38,7 @@ const KafkaForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         console.log(JSON.stringify(values, null, 2));
+        setKafkaFormValues(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideKafkaForm());

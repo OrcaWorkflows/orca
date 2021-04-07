@@ -81,14 +81,17 @@ const DnDFlow = () => {
                 nodeS3.showS3Form();
                 nodeKafka.hideKafkaForm();
                 nodeES.hideEsForm();
+                console.log(nodeS3.getFormValues());
             } else if (node_type === "Kafka") {
                 nodeKafka.showKafkaForm();
                 nodeS3.hideS3Form();
                 nodeES.hideEsForm();
+                console.log(nodeKafka.getFormValues());
             } else if (node_type === "Elasticsearch") {
                 nodeES.showESForm();
                 nodeKafka.hideKafkaForm();
                 nodeS3.hideS3Form();
+                console.log(nodeES.getFormValues());
             }
         }
     };

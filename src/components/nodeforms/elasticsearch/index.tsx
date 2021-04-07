@@ -7,7 +7,8 @@ import {delayNotification, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 
 const ESForm = forwardRef((props, ref) => {
-    const [state, setState] = useState(true)
+    const [state, setState] = useState(true);
+    const [ESFormValues, setESFormValues] = useState({});
 
     const hideESForm = () => {
         setState(true);
@@ -20,10 +21,15 @@ const ESForm = forwardRef((props, ref) => {
             setState(false);
     }
 
+    const getESFormValues = () => {
+        return ESFormValues;
+    }
+
     useImperativeHandle(ref, () => {
         return {
             showESForm: showESForm,
-            hideEsForm: hideESForm
+            hideEsForm: hideESForm,
+            getFormValues: getESFormValues
         };
     });
 
@@ -33,6 +39,7 @@ const ESForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         console.log(JSON.stringify(values, null, 2));
+        setESFormValues(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideESForm());

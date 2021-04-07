@@ -6,7 +6,8 @@ import {NotificationContainer, NotificationManager} from "react-notifications";
 import {delayNotification, timeoutMillis} from "../helper"
 
 const S3Form = forwardRef((props, ref) => {
-    const [state, setState] = useState(true)
+    const [state, setState] = useState(true);
+    const [S3FormValues, setS3FormValues] = useState({});
 
     const hideS3Form = () => {
         setState(true);
@@ -19,10 +20,15 @@ const S3Form = forwardRef((props, ref) => {
             setState(false);
     }
 
+    const getS3FormValues = () => {
+        return S3FormValues;
+    }
+
     useImperativeHandle(ref, () => {
         return {
             showS3Form: showS3Form,
-            hideS3Form: hideS3Form
+            hideS3Form: hideS3Form,
+            getFormValues: getS3FormValues
         };
     });
 
@@ -34,6 +40,7 @@ const S3Form = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         console.log(JSON.stringify(values, null, 2));
+        setS3FormValues(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideS3Form());
