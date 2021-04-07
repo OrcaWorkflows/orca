@@ -5,6 +5,7 @@ import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {delayNotification, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
+import State from "../../data/state";
 
 const ESForm = forwardRef((props, ref) => {
     const [state, setState] = useState(true);
@@ -38,8 +39,8 @@ const ESForm = forwardRef((props, ref) => {
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        console.log(JSON.stringify(values, null, 2));
-        setESFormValues(JSON.stringify(values, null, 2));
+        setESFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        State.configES = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
         delayNotification().then(() => hideESForm());

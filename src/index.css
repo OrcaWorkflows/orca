@@ -26,11 +26,26 @@ header {
 
 .logo {
     text-decoration: none;
-    display: block;
+    display: flow;
     line-height: 1;
-    text-align: right;
+    text-align: left;
+    position: absolute;
     color: black;
-    width: 100%;
+    padding-left: 100px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.logo-item {
+    width: 80px;
+    min-height: 50px;
+    max-height: 50px;
+    float: left;
+    margin: 3px;
+    padding: 3px;
 }
 
 header a,

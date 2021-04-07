@@ -53,10 +53,11 @@ function createTasksForEdge(edge: Edge, edges:Elements) : void {
         },
         arguments: {
             parameters: [{"name": "OPERATOR", "value": "s3"}, {"name": "OPERATOR_TYPE", "value": "read"},
-                {"name": "REDIS_URL", "value": "192.168.2.101"}, {"name": "REDIS_PORT", "value": "6379"}, {"name": "REDIS_PUSH_KEY", "value": "testFinal"}, {"name": "REDIS_POP_KEY", "value": "None"},
+                {"name": "REDIS_URL", "value": "192.168.2.101"}, {"name": "REDIS_PORT", "value": "6379"},
+                {"name": "REDIS_PUSH_KEY", "value": "testFinal"}, {"name": "REDIS_POP_KEY", "value": "None"},
                 {"name": "AWS_S3_BUCKET_NAME", "value": "databoss-weather-test"}, {"name": "AWS_S3_FILE_PATH", "value": "weather.csv"}, {"name": "AWS_S3_FILE_TYPE", "value": "CSV"},
-                {"name": "BOOTSTRAP_SERVERS", "value": "192.168.2.102:9094"}, {"name": "KAFKA_TOPIC", "value": "testFinal"},
-                {"name": "ELASTICSEARCH_HOST", "value": "http://192.168.2.101:9200"},  {"name": "ELASTICSEARCH_INDEX", "value": "test"}]
+                {"name": "KAFKA_TOPIC", "value": "testFinal"},
+                {"name": "ELASTICSEARCH_INDEX", "value": "test"}]
         }
     };
     State.tasks.push(task);
@@ -90,6 +91,9 @@ const DnDFlow = () => {
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
 
+    const refS3 = useRef<HTMLDivElement>(null);
+    const refKafka = useRef<HTMLDivElement>(null);
+    const refES = useRef<HTMLDivElement>(null);
 
     const onConnect = (params: Edge | Connection) => {
         (params as Edge).animated = true;
@@ -125,32 +129,24 @@ const DnDFlow = () => {
         Elasticsearch: ELASTICSEARCH,
     };
 
-    const refS3 = useRef<HTMLDivElement>(null);
-    const refKafka = useRef<HTMLDivElement>(null);
-    const refES = useRef<HTMLDivElement>(null);
-
-    const nodeS3 = refS3.current as any;
-    const nodeKafka = refKafka.current as any;
-    const nodeES = refES.current as any;
-
     const handleClick = (element: any) => {
+        const nodeS3 = refS3.current as any;
+        const nodeKafka = refKafka.current as any;
+        const nodeES = refES.current as any;
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
             if (node_type === "S3") {
                 nodeS3.showS3Form();
                 nodeKafka.hideKafkaForm();
                 nodeES.hideEsForm();
-                console.log(nodeS3.getFormValues());
             } else if (node_type === "Kafka") {
                 nodeKafka.showKafkaForm();
                 nodeS3.hideS3Form();
                 nodeES.hideEsForm();
-                console.log(nodeKafka.getFormValues());
             } else if (node_type === "Elasticsearch") {
                 nodeES.showESForm();
                 nodeKafka.hideKafkaForm();
                 nodeS3.hideS3Form();
-                console.log(nodeES.getFormValues());
             }
         }
     };

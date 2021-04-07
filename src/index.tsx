@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Route, Switch, withRouter} from 'react-router-d
 import DragNDrop from './components/dnd/index';
 
 import './index.css';
-
+import logo from './assets/logo/vector/default-monochrome-black.svg'
 const routes = [
     {
         path: '/',
@@ -16,9 +16,12 @@ const routes = [
 const Header = withRouter(({history, location}) => {
     return (
         <header>
-            <span className="logo">
-                ORCA
-            </span>
+            <div className={"logo-item"}>
+                <img src={logo} alt={"Logo"}/>
+            </div>
+            <div className={"logo"}>
+                <label>Killer of Orchestration</label>
+            </div>
         </header>
     );
 });
