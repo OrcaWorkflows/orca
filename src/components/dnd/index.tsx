@@ -71,10 +71,11 @@ const DnDFlow = () => {
     const refKafka = useRef<HTMLDivElement>(null);
     const refES = useRef<HTMLDivElement>(null);
 
+    const nodeS3 = refS3.current as any;
+    const nodeKafka = refKafka.current as any;
+    const nodeES = refES.current as any;
+
     const handleClick = (element: any) => {
-        const nodeS3 = refS3.current as any;
-        const nodeKafka = refKafka.current as any;
-        const nodeES = refES.current as any;
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
             if (node_type === "S3") {
@@ -101,6 +102,7 @@ const DnDFlow = () => {
             <ReactFlowProvider >
                 <Sidebar/>
                 <div className="reactflow-wrapper">
+                    console.log(nodeS3.getFormValues());
                     <TopBar/>
                     <ReactFlow
                         elements={elements}
