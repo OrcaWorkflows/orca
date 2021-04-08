@@ -4,12 +4,17 @@
   "dependencies": {
     "antd": "^4.15.0",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "dagre": "^0.8.5",
     "delay": "^5.0.0",
     "formik": "^2.2.6",
     "localforage": "^1.9.0",
     "moment": "^2.29.1",
     "react": "17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-collapse": "^5.1.0",
+    "react-collapsed": "^3.0.2",
+    "react-collapsible": "^2.8.3",
     "react-dom": "17.0.2",
     "react-flow-renderer": "9.4.2",
     "react-notifications": "^1.7.2",
@@ -25,7 +30,8 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@types/react-notifications-component": "^3.1.0",
-    "@types/react-router-dom": "^5.1.7"
+    "@types/react-router-dom": "^5.1.7",
+    "devextreme-react": "^20.2.6"
   },
   "scripts": {
     "start": "react-scripts start",

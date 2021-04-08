@@ -2,14 +2,7 @@
     flex-direction: column;
     display: flex;
     height: 100%;
-    background: #5a5a5a;
-}
-
-.sidebar {
-    background-color: #464646;
-    border-right: 1px solid #eee;
-    padding: 0 0;
-    width: 300px;
+    background: #1e1e1e;
 }
 
 .topbarbutton {
@@ -21,7 +14,7 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition-duration: 0.1s;
 }
 
@@ -34,7 +27,7 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .dndflow aside {
@@ -102,21 +95,59 @@
     background-size: contain;
 }
 
+
+.sidebar {
+    background-color: #464646;
+    border-right: 1px solid #eee;
+    padding-top: 10px;
+    padding-right: 3px;
+    width: 300px;
+}
+
 .sidebar-table {
     width: 100%;
     vertical-align: top;
     border-collapse: collapse;
     overflow: auto;
+    table-layout: fixed;
 }
 
-.tr, td{
-    height: 50px;
+.tr, td {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
+    overflow: hidden;
 }
+
+td:first-child {
+    text-align: left;
+    width: 60px;
+}
+
 
 .tr {
     border: 1px solid black;
+}
+
+.Collapsible {
+    height: 100%;
+    vertical-align: top;
+    display: block;
+}
+
+.Collapsible__trigger {
+    height: 30px;
+    display: inline-block;
+    background-color: #1e1e1e;
+    width: 100%;
+    color: white;
+    vertical-align: top;
+    border-collapse: collapse;
+    overflow: auto;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.Collapsible__contentInner {
 }
 
 .title {
@@ -129,8 +160,24 @@
     border-right-style: solid;
     padding-right: 20px;
     padding-left: 20px;
-    height: fit-content;
-    width: 300px;
+    height: inherit;
+    width: 400px;
     background-color: #5a5a5a;
 }
 
+.form-div {
+    padding-top: 20px;
+}
+
+.form-label {
+    text-align: center;
+    display: block;
+    padding-top: 30px;
+}
+
+.mouse-image {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    padding-top: 30px;
+}

@@ -5,6 +5,12 @@
   padding: 10px;
 }
 
+.ant-input {
+  width: 100%;
+  display: block;
+  overflow: auto;
+}
+
 .ant-form-item-control-wrapper {
   width: 66.66666667%;
   display: inline-flex;
@@ -17,22 +23,19 @@
 }
 
 .container {
-  vertical-align: top;
-  border-collapse: collapse;
-  overflow: auto;
-  width: 300px;
-  background-color: #464646;
-
+  display: flex;
+  justify-content: center;
 }
 
 .form-container {
-  text-align: left;
-  margin: 10px 10px 10px;
+  width:50%;
+  display: block;
+  margin:0 auto;
 }
 
 .field-container {
   height: 65px;
   padding: 10px;
   float: right;
-  margin: 10px 10px 10px;
+  margin: 15px 10px 10px;
 }

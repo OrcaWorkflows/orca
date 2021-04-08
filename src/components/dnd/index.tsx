@@ -21,7 +21,7 @@ import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
 import 'react-notifications/lib/notifications.css';
-
+import mouseImage from "../../assets/mouseclick.png"
 import {Task} from "../data/interface";
 import State from "../data/state";
 
@@ -90,6 +90,7 @@ const DnDFlow = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
+    const [confHidden, setConfHidden] = useState<boolean>(false);
 
     const refS3 = useRef<HTMLDivElement>(null);
     const refKafka = useRef<HTMLDivElement>(null);
@@ -101,6 +102,7 @@ const DnDFlow = () => {
         setEdges((edges) => addEdge(params, edges));
         createTasksForEdge(params as Edge, edges);
     }
+
     console.log(nodes);
     console.log(edges);
     const onElementsRemove = (elementsToRemove: Elements) => setNodes((nodes) => removeElements(elementsToRemove, nodes));
@@ -135,6 +137,11 @@ const DnDFlow = () => {
         const nodeES = refES.current as any;
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
+            if (!confHidden){
+                setConfHidden(true);
+            } else {
+                setConfHidden(false);
+            }
             if (node_type === "S3") {
                 nodeS3.showS3Form();
                 nodeKafka.hideKafkaForm();
@@ -172,6 +179,11 @@ const DnDFlow = () => {
                 </div>
             </ReactFlowProvider>
             <div className={"forms"}>
+                <div className={"form-div"} hidden={confHidden}>
+                    <label className={"form-label"}>No Configuration Selected</label>
+                    <img className={"mouse-image"} src={mouseImage} alt={""}/>
+                    <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
+                </div>
                 <S3Form ref={refS3}/>
                 <KafkaForm ref={refKafka}/>
                 <ESForm ref={refES}/>
@@ -179,5 +191,4 @@ const DnDFlow = () => {
         </div>
     );
 };
-
 export default DnDFlow;
