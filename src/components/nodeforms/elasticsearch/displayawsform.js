@@ -11,6 +11,15 @@ const display = () => ({ handleSubmit, submitCount }) => (
     <Form className="form-container" onSubmit={handleSubmit}>
         <Field
             component={AntInput}
+            name="host"
+            type="host"
+            label="Host"
+            submitCount={submitCount}
+            validate={isRequired}
+            hasFeedback
+        />
+        <Field
+            component={AntInput}
             name="index_name"
             type="index_name"
             label="Index Name"

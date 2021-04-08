@@ -1,18 +1,19 @@
 import React from 'react';
 import {Workflow} from "../data/interface";
-import RequestUtils from "../event/utils";
+import RequestUtils, {createTasksForEdge} from "../event/utils";
 import State from "../data/state";
+import {Edge} from "react-flow-renderer";
 
 const TopBar = () => {
     const submit = () => {
+        for (let key in State.edges) {
+            let edge:Edge = (State.edges[key] as Edge);
+            createTasksForEdge(edge);
+        }
         RequestUtils.submit(new class implements Workflow {
             name= "test-";
             tasks = State.tasks;
-        })
-        console.log("-------------------");
-        console.log(State.configS3);
-        console.log(State.configKafka);
-        console.log(State.configES);
+        });
     };
 
     return (
