@@ -48,7 +48,7 @@ const S3Form = forwardRef((props, ref) => {
     };
 
     return (
-        <div className={"container"} hidden={state}>
+        <div className={"container"}>
             <NotificationContainer/>
             <label className={"label"}>S3 Configurations</label>
             <Formik

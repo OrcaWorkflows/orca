@@ -35,6 +35,7 @@ const KafkaForm = forwardRef((props, ref) => {
 
     const initialValues = {
         topic_name: "",
+        broker_host: ""
     };
 
     const handleSubmit = (values: any, actions: any) => {
@@ -46,7 +47,7 @@ const KafkaForm = forwardRef((props, ref) => {
     };
 
     return (
-        <div className={"container"} hidden={state}>
+        <div className={"container"}>
             <NotificationContainer/>
             <label className={"label"}>Kafka Configurations</label>
             <Formik

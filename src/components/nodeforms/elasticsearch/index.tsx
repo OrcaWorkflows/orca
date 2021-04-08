@@ -36,6 +36,7 @@ const ESForm = forwardRef((props, ref) => {
 
     const initialValues = {
         index_name: "",
+        host: ""
     };
 
     const handleSubmit = (values: any, actions: any) => {
@@ -47,7 +48,7 @@ const ESForm = forwardRef((props, ref) => {
     };
 
     return (
-        <div className={"container"} hidden={state}>
+        <div className={"container"}>
             <NotificationContainer/>
             <label className={"label"}>Elasticsearch Configurations</label>
             <Formik

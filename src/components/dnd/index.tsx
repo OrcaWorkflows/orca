@@ -41,6 +41,7 @@ const DnDFlow = () => {
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
     const [confHidden, setConfHidden] = useState<boolean>(false);
+    const [showForm , setShowForm] = useState<string>("")
 
     const refS3 = useRef<HTMLDivElement>(null);
     const refKafka = useRef<HTMLDivElement>(null);
@@ -79,32 +80,21 @@ const DnDFlow = () => {
     };
 
     const handleClick = (element: any) => {
-        const nodeS3 = refS3.current as any;
-        const nodeKafka = refKafka.current as any;
-        const nodeES = refES.current as any;
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
-            if (!confHidden){
-                setConfHidden(true);
-            } else {
+            setShowForm((prevShowForm:string) => {
+                let newState = ""
                 setConfHidden(false);
-            }
-            if (node_type === "S3") {
-                nodeS3.showS3Form();
-                nodeKafka.hideKafkaForm();
-                nodeES.hideEsForm();
-            } else if (node_type === "Kafka") {
-                nodeKafka.showKafkaForm();
-                nodeS3.hideS3Form();
-                nodeES.hideEsForm();
-            } else if (node_type === "Elasticsearch") {
-                nodeES.showESForm();
-                nodeKafka.hideKafkaForm();
-                nodeS3.hideS3Form();
-            }
+                if(prevShowForm !== node_type){
+                    newState = node_type;
+                    setConfHidden(true);
+                }
+                return newState
+            } );
         }
-    };
 
+    };
+    console.log(confHidden, showForm);
     return (
         <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
             <ReactFlowProvider >
@@ -126,14 +116,15 @@ const DnDFlow = () => {
                 </div>
             </ReactFlowProvider>
             <div className={"forms"}>
-                <div className={"form-div"} hidden={confHidden}>
+                {! confHidden &&
+                <div className={"form-div"} >
                     <label className={"form-label"}>No Configuration Selected</label>
                     <img className={"mouse-image"} src={mouseImage} alt={""}/>
                     <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
-                </div>
-                <S3Form ref={refS3}/>
-                <KafkaForm ref={refKafka}/>
-                <ESForm ref={refES}/>
+                </div>}
+                {(showForm === "S3") && <S3Form ref={refS3}/>}
+                {(showForm === "Kafka") && <KafkaForm ref={refKafka}/>}
+                {(showForm === "Elasticsearch") && <ESForm ref={refES}/>}
             </div>
         </div>
     );
