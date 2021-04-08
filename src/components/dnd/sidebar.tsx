@@ -13,7 +13,7 @@ const sidebar = () => {
             <Table className={"sidebar-table"}>
                 <tbody>
                     <tr>
-                        <Collapsible trigger="Amazon Web Service" >
+                        <Collapsible trigger="Amazon Web Service" open={true}>
                             <Table className={"sidebar-table"}>
                                 <tr>
                                     <td>
@@ -28,7 +28,7 @@ const sidebar = () => {
                         </Collapsible>
                     </tr>
                     <tr>
-                        <Collapsible trigger={"Apache Stack"}>
+                        <Collapsible trigger={"Apache Stack"} open={true}>
                             <Table className={"sidebar-table"}>
                                 <tr>
                                     <td>
@@ -42,7 +42,7 @@ const sidebar = () => {
                         </Collapsible>
                     </tr>
                     <tr>
-                        <Collapsible trigger={"ELK Stack"}>
+                        <Collapsible trigger={"ELK Stack"} open={true}>
                             <Table className={"sidebar-table"}>
                                 <tr>
                                     <td>
