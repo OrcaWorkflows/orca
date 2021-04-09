@@ -7,19 +7,7 @@ import {delayNotification, timeoutMillis} from "../helper";
 import State from "../../data/state";
 
 const KafkaForm = forwardRef((props, ref) => {
-    const [state, setState] = useState(true);
     const [KafkaFormValues, setKafkaFormValues] = useState({});
-
-    const hideKafkaForm = () => {
-        setState(true);
-    };
-
-    const showKafkaForm = () => {
-        if (!state)
-            setState(true);
-        else
-            setState(false);
-    }
 
     const getKafkaFormValues = () => {
         return KafkaFormValues;
@@ -27,8 +15,6 @@ const KafkaForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            showKafkaForm: showKafkaForm,
-            hideKafkaForm: hideKafkaForm,
             getFormValues: getKafkaFormValues
         };
     });
@@ -43,7 +29,6 @@ const KafkaForm = forwardRef((props, ref) => {
         State.configKafka = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
-        delayNotification().then(() => hideKafkaForm());
     };
 
     return (

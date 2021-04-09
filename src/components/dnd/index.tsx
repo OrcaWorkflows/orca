@@ -22,7 +22,6 @@ import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
 import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../assets/mouseclick.png"
-import {Task} from "../data/interface";
 
 import State from "../data/state";
 
@@ -40,7 +39,6 @@ const DnDFlow = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
-    const [confHidden, setConfHidden] = useState<boolean>(false);
     const [showForm , setShowForm] = useState<string>("")
 
     const refS3 = useRef<HTMLDivElement>(null);
@@ -51,9 +49,11 @@ const DnDFlow = () => {
         (params as Edge).animated = true;
         (params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
         setEdges((edges) => addEdge(params, edges));
-        State.edges.push(params as Edge);
     }
-    const onElementsRemove = (elementsToRemove: Elements) => setNodes((nodes) => removeElements(elementsToRemove, nodes));
+    const onElementsRemove = (elementsToRemove: Elements) => {
+        setNodes((nodes) => removeElements(elementsToRemove, nodes));
+        setEdges((edges) => removeElements(elementsToRemove, edges));
+    }
     const onLoad = (_reactFlowInstance: OnLoadParams) => setReactFlowInstance(_reactFlowInstance);
 
     const onDrop = (event: DragEvent) => {
@@ -78,23 +78,20 @@ const DnDFlow = () => {
         Kafka: KAFKA,
         Elasticsearch: ELASTICSEARCH,
     };
-
+    State.edges = edges;
     const handleClick = (element: any) => {
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
             setShowForm((prevShowForm:string) => {
                 let newState = ""
-                setConfHidden(false);
                 if(prevShowForm !== node_type){
                     newState = node_type;
-                    setConfHidden(true);
                 }
                 return newState
             } );
         }
 
     };
-    console.log(confHidden, showForm);
     return (
         <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
             <ReactFlowProvider >
@@ -116,7 +113,7 @@ const DnDFlow = () => {
                 </div>
             </ReactFlowProvider>
             <div className={"forms"}>
-                {! confHidden &&
+                {! (showForm !== "") &&
                 <div className={"form-div"} >
                     <label className={"form-label"}>No Configuration Selected</label>
                     <img className={"mouse-image"} src={mouseImage} alt={""}/>

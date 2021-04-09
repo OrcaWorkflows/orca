@@ -7,19 +7,7 @@ import {delayNotification, timeoutMillis} from "../helper"
 import State from "../../data/state";
 
 const S3Form = forwardRef((props, ref) => {
-    const [state, setState] = useState(true);
     const [S3FormValues, setS3FormValues] = useState({});
-
-    const hideS3Form = () => {
-        setState(true);
-    };
-
-    const showS3Form = () => {
-        if (!state)
-            setState(true);
-        else
-            setState(false);
-    }
 
     const getS3FormValues = () => {
         return S3FormValues;
@@ -27,8 +15,6 @@ const S3Form = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            showS3Form: showS3Form,
-            hideS3Form: hideS3Form,
             getFormValues: getS3FormValues
         };
     });
@@ -44,7 +30,6 @@ const S3Form = forwardRef((props, ref) => {
         State.configS3 = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
-        delayNotification().then(() => hideS3Form());
     };
 
     return (
