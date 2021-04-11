@@ -25,6 +25,9 @@ import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../assets/mouseclick.png"
 
 import State from "../data/state";
+import DYNAMODB from "./nodes/DYNAMODB";
+import KINESIS from "./nodes/KINESIS";
+import PUBSUB from "./nodes/PUBSUB";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
@@ -59,7 +62,7 @@ const DnDFlow = () => {
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
-
+        console.log(event);
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
             const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
@@ -78,6 +81,9 @@ const DnDFlow = () => {
         S3: S3,
         Kafka: KAFKA,
         Elasticsearch: ELASTICSEARCH,
+        DynamoDB: DYNAMODB,
+        Kinesis: KINESIS,
+        PubSub: PUBSUB
     };
 
     State.edges = edges;

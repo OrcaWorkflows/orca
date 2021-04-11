@@ -9,7 +9,7 @@
 }
 
 .s3 {
-  background-image: url("../../../assets/s3.png");
+  background-image: url("../../../assets/AWS/s3.png");
 }
 
 .kafka {
@@ -18,4 +18,16 @@
 
 .elasticsearch {
   background-image: url("../../../assets/elasticsearch.svg");
+}
+
+.dynamodb {
+  background-image: url("../../../assets/AWS/dynamodb.png");
+}
+
+.kinesis {
+  background-image: url("../../../assets/AWS/kinesis.svg");
+}
+
+.pubsub {
+  background-image: url("../../../assets/GCP/Big Data/pub_sub-512-color.svg");
 }

@@ -12,7 +12,7 @@ const KAFKA: FC<NodeProps> = () => {
         <>
             <Handle className={"operator-handle"} type="target" position={Position.Top} id="operator_target"
                     style={targetHandleStyle} onConnect={onConnect}/>
-            <div className="kafka"/>
+            <div className="node kafka"/>
             <Handle className={"operator-handle"} type="source" position={Position.Bottom} id="operator_source"
                     style={sourceHandleStyleA}/>
         </>

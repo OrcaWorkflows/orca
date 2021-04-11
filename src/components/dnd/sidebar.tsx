@@ -2,6 +2,7 @@ import React from 'react';
 import {Table} from "react-bootstrap";
 import Collapsible from "react-collapsible";
 import NodeRow from "./rowgenerator";
+import './scss/nodes.scss'
 
 const sidebar = () => {
     return (
@@ -13,7 +14,9 @@ const sidebar = () => {
                            <Collapsible trigger="Amazon Web Service" open={true}>
                                <Table className={"sidebar-table"}>
                                    <tbody>
-                                   <NodeRow node={"S3"}/>
+                                       <NodeRow node={"S3"}/>
+                                       <NodeRow node={"DynamoDB"}/>
+                                       <NodeRow node={"Kinesis"}/>
                                    </tbody>
                                </Table>
                            </Collapsible>
@@ -21,10 +24,21 @@ const sidebar = () => {
                     </tr>
                     <tr>
                         <td>
+                            <Collapsible trigger="Google Cloud Platform" open={true}>
+                                <Table className={"sidebar-table"}>
+                                    <tbody>
+                                        <NodeRow node={"PubSub"}/>
+                                    </tbody>
+                                </Table>
+                            </Collapsible>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <Collapsible trigger={"Apache Stack"} open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"Kafka"}/>
+                                        <NodeRow node={"Kafka"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
@@ -35,7 +49,7 @@ const sidebar = () => {
                             <Collapsible trigger={"ELK Stack"} open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"Elasticsearch"}/>
+                                        <NodeRow node={"Elasticsearch"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
