@@ -79,6 +79,7 @@ const DnDFlow = () => {
         Kafka: KAFKA,
         Elasticsearch: ELASTICSEARCH,
     };
+
     State.edges = edges;
     const handleClick = (element: any) => {
         if (element.target.nextElementSibling != null){
