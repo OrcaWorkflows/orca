@@ -22,8 +22,17 @@ const ESForm = forwardRef((props, ref) => {
     });
 
     const initialValues = {
-        index_name: "",
-        host: ""
+        host: "",
+        index_name: ""
+    };
+
+    const setInitialValues = () => {
+        if (State.configES !== undefined) {
+            initialValues.host = State.configES["host"];
+            initialValues.index_name = State.configES["index_name"];
+        }
+
+        return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
@@ -38,7 +47,7 @@ const ESForm = forwardRef((props, ref) => {
             <NotificationContainer/>
             <label className={"form-label"}>Elasticsearch Configurations</label>
             <Formik
-                initialValues={initialValues}
+                initialValues={setInitialValues()}
                 onSubmit={handleSubmit}
                 render={DisplayForm}
             />

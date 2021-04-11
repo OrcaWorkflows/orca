@@ -24,6 +24,15 @@ const KafkaForm = forwardRef((props, ref) => {
         broker_host: ""
     };
 
+    const setInitialValues = () => {
+        if (State.configKafka !== undefined) {
+            initialValues.broker_host = State.configKafka["broker_host"];
+            initialValues.topic_name = State.configKafka["topic_name"];
+        }
+
+        return initialValues;
+    };
+
     const handleSubmit = (values: any, actions: any) => {
         setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
         State.configKafka = JSON.parse(JSON.stringify(values, null, 2));
@@ -36,7 +45,7 @@ const KafkaForm = forwardRef((props, ref) => {
             <NotificationContainer/>
             <label className={"form-label"}>Kafka Configurations</label>
             <Formik
-                initialValues={initialValues}
+                initialValues={setInitialValues()}
                 onSubmit={handleSubmit}
                 render={DisplayForm}
             />
