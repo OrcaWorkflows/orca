@@ -24,7 +24,7 @@ const CreateAntField = AntComponent => ({
     const onChange = value => form.setFieldValue(field.name, value);
     const onBlur = () => form.setFieldTouched(field.name, true);
     return (
-        <div>
+        <div className={"form-container"}>
             <FormItem
                 label={label}
                 hasFeedback={

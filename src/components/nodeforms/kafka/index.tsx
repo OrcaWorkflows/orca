@@ -28,13 +28,13 @@ const KafkaForm = forwardRef((props, ref) => {
         setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
         State.configKafka = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
+        delayNotification().then(() => NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis));
     };
 
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"label"}>Kafka Configurations</label>
+            <label className={"form-label"}>Kafka Configurations</label>
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}

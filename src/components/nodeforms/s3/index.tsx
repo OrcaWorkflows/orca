@@ -29,18 +29,18 @@ const S3Form = forwardRef((props, ref) => {
         setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
         State.configS3 = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
+        delayNotification().then(() => NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis));
     };
 
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"label"}>S3 Configurations</label>
-            <Formik
-                initialValues={initialValues}
-                onSubmit={handleSubmit}
-                render={DisplayForm}
-            />
+            <label className={"form-label"}>S3 Configurations</label>
+                <Formik
+                    initialValues={initialValues}
+                    onSubmit={handleSubmit}
+                    render={DisplayForm}
+                />
         </div>)
 });
 

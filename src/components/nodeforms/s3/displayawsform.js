@@ -8,7 +8,7 @@ import {
 } from "../validatefields";
 
 const display = () => ({ handleSubmit, submitCount }) => (
-    <Form className="form-container" onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
         <Field
             component={AntInput}
             name="bucket_name"

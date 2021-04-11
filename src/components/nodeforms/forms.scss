@@ -5,6 +5,11 @@
   padding: 10px;
 }
 
+.ant-form-item {
+  margin-top: 10px;
+  display: inline;
+}
+
 .ant-input {
   width: 100%;
   display: block;
@@ -23,13 +28,17 @@
 }
 
 .container {
-  display: flex;
+  display: inline-block;
   justify-content: center;
 }
 
+.Formik {
+  width: 100%;
+}
+
 .form-container {
-  width:50%;
-  display: block;
+  width: 100%;
+  display: inline-block;
   margin:0 auto;
 }
 
