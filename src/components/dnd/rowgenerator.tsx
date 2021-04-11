@@ -14,7 +14,7 @@ class NodeRow extends Component<NodeProps> {
         return (
             <tr>
                 <td>
-                    <div className={this.props.node.toLowerCase()}
+                    <div className={`node ${this.props.node.toLowerCase()}`}
                          onDragStart={(event) => onDragStart(event, this.props.node)}
                          draggable/>
                 </td>
