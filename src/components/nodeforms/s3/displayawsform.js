@@ -36,9 +36,11 @@ const display = () => ({ handleSubmit, submitCount }) => (
             validate={isRequired}
             hasFeedback
         />
-        <button className="topbarbutton" type="submit">
-            Save
-        </button>
+        <div className={"margin-top"}>
+            <button className="topbarbutton" type="submit">
+                Save
+            </button>
+        </div>
     </Form>
 );
 export default display();

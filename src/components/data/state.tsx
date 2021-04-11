@@ -1,5 +1,5 @@
 import {Task} from "./interface";
-import {Edge, Elements, Node} from "react-flow-renderer";
+import {Elements} from "react-flow-renderer";
 
 class State {
     static tasks: Array<Task> = [];

@@ -1,6 +1,6 @@
 import React from "react";
 import { DatePicker, Form, Input, TimePicker, Select } from "antd";
-
+import './forms.scss'
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -23,6 +23,7 @@ const CreateAntField = AntComponent => ({
         form.setFieldValue(field.name, value);
     const onChange = value => form.setFieldValue(field.name, value);
     const onBlur = () => form.setFieldTouched(field.name, true);
+
     return (
         <div className={"form-container"}>
             <FormItem
@@ -40,7 +41,7 @@ const CreateAntField = AntComponent => ({
                     onChange={type ? onInputChange : onChange}
                 >
                     {selectOptions &&
-                    selectOptions.map(name => <Option key={name}>{name}</Option>)}
+                    selectOptions.map(name => <Option key={name} value={""}>{name}</Option>)}
                 </AntComponent>
             </FormItem>
         </div>

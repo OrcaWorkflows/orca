@@ -1,7 +1,7 @@
 import axios from "axios";
 import {Task, Workflow} from "../data/interface";
 import State from "../data/state";
-import {Edge, Elements} from "react-flow-renderer";
+import {Edge} from "react-flow-renderer";
 import {timeoutMillis} from "../nodeforms/helper";
 import {NotificationManager} from "react-notifications";
 

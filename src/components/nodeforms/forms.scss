@@ -1,26 +1,19 @@
 .ant-form-item-label {
-  position: relative;
-  top: 25px;
   width: 33.33333333%;
-  padding: 10px;
+  padding-bottom: 10px;
+  padding-top: 20px;
 }
 
-.ant-form-item {
-  margin-top: 10px;
-  display: inline;
-}
-
-.ant-input {
+.ant-input{
   width: 100%;
-  display: block;
-  overflow: auto;
+  font-size : 20px;
+  padding-top: 10px;
 }
 
 .ant-form-item-control-wrapper {
   width: 66.66666667%;
   display: inline-flex;
   line-height: normal;
-  padding: 10px;
 }
 
 .label {
@@ -30,10 +23,7 @@
 .container {
   display: inline-block;
   justify-content: center;
-}
-
-.Formik {
-  width: 100%;
+  padding-top: 20px;
 }
 
 .form-container {
@@ -47,4 +37,8 @@
   padding: 10px;
   float: right;
   margin: 15px 10px 10px;
+}
+
+.margin-top {
+  margin-top: 10px;
 }
