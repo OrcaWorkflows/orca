@@ -3,7 +3,7 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {delayNotification, timeoutMillis} from "../helper"
+import {timeoutMillis} from "../helper"
 import State from "../../data/state";
 
 const S3Form = forwardRef((props, ref) => {
@@ -29,7 +29,7 @@ const S3Form = forwardRef((props, ref) => {
         setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
         State.configS3 = JSON.parse(JSON.stringify(values, null, 2));
         actions.setSubmitting(false);
-        delayNotification().then(() => NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis));
+        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
     };
 
     return (
