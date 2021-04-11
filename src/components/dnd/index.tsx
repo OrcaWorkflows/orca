@@ -13,10 +13,11 @@ import ReactFlow, {
 import Sidebar from './sidebar';
 import TopBar from './topbar';
 
-import './dnd.css';
-import S3 from "../nodes/S3";
-import KAFKA from "../nodes/KAFKA";
-import ELASTICSEARCH from "../nodes/ELASTICSEARCH";
+import './scss/dnd.css';
+import './scss/nodes.scss'
+import S3 from "./nodes/S3";
+import KAFKA from "./nodes/KAFKA";
+import ELASTICSEARCH from "./nodes/ELASTICSEARCH";
 import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
