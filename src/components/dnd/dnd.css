@@ -171,6 +171,7 @@ td:first-child {
 
 .form-label {
     text-align: center;
+    font-weight: bold;
     display: block;
     padding-top: 30px;
 }
