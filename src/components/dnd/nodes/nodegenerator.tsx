@@ -7,7 +7,8 @@ type types = {
 export let nodeTypes: types = {};
 
 export const createNodes = () => {
-    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub", "BigQuery", "DataLab", "DataFlow"]
+    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub", "BigQuery", "DataLab", "DataFlow",
+    "DataProc", "AppEngine", "CloudFunctions"]
     nodeTypes = {};
     for (let node of nodes) {
         nodeTypes[node] = React.memo(() => {

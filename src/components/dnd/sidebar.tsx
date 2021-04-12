@@ -31,6 +31,9 @@ const sidebar = () => {
                                         <NodeRow node={"BigQuery"}/>
                                         <NodeRow node={"DataLab"}/>
                                         <NodeRow node={"DataFlow"}/>
+                                        <NodeRow node={"DataProc"}/>
+                                        <NodeRow node={"AppEngine"}/>
+                                        <NodeRow node={"CloudFunctions"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>

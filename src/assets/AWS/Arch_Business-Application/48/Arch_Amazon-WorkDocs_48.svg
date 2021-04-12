@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Icon-Architecture/48/Arch_Amazon-WorkDocs_48</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#BD0816" offset="0%"></stop>
+            <stop stop-color="#FF5252" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Icon-Architecture/48/Arch_Amazon-WorkDocs_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icon-Architecture-BG/48/Business-Applications" fill="url(#linearGradient-1)">
+            <rect id="Rectangle" x="0" y="0" width="64" height="64"></rect>
+        </g>
+        <path d="M31,45 L33,45 L33,41 L31,41 L31,45 Z M31,39 L33,39 L33,35 L31,35 L31,39 Z M31,51 L33,51 L33,47 L31,47 L31,51 Z M17,33 L21,33 L21,31 L17,31 L17,33 Z M23,33 L27,33 L27,31 L23,31 L23,33 Z M12,52 L12,33 L15,33 L15,31 L12,31 L12,12 L31,12 L31,31 L29,31 L29,33 L32,33 L33,33 L52,33 L52,52 L12,52 Z M33,13.414 L50.586,31 L33,31 L33,13.414 Z M54,32 C54,31.74 53.898,31.484 53.707,31.293 L32.707,10.293 C32.515,10.102 32.26,10 32,10 L11,10 C10.447,10 10,10.448 10,11 L10,53 C10,53.552 10.447,54 11,54 L53,54 C53.552,54 54,53.552 54,53 L54,32 Z" id="Amazon-WorkDocs_Icon_48_Squid" fill="#FFFFFF"></path>
+    </g>
+</svg>
