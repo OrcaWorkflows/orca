@@ -1,0 +1,32 @@
+import React, {CSSProperties, NamedExoticComponent} from "react";
+import {Connection, Edge, Handle, NodeProps, Position} from "react-flow-renderer";
+
+type types = {
+    [key: string]: NamedExoticComponent<NodeProps>
+}
+export let nodeTypes: types = {
+};
+
+export const createNodes = () => {
+    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub"]
+    nodeTypes = {};
+    for (let node of nodes) {
+        nodeTypes[node] = React.memo(() => {
+            const targetHandleStyle: CSSProperties = {background: '#555'};
+            const sourceHandleStyleA: CSSProperties = {...targetHandleStyle};
+
+            const onConnect = (params: Connection | Edge) => console.log('handle onConnect', params);
+
+            return (
+                <>
+                    <Handle className={"operator-handle"} type="target" position={Position.Top} id="operator_target"
+                            style={targetHandleStyle} onConnect={onConnect}/>
+                    <div className={`node ${node.toLocaleLowerCase()}`}/>
+                    <Handle className={"operator-handle"} type="source" position={Position.Bottom} id="operator_source"
+                            style={sourceHandleStyleA}/>
+                </>
+            );
+        });
+    }
+    return nodeTypes;
+}

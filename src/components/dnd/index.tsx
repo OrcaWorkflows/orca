@@ -15,9 +15,6 @@ import TopBar from './topbar';
 
 import './scss/dnd.css';
 import './scss/nodes.scss'
-import S3 from "./nodes/S3";
-import KAFKA from "./nodes/KAFKA";
-import ELASTICSEARCH from "./nodes/ELASTICSEARCH";
 import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
@@ -25,9 +22,8 @@ import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../assets/mouseclick.png"
 
 import State from "../data/state";
-import DYNAMODB from "./nodes/DYNAMODB";
-import KINESIS from "./nodes/KINESIS";
-import PUBSUB from "./nodes/PUBSUB";
+
+import {nodeTypes} from "./nodes/basenode";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
@@ -50,6 +46,7 @@ const DnDFlow = () => {
     const refES = useRef<HTMLDivElement>(null);
 
     const onConnect = (params: Edge | Connection) => {
+        console.log(params);
         (params as Edge).animated = true;
         (params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
         setEdges((edges) => addEdge(params, edges));
@@ -75,15 +72,6 @@ const DnDFlow = () => {
             counter++;
             setNodes((es) => es.concat(newNode));
         }
-    };
-
-    const nodeTypes = {
-        S3: S3,
-        Kafka: KAFKA,
-        Elasticsearch: ELASTICSEARCH,
-        DynamoDB: DYNAMODB,
-        Kinesis: KINESIS,
-        PubSub: PUBSUB
     };
 
     State.edges = edges;
