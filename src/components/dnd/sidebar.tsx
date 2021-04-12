@@ -28,6 +28,9 @@ const sidebar = () => {
                                 <Table className={"sidebar-table"}>
                                     <tbody>
                                         <NodeRow node={"PubSub"}/>
+                                        <NodeRow node={"BigQuery"}/>
+                                        <NodeRow node={"DataLab"}/>
+                                        <NodeRow node={"DataFlow"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>

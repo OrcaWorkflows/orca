@@ -4,11 +4,10 @@ import {Connection, Edge, Handle, NodeProps, Position} from "react-flow-renderer
 type types = {
     [key: string]: NamedExoticComponent<NodeProps>
 }
-export let nodeTypes: types = {
-};
+export let nodeTypes: types = {};
 
 export const createNodes = () => {
-    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub"]
+    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub", "BigQuery", "DataLab", "DataFlow"]
     nodeTypes = {};
     for (let node of nodes) {
         nodeTypes[node] = React.memo(() => {

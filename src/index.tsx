@@ -6,7 +6,7 @@ import DragNDrop from './components/dnd/index';
 
 import './index.css';
 import logo from './assets/logo/vector/default-monochrome-black.svg'
-import {createNodes} from "./components/dnd/nodes/basenode";
+import {createNodes} from "./components/dnd/nodes/nodegenerator";
 const routes = [
     {
         path: '/',

@@ -23,7 +23,7 @@ import mouseImage from "../../assets/mouseclick.png"
 
 import State from "../data/state";
 
-import {nodeTypes} from "./nodes/basenode";
+import {nodeTypes} from "./nodes/nodegenerator";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
