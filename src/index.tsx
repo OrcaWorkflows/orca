@@ -24,7 +24,6 @@ const Header = withRouter(({history, location}) => {
                 <img src={logo} alt={"Logo"}/>
             </div>
             <div className={"logo"}>
-                <label>Killer of Orchestration</label>
             </div>
         </header>
     );

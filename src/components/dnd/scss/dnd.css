@@ -68,13 +68,28 @@
     border-right: 1px solid #eee;
     padding-right: 3px;
     width: 300px;
+    overflow: hidden;
+    display: inline-table;
+    position: relative;
+
+}
+
+.sidebar-scroll {
+    width: 100%;
+    overflow-y: scroll;
+    height: 93vh;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar-table {
     width: 100%;
-    vertical-align: top;
     border-collapse: collapse;
-    overflow: auto;
     table-layout: fixed;
 }
 
