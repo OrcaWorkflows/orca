@@ -1,4 +1,4 @@
-import React, {DragEvent, useRef, useState} from 'react';
+import React, {DragEvent, useEffect, useRef, useState} from 'react';
 import ReactFlow, {
     addEdge,
     ArrowHeadType, Connection,
@@ -34,12 +34,18 @@ const onDragOver = (event: DragEvent) => {
     event.dataTransfer.dropEffect = 'move';
 };
 
+let defaultTabElement = document.getElementById("defaultTab");
+if (defaultTabElement !== null) {
+    defaultTabElement.click();
+}
+
 const DnDFlow = () => {
 
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
-    const [showForm , setShowForm] = useState<string>("")
+    const [showForm , setShowForm] = useState<string>("");
+    const [activeTab, setActiveTab] = useState("Configurations");
 
     const refS3 = useRef<HTMLDivElement>(null);
     const refKafka = useRef<HTMLDivElement>(null);
@@ -89,6 +95,11 @@ const DnDFlow = () => {
 
     };
 
+    const openTab = (opName:any) => {
+        console.log(opName);
+        setActiveTab(opName);
+    }
+    console.log(activeTab);
     return (
         <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
             <ReactFlowProvider >
@@ -110,15 +121,31 @@ const DnDFlow = () => {
                 </div>
             </ReactFlowProvider>
             <div className={"forms"}>
-                {! (showForm !== "") &&
-                <div className={"form-div"} >
-                    <label className={"form-label"}>No Configuration Selected</label>
-                    <img className={"mouse-image"} src={mouseImage} alt={""}/>
-                    <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
+                <div className="tab">
+                    <button className={activeTab === "Configurations" ? "tablinks active" : "tablinks"}  onClick={() => openTab('Configurations')} >Conf</button>
+                    <button className={activeTab === "Output" ? "tablinks active" : "tablinks"} onClick={() => openTab('Output')}>Output</button>
+                    <button className={activeTab === "Details" ? "tablinks active" : "tablinks"} onClick={() => openTab('Details')}>Details</button>
+                </div>
+                {activeTab === "Configurations" && <div>
+                    {! (showForm !== "") &&
+                    <div className={"form-div"} >
+                        <label className={"form-label"}>No Configuration Selected</label>
+                        <img className={"mouse-image"} src={mouseImage} alt={""}/>
+                        <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
+                    </div>}
+                    {(showForm === "S3") && <S3Form ref={refS3}/>}
+                    {(showForm === "Kafka") && <KafkaForm ref={refKafka}/>}
+                    {(showForm === "Elasticsearch") && <ESForm ref={refES}/>}
                 </div>}
-                {(showForm === "S3") && <S3Form ref={refS3}/>}
-                {(showForm === "Kafka") && <KafkaForm ref={refKafka}/>}
-                {(showForm === "Elasticsearch") && <ESForm ref={refES}/>}
+                {activeTab === "Output" && <div>
+                    <h3>Output</h3>
+                    <p>Output.</p>
+                </div>}
+
+                {activeTab === "Details" && <div>
+                    <h3>Details</h3>
+                    <p>Details.</p>
+                </div>}
             </div>
         </div>
     );

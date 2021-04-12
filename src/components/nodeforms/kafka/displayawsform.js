@@ -13,7 +13,7 @@ const display= () => ({ handleSubmit, submitCount }) => (
             component={AntInput}
             name="broker_host"
             type="broker_host"
-            label="Broker Host"
+            placeholder="Broker Host"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
@@ -22,13 +22,13 @@ const display= () => ({ handleSubmit, submitCount }) => (
             component={AntInput}
             name="topic_name"
             type="topic_name"
-            label="Topic Name"
+            placeholder="Topic Name"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
         />
         <div className={"margin-top"}>
-            <button className="topbarbutton" type="submit">
+            <button className="form-button" type="submit">
                 Save
             </button>
         </div>

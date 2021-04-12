@@ -6,6 +6,7 @@ import {
 import {
     isRequired
 } from "../validatefields";
+import "../forms.scss";
 
 const display = () => ({ handleSubmit, submitCount }) => (
     <Form onSubmit={handleSubmit}>
@@ -13,7 +14,7 @@ const display = () => ({ handleSubmit, submitCount }) => (
             component={AntInput}
             name="bucket_name"
             type="bucket_name"
-            label="Bucket Name"
+            placeholder="Bucket Name"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
@@ -22,7 +23,7 @@ const display = () => ({ handleSubmit, submitCount }) => (
             component={AntInput}
             name="file_path"
             type="file_path"
-            label="File Name"
+            placeholder="File Name"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
@@ -31,13 +32,13 @@ const display = () => ({ handleSubmit, submitCount }) => (
             component={AntInput}
             name="file_type"
             type="file_type"
-            label="File Type"
+            placeholder="File Type"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
         />
         <div className={"margin-top"}>
-            <button className="topbarbutton" type="submit">
+            <button className="form-button" type="submit">
                 Save
             </button>
         </div>

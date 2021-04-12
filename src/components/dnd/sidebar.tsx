@@ -45,6 +45,7 @@ const sidebar = () => {
                                 <Table className={"sidebar-table"}>
                                     <tbody>
                                         <NodeRow node={"Kafka"}/>
+                                        <NodeRow node={"Spark"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
