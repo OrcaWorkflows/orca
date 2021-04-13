@@ -6,14 +6,15 @@ import {Edge} from "react-flow-renderer";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {timeoutMillis} from "../nodeforms/helper";
 import {AxiosResponse} from "axios";
-import {Button} from "react-bootstrap";
 
 const TopBar = () => {
     const submit = () => {
         try {
             for (let key in State.edges) {
-                let edge:Edge = (State.edges[key] as Edge);
-                createTasksForEdge(edge);
+                if (State.edges.hasOwnProperty(key)){
+                    let edge:Edge = (State.edges[key] as Edge);
+                    createTasksForEdge(edge);
+                }
             }
             RequestUtils.submit(new class implements Workflow {
                 name= "test-";

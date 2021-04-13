@@ -1,7 +1,7 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
-import {NotificationContainer, NotificationManager} from "react-notifications";
+import React, {forwardRef} from 'react';
+import {NotificationContainer} from "react-notifications";
 
-const DefaultForm = forwardRef((props, ref) => {
+const DefaultForm = forwardRef(() => {
     return (
         <div className={"container"}>
             <NotificationContainer/>

@@ -1,6 +1,7 @@
 import React from "react";
 import { DatePicker, Form, Input, TimePicker, Select } from "antd";
 import './forms.scss'
+import Password from "antd/es/input/Password";
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -52,3 +53,4 @@ export const AntSelect = CreateAntField(Select);
 export const AntDatePicker = CreateAntField(DatePicker);
 export const AntInput = CreateAntField(Input);
 export const AntTimePicker = CreateAntField(TimePicker);
+export const AntPassword = CreateAntField(Password);

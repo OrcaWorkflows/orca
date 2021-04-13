@@ -38,7 +38,6 @@ const S3Form = forwardRef((props, ref) => {
     const handleSubmit = (values: any, actions: any) => {
         setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
         State.configS3 = JSON.parse(JSON.stringify(values, null, 2));
-        console.log(State.configS3)
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
     };

@@ -1,4 +1,4 @@
-import React, {DragEvent, useEffect, useRef, useState} from 'react';
+import React, {DragEvent, useRef, useState} from 'react';
 import ReactFlow, {
     addEdge,
     ArrowHeadType, Connection,
