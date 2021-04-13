@@ -7,7 +7,7 @@ type types = {
 export let nodeTypes: types = {};
 
 export const createNodes = () => {
-    let nodes = ["S3", "Kafka", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub", "BigQuery", "DataLab", "DataFlow",
+    let nodes = ["S3", "Kafka", "Spark", "Elasticsearch", "DynamoDB", "Kinesis", "PubSub", "BigQuery", "DataLab", "DataFlow",
     "DataProc", "AppEngine", "CloudFunctions", "BigTable", "FileStore"]
     nodeTypes = {};
     for (let node of nodes) {
