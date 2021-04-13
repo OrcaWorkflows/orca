@@ -6,6 +6,7 @@ import {Edge} from "react-flow-renderer";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {timeoutMillis} from "../nodeforms/helper";
 import {AxiosResponse} from "axios";
+import {Button} from "react-bootstrap";
 
 const TopBar = () => {
     const submit = () => {
@@ -33,7 +34,7 @@ const TopBar = () => {
     };
 
     return (
-        <div>
+        <div className={"parent-top-bar"}>
             <NotificationContainer/>
             <button onClick={submit} className="topbarbutton">Submit</button>
             <button onClick={() => RequestUtils.resubmit()} className="topbarbutton">Resubmit</button>

@@ -44,8 +44,8 @@ img {
     min-height: 50px;
     max-height: 50px;
     float: left;
-    margin: 3px;
     padding: 3px;
+    margin-inline: 8px;
 }
 
 header a,

@@ -4,31 +4,44 @@
     height: 100%;
     background: #2d2d2d;
 }
+.parent-top-bar {
+    width: 100%;
+}
 
 .topbarbutton {
     background-color: #a0aaa0; /* Green */
-    border: 2px #0d220d;
+    border: 2px #a0aaa0;
     color: black;
     cursor: pointer;
-    padding: 15px 32px;
+    border-radius: 8px;
+    padding: 12px;
+    width: 13%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transition-duration: 0.1s;
+    transition-duration: 0.2s;
+    margin-left: 1.111%;
 }
 
 .topbarbutton:hover {
     background-color: #3e8e41; /* Green */
-    border: 2px #0d220d;
+    border: 2px #a0aaa0;
     color: black;
-    padding: 15px 32px;
+    padding: 12px;
+    border-radius: 8px;
+    width: 13%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 1.111%;
+}
+
+.tabchild {
+    margin-left: 20px;
 }
 
 .dndflow aside {
@@ -121,7 +134,7 @@ td:first-child {
     display: inline-block;
     background-color: #1e1e1e;
     width: 100%;
-    color: white;
+    color: lightgrey;
     vertical-align: top;
     border-collapse: collapse;
     overflow: auto;
@@ -147,6 +160,7 @@ td:first-child {
 .tab {
     overflow: hidden;
     background-color: #464646;
+    width: 100%;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -156,7 +170,7 @@ td:first-child {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 14px 28px;
     transition: 0.3s;
     color: black;
 }

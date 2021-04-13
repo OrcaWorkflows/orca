@@ -24,6 +24,7 @@ import mouseImage from "../../assets/mouseclick.png"
 import State from "../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
+import DefaultForm from "../nodeforms/default";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
@@ -34,10 +35,7 @@ const onDragOver = (event: DragEvent) => {
     event.dataTransfer.dropEffect = 'move';
 };
 
-let defaultTabElement = document.getElementById("defaultTab");
-if (defaultTabElement !== null) {
-    defaultTabElement.click();
-}
+const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka"];
 
 const DnDFlow = () => {
 
@@ -50,6 +48,7 @@ const DnDFlow = () => {
     const refS3 = useRef<HTMLDivElement>(null);
     const refKafka = useRef<HTMLDivElement>(null);
     const refES = useRef<HTMLDivElement>(null);
+    const refDefaultForm = useRef(null);
 
     const onConnect = (params: Edge | Connection) => {
         console.log(params);
@@ -136,13 +135,14 @@ const DnDFlow = () => {
                     {(showForm === "S3") && <S3Form ref={refS3}/>}
                     {(showForm === "Kafka") && <KafkaForm ref={refKafka}/>}
                     {(showForm === "Elasticsearch") && <ESForm ref={refES}/>}
+                    {(showForm !== "" && implementedNodes.indexOf(showForm) === -1) && <DefaultForm ref={refDefaultForm}/>}
                 </div>}
-                {activeTab === "Output" && <div>
+                {activeTab === "Output" && <div className={"tabchild"}>
                     <h3>Output</h3>
                     <p>Output.</p>
                 </div>}
 
-                {activeTab === "Details" && <div>
+                {activeTab === "Details" && <div className={"tabchild"}>
                     <h3>Details</h3>
                     <p>Details.</p>
                 </div>}

@@ -31,9 +31,10 @@
 }
 
 .form-container {
-  width: 95%;
+  width: 90%;
   display: inline-block;
-  margin:0px auto;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 
 .field-container {
@@ -47,6 +48,8 @@
   height: auto;
   margin: 20px 0;
   position: relative;
+  width: 90%;
+  padding-left: 3%;
 }
 
 .form-button {
@@ -77,13 +80,13 @@
   text-align: center;
   display: block;
   padding-top: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .forms {
   border-right-width: 0;
   border-right-style: solid;
-  padding-right: 5px;
-  padding-left: 5px;
   height: inherit;
   width: 400px;
   background-color: #5a5a5a;
