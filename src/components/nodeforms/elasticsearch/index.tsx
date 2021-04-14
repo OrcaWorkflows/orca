@@ -3,9 +3,9 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
-import {timeoutMillis} from "../helper";
+import {findIndex, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State from "../../data/state";
+import State, {ElasticsearchConf} from "../../data/state";
 
 const ESForm = forwardRef((props, ref) => {
     const [ESFormValues, setESFormValues] = useState({});
@@ -27,9 +27,10 @@ const ESForm = forwardRef((props, ref) => {
     };
 
     const setInitialValues = () => {
-        if (State.configES !== undefined) {
-            initialValues.host = State.configES["host"];
-            initialValues.index_name = State.configES["index_name"];
+        const index:number = findIndex(State.currentNodeClick);
+        if (State.nodeConfList[index].hasOwnProperty("host")) {
+            initialValues.host = (State.nodeConfList[index] as ElasticsearchConf).host;
+            initialValues.index_name = (State.nodeConfList[index] as ElasticsearchConf).index_name;
         }
 
         return initialValues;
@@ -37,7 +38,13 @@ const ESForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         setESFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        State.configES = JSON.parse(JSON.stringify(values, null, 2));
+        const indexToUpdate:number = findIndex(State.currentNodeClick);
+        let newElasticsearchConf:ElasticsearchConf = {
+            id: State.currentNodeClick,
+            host: values.host,
+            index_name: values.index_name,
+        }
+        State.nodeConfList[indexToUpdate] = newElasticsearchConf;
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
     };

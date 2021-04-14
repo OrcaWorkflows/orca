@@ -1,6 +1,6 @@
 import axios from "axios";
 import {Task, Workflow} from "../data/interface";
-import State from "../data/state";
+import State, {ElasticsearchConf, KafkaConf, S3Conf} from "../data/state";
 import {Edge} from "react-flow-renderer";
 import {timeoutMillis} from "../nodeforms/helper";
 import {NotificationManager} from "react-notifications";
@@ -14,31 +14,28 @@ const API=process.env.API || "http://localhost:5000/";
 const WORKFLOWS = "workflows/";
 const SERVICE_ACCOUNT_NAME = "argo/";
 
-function isConfGiven(nodeName:string):boolean {
-    switch(nodeName) {
-        case "S3": {
-            if (State.configS3 === undefined) {
-                NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", timeoutMillis);
-                return false;
-            }
-            break;
-        }
-        case "Kafka": {
-            if (State.configS3 === undefined) {
-                NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", timeoutMillis);
-                return false;
-            }
-            break;
-        }
-        case "Elasticsearch": {
-            if (State.configS3 === undefined) {
-                NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", timeoutMillis);
-                return false;
-            }
-            break;
+function findIndex(node_id:string) {
+    for (let i = 0; i < State.nodeConfList.length; i++) {
+        if (State.nodeConfList[i].id === node_id) {
+            return i;
         }
     }
-    return true;
+    return -1;
+}
+
+function isConfGiven(nodeName:string):boolean {
+    const index = findIndex(nodeName);
+    if (nodeName.indexOf("S3") >= 0 && State.nodeConfList[index].hasOwnProperty("bucket_name")) {
+        return true;
+    }
+    else if (nodeName.indexOf("Kafka") >= 0 && State.nodeConfList[index].hasOwnProperty("broker_host")) {
+        return true;
+    }
+    else if (nodeName.indexOf("Elasticsearch") >= 0 && State.nodeConfList[index].hasOwnProperty("host")) {
+        return true;
+    }
+    NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", timeoutMillis);
+    return false;
 }
 
 function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
@@ -50,14 +47,14 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
         nodeName = edge.target;
     }
     let task:Task = {
-        name: nodeName + type,
+        name: nodeName + "_" + type,
         dependencies: dependencies,
         templateRef: {
             "name": "orca-operators",
             "template": "orca-operators"
         },
         arguments: {
-            parameters: [{"name": "OPERATOR", "value": edge.source.toLowerCase()},
+            parameters: [{"name": "OPERATOR", "value": edge.source.toLowerCase().split("_")[0]},
                 {"name": "OPERATOR_TYPE", "value": "read"},
                 {"name": "REDIS_URL", "value": "192.168.2.101"},
                 {"name": "REDIS_PORT", "value": "6379"},
@@ -66,18 +63,19 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
                 ]
         }
     }
-    if (nodeName === "S3") {
-        task.arguments.parameters.push({"name": "AWS_S3_BUCKET_NAME", "value": State.configS3["bucket_name"]});
-        task.arguments.parameters.push({"name": "AWS_S3_FILE_PATH", "value": State.configS3["file_path"]});
-        task.arguments.parameters.push({"name": "AWS_S3_FILE_TYPE", "value": State.configS3["file_type"]});
+    let index = findIndex(nodeName);
+    if (nodeName.indexOf("S3") >= 0) {
+        task.arguments.parameters.push({"name": "AWS_S3_BUCKET_NAME", "value": (State.nodeConfList[index] as S3Conf).bucket_name});
+        task.arguments.parameters.push({"name": "AWS_S3_FILE_PATH", "value": (State.nodeConfList[index] as S3Conf).file_path});
+        task.arguments.parameters.push({"name": "AWS_S3_FILE_TYPE", "value": (State.nodeConfList[index] as S3Conf).file_type});
     }
-    else if (nodeName === "Kafka") {
-        task.arguments.parameters.push({"name": "BOOTSTRAP_SERVERS", "value": State.configKafka["broker_host"]});
-        task.arguments.parameters.push({"name": "KAFKA_TOPIC", "value": State.configKafka["topic_name"]});
+    else if (nodeName.indexOf("Kafka") >= 0) {
+        task.arguments.parameters.push({"name": "BOOTSTRAP_SERVERS", "value": (State.nodeConfList[index] as KafkaConf).broker_host});
+        task.arguments.parameters.push({"name": "KAFKA_TOPIC", "value": (State.nodeConfList[index] as KafkaConf).topic_name});
     }
-    else if (nodeName === "Elasticsearch") {
-        task.arguments.parameters.push({"name": "ELASTICSEARCH_HOST", "value": State.configES["host"]});
-        task.arguments.parameters.push({"name": "ELASTICSEARCH_INDEX", "value": State.configES["index_name"]});
+    else if (nodeName.indexOf("Elasticsearch") >= 0) {
+        task.arguments.parameters.push({"name": "ELASTICSEARCH_HOST", "value": (State.nodeConfList[index] as ElasticsearchConf).host});
+        task.arguments.parameters.push({"name": "ELASTICSEARCH_INDEX", "value": (State.nodeConfList[index] as ElasticsearchConf).index_name});
     }
     return task;
 }
@@ -95,8 +93,7 @@ export function createTasksForEdge(edge: Edge) {
         dependencies.push(edge.source + Write);
     }
     State.tasks.push(taskGenerator(edge, dependencies, Read));
-    State.tasks.push(taskGenerator(edge, [edge.source + Read], Write));
-    console.log(State.tasks);
+    State.tasks.push(taskGenerator(edge, [edge.source + "_" + Read], Write));
 }
 
 export function hasDependency(nodeName:string):boolean {

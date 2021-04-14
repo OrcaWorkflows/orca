@@ -19,9 +19,10 @@ import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
 import 'react-notifications/lib/notifications.css';
-import mouseImage from "../../assets/mouseclick.png"
+import mouseImage from "../../assets/mouseclick.png";
 
-import State from "../data/state";
+
+import {State, NodeConf} from "../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
@@ -64,18 +65,21 @@ const DnDFlow = () => {
 
     const onDrop = (event: DragEvent) => {
         event.preventDefault();
-        console.log(event);
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
             const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
             const newNode: Node = {
-                id: `${type}`,
+                id: `${type}` + '_' + counter,
                 type,
                 position,
                 data: {label: `${type}`},
             };
             counter++;
             setNodes((es) => es.concat(newNode));
+            let nodeConf:NodeConf = {
+                id: newNode.id
+            }
+            State.nodeConfList.push(nodeConf);
         }
     };
 
@@ -87,18 +91,16 @@ const DnDFlow = () => {
                 let newState = ""
                 if(prevShowForm !== node_type){
                     newState = node_type;
+                    State.currentNodeClick = node_type;
                 }
                 return newState
             } );
         }
-
     };
 
     const openTab = (opName:any) => {
-        console.log(opName);
         setActiveTab(opName);
     }
-    console.log(activeTab);
     return (
         <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
             <ReactFlowProvider >
@@ -132,10 +134,10 @@ const DnDFlow = () => {
                         <img className={"mouse-image"} src={mouseImage} alt={""}/>
                         <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
                     </div>}
-                    {(showForm === "S3") && <S3Form ref={refS3}/>}
-                    {(showForm === "Kafka") && <KafkaForm ref={refKafka}/>}
-                    {(showForm === "Elasticsearch") && <ESForm ref={refES}/>}
-                    {(showForm !== "" && implementedNodes.indexOf(showForm) === -1) && <DefaultForm ref={refDefaultForm}/>}
+                    {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
+                    {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
+                    {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
+                    {(showForm !== "" && implementedNodes.indexOf(showForm.split('_')[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                 </div>}
                 {activeTab === "Output" && <div className={"tabchild"}>
                     <h3>Output</h3>
