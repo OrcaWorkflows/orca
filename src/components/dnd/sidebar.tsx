@@ -16,9 +16,13 @@ const sidebar = () => {
                             <Collapsible trigger="Amazon Web Service" open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"S3"}/>
-                                    <NodeRow node={"DynamoDB"}/>
-                                    <NodeRow node={"Kinesis"}/>
+                                        <NodeRow node={"S3"}/>
+                                        <NodeRow node={"DynamoDB"}/>
+                                        <NodeRow node={"Kinesis"}/>
+                                        <NodeRow node={"Lambda"}/>
+                                        <NodeRow node={"EMR"}/>
+                                        <NodeRow node={"RedShift"}/>
+                                        <NodeRow node={"SQS"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
@@ -29,15 +33,16 @@ const sidebar = () => {
                             <Collapsible trigger="Google Cloud Platform" open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"PubSub"}/>
-                                    <NodeRow node={"BigQuery"}/>
-                                    <NodeRow node={"DataLab"}/>
-                                    <NodeRow node={"DataFlow"}/>
-                                    <NodeRow node={"DataProc"}/>
-                                    <NodeRow node={"AppEngine"}/>
-                                    <NodeRow node={"CloudFunctions"}/>
-                                    <NodeRow node={"BigTable"}/>
-                                    <NodeRow node={"FileStore"}/>
+                                        <NodeRow node={"PubSub"}/>
+                                        <NodeRow node={"BigQuery"}/>
+                                        <NodeRow node={"DataFlow"}/>
+                                        <NodeRow node={"DataProc"}/>
+                                        <NodeRow node={"AppEngine"}/>
+                                        <NodeRow node={"CloudFunctions"}/>
+                                        <NodeRow node={"BigTable"}/>
+                                        <NodeRow node={"FileStore"}/>
+                                        <NodeRow node={"CloudSQL"}/>
+                                        <NodeRow node={"MemoryStore"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
@@ -48,8 +53,14 @@ const sidebar = () => {
                             <Collapsible trigger={"Apache Stack"} open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"Kafka"}/>
-                                    <NodeRow node={"Spark"}/>
+                                        <NodeRow node={"Kafka"}/>
+                                        <NodeRow node={"Spark"}/>
+                                        <NodeRow node={"Flink"}/>
+                                        <NodeRow node={"Pig"}/>
+                                        <NodeRow node={"Hive"}/>
+                                        <NodeRow node={"Hadoop"}/>
+                                        <NodeRow node={"Impala"}/>
+                                        <NodeRow node={"Cassandra"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>
@@ -60,7 +71,7 @@ const sidebar = () => {
                             <Collapsible trigger={"ELK Stack"} open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
-                                    <NodeRow node={"Elasticsearch"}/>
+                                        <NodeRow node={"Elasticsearch"}/>
                                     </tbody>
                                 </Table>
                             </Collapsible>

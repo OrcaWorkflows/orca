@@ -13,7 +13,7 @@
 }
 
 .kafka {
-  background-image: url("../../../assets/kafka.png");
+  background-image: url("../../../assets/apache/kafka.png");
 }
 
 .elasticsearch {
@@ -33,7 +33,7 @@
 }
 
 .spark {
-  background-image: url("../../../assets/spark.png");
+  background-image: url("../../../assets/apache/spark.png");
 }
 
 .bigquery {
@@ -66,4 +66,52 @@
 
 .filestore {
   background-image: url("../../../assets/GCP/Storage & Databases/filestore-512-color.svg");
+}
+
+.lambda {
+  background-image: url("../../../assets/AWS/lambda.svg");
+}
+
+.emr{
+  background-image: url("../../../assets/AWS/emr.png");
+}
+
+.redshift{
+  background-image: url("../../../assets/AWS/redshift.svg");
+}
+
+.sqs {
+  background-image: url("../../../assets/AWS/sqs.svg");
+}
+
+.cloudsql {
+  background-image: url("../../../assets/GCP/Storage & Databases/cloud-sql-512-color.svg");
+}
+
+.memorystore {
+  background-image: url("../../../assets/GCP/Storage & Databases/memorystore-512-color.svg");
+}
+
+.flink {
+  background-image: url("../../../assets/apache/flink.png");
+}
+
+.pig {
+  background-image: url("../../../assets/apache/pig.png");
+}
+
+.hive {
+  background-image: url("../../../assets/apache/hive.svg");
+}
+
+.hadoop {
+  background-image: url("../../../assets/apache/hadoop.svg");
+}
+
+.impala {
+  background-image: url("../../../assets/apache/impala.svg");
+}
+
+.cassandra {
+  background-image: url("../../../assets/apache/cassandra.svg");
 }
