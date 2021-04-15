@@ -69,7 +69,6 @@ const DnDFlow = () => {
         if (reactFlowInstance) {
             const type = event.dataTransfer.getData('application/reactflow');
             const position = reactFlowInstance.project({x: event.clientX - 330, y: event.clientY - 140});
-            console.log(event.clientX + "----" + event.clientY + 40)
             const newNode: Node = {
                 id: `${type}` + SEPERATOR + counter,
                 type,
