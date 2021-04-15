@@ -14,6 +14,8 @@ import Account from "./components/auth/account";
 // Create Custom Nodes
 createNodes();
 
+export const SEPERATOR:string = "-";
+
 export const getHidden = () => {
     const isLoggedIn = localStorage.getItem("user");
     return isLoggedIn != null;

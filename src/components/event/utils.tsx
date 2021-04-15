@@ -4,6 +4,7 @@ import State, {ElasticsearchConf, KafkaConf, S3Conf} from "../data/state";
 import {Edge} from "react-flow-renderer";
 import {timeoutMillis} from "../nodeforms/helper";
 import {NotificationManager} from "react-notifications";
+import {SEPERATOR} from "../../index";
 
 
 
@@ -47,15 +48,15 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
         nodeName = edge.target;
     }
     let task:Task = {
-        name: nodeName + "_" + type,
+        name: nodeName + SEPERATOR + type,
         dependencies: dependencies,
         templateRef: {
             "name": "orca-operators",
             "template": "orca-operators"
         },
         arguments: {
-            parameters: [{"name": "OPERATOR", "value": edge.source.toLowerCase().split("_")[0]},
-                {"name": "OPERATOR_TYPE", "value": "read"},
+            parameters: [{"name": "OPERATOR", "value": nodeName.toLowerCase().split(SEPERATOR)[0]},
+                {"name": "OPERATOR_TYPE", "value": type},
                 {"name": "REDIS_URL", "value": "192.168.2.101"},
                 {"name": "REDIS_PORT", "value": "6379"},
                 {"name": "REDIS_PUSH_KEY", "value": "testFinal"},
@@ -90,10 +91,10 @@ export function createTasksForEdge(edge: Edge) {
     const dep = hasDependency(edge.source);
     const dependencies:Array<string> = [];
     if (dep) {
-        dependencies.push(edge.source + Write);
+        dependencies.push(edge.source + SEPERATOR + Write);
     }
     State.tasks.push(taskGenerator(edge, dependencies, Read));
-    State.tasks.push(taskGenerator(edge, [edge.source + "_" + Read], Write));
+    State.tasks.push(taskGenerator(edge, [edge.source + SEPERATOR + Read], Write));
 }
 
 export function hasDependency(nodeName:string):boolean {

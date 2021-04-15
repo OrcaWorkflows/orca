@@ -26,6 +26,7 @@ import {State, NodeConf} from "../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
+import {SEPERATOR} from "../../index";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
@@ -69,7 +70,7 @@ const DnDFlow = () => {
             const type = event.dataTransfer.getData('application/reactflow');
             const position = reactFlowInstance.project({x: event.clientX, y: event.clientY - 40});
             const newNode: Node = {
-                id: `${type}` + '_' + counter,
+                id: `${type}` + SEPERATOR + counter,
                 type,
                 position,
                 data: {label: `${type}`},
@@ -137,7 +138,7 @@ const DnDFlow = () => {
                     {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
                     {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
                     {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
-                    {(showForm !== "" && implementedNodes.indexOf(showForm.split('_')[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
+                    {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                 </div>}
                 {activeTab === "Output" && <div className={"tabchild"}>
                     <h3>Output</h3>
