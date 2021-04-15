@@ -81,6 +81,18 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
     return task;
 }
 
+export function isTaskTargetSame(edge: Edge):number {
+    for (let key in State.tasks) {
+        if (State.tasks.hasOwnProperty(key)){
+            let task:Task = (State.tasks[key] as Task);
+            if (task.dependencies.includes(edge.source + SEPERATOR + Write)) {
+                return task.dependencies.indexOf(edge.source + SEPERATOR + Write);
+            }
+        }
+    }
+    return -1;
+}
+
 export function createTasksForEdge(edge: Edge) {
     if (! isConfGiven(edge.source)) {
         throw new Error();
@@ -88,13 +100,20 @@ export function createTasksForEdge(edge: Edge) {
     if (! isConfGiven(edge.target)) {
         throw new Error();
     }
-    const dep = hasDependency(edge.source);
-    const dependencies:Array<string> = [];
-    if (dep) {
-        dependencies.push(edge.source + SEPERATOR + Write);
+    let isTargetSame:number = isTaskTargetSame(edge);
+    if (isTargetSame !== -1) {
+        let task:Task = (State.tasks[isTargetSame] as Task);
+        task.dependencies.push(edge.source + SEPERATOR + Read);
     }
-    State.tasks.push(taskGenerator(edge, dependencies, Read));
-    State.tasks.push(taskGenerator(edge, [edge.source + SEPERATOR + Read], Write));
+    else {
+        const dep = hasDependency(edge.source);
+        const dependencies:Array<string> = [];
+        if (dep) {
+            dependencies.push(edge.source + SEPERATOR + Write);
+        }
+        State.tasks.push(taskGenerator(edge, dependencies, Read));
+        State.tasks.push(taskGenerator(edge, [edge.source + SEPERATOR + Read], Write));
+    }
 }
 
 export function hasDependency(nodeName:string):boolean {

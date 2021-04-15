@@ -58,10 +58,12 @@ const DnDFlow = () => {
         (params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
         setEdges((edges) => addEdge(params, edges));
     }
+
     const onElementsRemove = (elementsToRemove: Elements) => {
         setNodes((nodes) => removeElements(elementsToRemove, nodes));
         setEdges((edges) => removeElements(elementsToRemove, edges));
     }
+
     const onLoad = (_reactFlowInstance: OnLoadParams) => setReactFlowInstance(_reactFlowInstance);
 
     const onDrop = (event: DragEvent) => {
