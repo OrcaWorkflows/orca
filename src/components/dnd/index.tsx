@@ -126,8 +126,8 @@ const DnDFlow = () => {
             </ReactFlowProvider>
             <div className={"forms"}>
                 <div className="tab">
-                    <button className={activeTab === "Configurations" ? "tablinks active" : "tablinks"}  onClick={() => openTab('Configurations')} >Conf</button>
-                    <button className={activeTab === "Output" ? "tablinks active" : "tablinks"} onClick={() => openTab('Output')}>Output</button>
+                    <button className={activeTab === "Configurations" ? "tablinks active" : "tablinks"}  onClick={() => openTab('Configurations')} >Configurations</button>
+                    <button className={activeTab === "System" ? "tablinks active" : "tablinks"} onClick={() => openTab('System')}>System</button>
                     <button className={activeTab === "Details" ? "tablinks active" : "tablinks"} onClick={() => openTab('Details')}>Details</button>
                 </div>
                 {activeTab === "Configurations" && <div>
@@ -142,7 +142,7 @@ const DnDFlow = () => {
                     {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
                     {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                 </div>}
-                {activeTab === "Output" && <div className={"tabchild"}>
+                {activeTab === "System" && <div className={"tabchild"}>
                     <h3>Output</h3>
                     <p>Output.</p>
                 </div>}

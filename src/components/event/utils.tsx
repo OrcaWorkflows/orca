@@ -43,11 +43,10 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
     let nodeName = "";
     if (type === "Read") {
         nodeName = edge.source;
-    }
-    else if (type === "Write") {
+    } else if (type === "Write") {
         nodeName = edge.target;
     }
-    let task:Task = {
+    let task: Task = {
         name: nodeName + SEPERATOR + type,
         dependencies: dependencies,
         templateRef: {
@@ -59,39 +58,52 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
                 {"name": "OPERATOR_TYPE", "value": type},
                 {"name": "REDIS_URL", "value": "192.168.2.101"},
                 {"name": "REDIS_PORT", "value": "6379"},
-                {"name": "REDIS_PUSH_KEY", "value": "testFinal"},
-                {"name": "REDIS_POP_KEY", "value": "None"},
-                ]
+            ]
         }
+    }
+    if (type === "Read") {
+        task.arguments.parameters.push({"name": "REDIS_PUSH_KEY", "value": "testMult"});
+        task.arguments.parameters.push({"name": "REDIS_POP_KEY", "value": "None"});
+    } else if (type === "Write") {
+        task.arguments.parameters.push({"name": "REDIS_PUSH_KEY", "value": "None"});
+        task.arguments.parameters.push({"name": "REDIS_POP_KEY", "value": "testMult"});
     }
     let index = findIndex(nodeName);
     if (nodeName.indexOf("S3") >= 0) {
-        task.arguments.parameters.push({"name": "AWS_S3_BUCKET_NAME", "value": (State.nodeConfList[index] as S3Conf).bucket_name});
-        task.arguments.parameters.push({"name": "AWS_S3_FILE_PATH", "value": (State.nodeConfList[index] as S3Conf).file_path});
-        task.arguments.parameters.push({"name": "AWS_S3_FILE_TYPE", "value": (State.nodeConfList[index] as S3Conf).file_type});
-    }
-    else if (nodeName.indexOf("Kafka") >= 0) {
-        task.arguments.parameters.push({"name": "BOOTSTRAP_SERVERS", "value": (State.nodeConfList[index] as KafkaConf).broker_host});
-        task.arguments.parameters.push({"name": "KAFKA_TOPIC", "value": (State.nodeConfList[index] as KafkaConf).topic_name});
-    }
-    else if (nodeName.indexOf("Elasticsearch") >= 0) {
-        task.arguments.parameters.push({"name": "ELASTICSEARCH_HOST", "value": (State.nodeConfList[index] as ElasticsearchConf).host});
-        task.arguments.parameters.push({"name": "ELASTICSEARCH_INDEX", "value": (State.nodeConfList[index] as ElasticsearchConf).index_name});
+        task.arguments.parameters.push({
+            "name": "AWS_S3_BUCKET_NAME",
+            "value": (State.nodeConfList[index] as S3Conf).bucket_name
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_S3_FILE_PATH",
+            "value": (State.nodeConfList[index] as S3Conf).file_path
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_S3_FILE_TYPE",
+            "value": (State.nodeConfList[index] as S3Conf).file_type
+        });
+    } else if (nodeName.indexOf("Kafka") >= 0) {
+        task.arguments.parameters.push({
+            "name": "BOOTSTRAP_SERVERS",
+            "value": (State.nodeConfList[index] as KafkaConf).broker_host
+        });
+        task.arguments.parameters.push({
+            "name": "KAFKA_TOPIC",
+            "value": (State.nodeConfList[index] as KafkaConf).topic_name
+        });
+    } else if (nodeName.indexOf("Elasticsearch") >= 0) {
+        task.arguments.parameters.push({
+            "name": "ELASTICSEARCH_HOST",
+            "value": (State.nodeConfList[index] as ElasticsearchConf).host
+        });
+        task.arguments.parameters.push({
+            "name": "ELASTICSEARCH_INDEX",
+            "value": (State.nodeConfList[index] as ElasticsearchConf).index_name
+        });
     }
     return task;
 }
 
-export function isTaskTargetSame(edge: Edge):number {
-    for (let key in State.tasks) {
-        if (State.tasks.hasOwnProperty(key)){
-            let task:Task = (State.tasks[key] as Task);
-            if (task.dependencies.includes(edge.source + SEPERATOR + Write)) {
-                return task.dependencies.indexOf(edge.source + SEPERATOR + Write);
-            }
-        }
-    }
-    return -1;
-}
 
 export function createTasksForEdge(edge: Edge) {
     if (! isConfGiven(edge.source)) {
@@ -100,18 +112,29 @@ export function createTasksForEdge(edge: Edge) {
     if (! isConfGiven(edge.target)) {
         throw new Error();
     }
-    let isTargetSame:number = isTaskTargetSame(edge);
-    if (isTargetSame !== -1) {
-        let task:Task = (State.tasks[isTargetSame] as Task);
-        task.dependencies.push(edge.source + SEPERATOR + Read);
-    }
-    else {
-        const dep = hasDependency(edge.source);
-        const dependencies:Array<string> = [];
-        if (dep) {
-            dependencies.push(edge.source + SEPERATOR + Write);
+    let flag1:boolean = false;
+    let flag2:boolean = false;
+    for (let key in State.tasks) {
+        if (State.tasks.hasOwnProperty(key)){
+            let tempTask:Task = (State.tasks[key] as Task);
+            if (tempTask.name.split("-")[0] + "-" + tempTask.name.split("-")[1] === edge.target) {
+                tempTask.dependencies.push(edge.source + SEPERATOR + Read);
+                flag1 = true;
+            }
+            if (tempTask.name === edge.source + SEPERATOR + Read) {
+                flag2 = true;
+            }
         }
+    }
+    const dep = hasDependency(edge.source);
+    const dependencies:Array<string> = [];
+    if (dep) {
+        dependencies.push(edge.source + SEPERATOR + Write);
+    }
+    if (! flag2) {
         State.tasks.push(taskGenerator(edge, dependencies, Read));
+    }
+    if (! flag1) {
         State.tasks.push(taskGenerator(edge, [edge.source + SEPERATOR + Read], Write));
     }
 }
@@ -124,7 +147,6 @@ export function hasDependency(nodeName:string):boolean {
 export default class RequestUtils {
     static submit(data:Workflow, onSuccess:any, onError:any) {
         console.log("Submit initiated.");
-        console.log(data);
         const newAxios=axios.create({
             headers: {
                 'Content-Type': 'application/json',
