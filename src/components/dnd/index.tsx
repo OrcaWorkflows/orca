@@ -30,6 +30,7 @@ import {SEPERATOR} from "../../index";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
+// eslint-disable-next-line
 let counter:number = 0;
 
 const onDragOver = (event: DragEvent) => {
