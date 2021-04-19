@@ -54,7 +54,8 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
             "template": "orca-operators"
         },
         arguments: {
-            parameters: [{"name": "OPERATOR", "value": nodeName.toLowerCase().split(SEPERATOR)[0]},
+            parameters: [
+                {"name": "OPERATOR", "value": nodeName.toLowerCase().split(SEPERATOR)[0]},
                 {"name": "OPERATOR_TYPE", "value": type},
                 {"name": "REDIS_URL", "value": "192.168.2.101"},
                 {"name": "REDIS_PORT", "value": "6379"},

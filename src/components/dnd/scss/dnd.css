@@ -127,6 +127,7 @@ td:first-child {
     height: 100%;
     vertical-align: top;
     display: block;
+    cursor: pointer;
 }
 
 .Collapsible__trigger {
