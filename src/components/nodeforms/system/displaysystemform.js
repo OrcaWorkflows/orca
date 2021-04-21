@@ -9,20 +9,22 @@ import {
 
 const display = () => ({handleSubmit, submitCount}) => (
     <Form onSubmit={handleSubmit}>
-        <div className={"system-conf"}>Redis</div>
-        <Field
-            component={AntInput}
-            name="redis_host"
-            type="redis_host"
-            placeholder="Redis Host"
-            submitCount={submitCount}
-            validate={isRequired}
-            hasFeedback
-        />
-        <div className={"margin-top"}>
-            <button className="form-button" type="submit">
-                Save
-            </button>
+        <div className={"content-conf"}>
+            <div className={"system-conf"}>Redis</div>
+            <Field
+                component={AntInput}
+                name="redis_host"
+                type="redis_host"
+                placeholder="Redis Host"
+                submitCount={submitCount}
+                validate={isRequired}
+                hasFeedback
+            />
+            <div className={"margin-top"}>
+                <button className="form-button" type="submit">
+                    Save
+                </button>
+            </div>
         </div>
     </Form>
 );

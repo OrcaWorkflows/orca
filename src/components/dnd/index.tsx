@@ -18,6 +18,7 @@ import './scss/nodes.scss'
 import S3Form from "../nodeforms/s3";
 import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
+import SystemForm from "../nodeforms/system";
 import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../assets/mouseclick.png";
 
@@ -144,8 +145,7 @@ const DnDFlow = () => {
                     {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                 </div>}
                 {activeTab === "System" && <div className={"tabchild"}>
-                    <h3>Output</h3>
-                    <p>Output.</p>
+                    <SystemForm/>
                 </div>}
 
                 {activeTab === "Details" && <div className={"tabchild"}>

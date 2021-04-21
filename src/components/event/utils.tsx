@@ -7,11 +7,10 @@ import {NotificationManager} from "react-notifications";
 import {SEPERATOR} from "../../index";
 
 
-
 const Read = "Read";
 const Write = "Write";
 
-const API=process.env.API || "http://localhost:5000/";
+const API=process.env.API || "http://192.168.2.102:5000/";
 const WORKFLOWS = "workflows/";
 const SERVICE_ACCOUNT_NAME = "argo/";
 
@@ -57,8 +56,8 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
             parameters: [
                 {"name": "OPERATOR", "value": nodeName.toLowerCase().split(SEPERATOR)[0]},
                 {"name": "OPERATOR_TYPE", "value": type},
-                {"name": "REDIS_URL", "value": "192.168.2.101"},
-                {"name": "REDIS_PORT", "value": "6379"},
+                {"name": "REDIS_URL", "value": State.redisConf.split(":")[0]},
+                {"name": "REDIS_PORT", "value": State.redisConf.split(":")[1]},
             ]
         }
     }
@@ -143,6 +142,51 @@ export function createTasksForEdge(edge: Edge) {
 export function hasDependency(nodeName:string):boolean {
     const edge = State.edges.find(x => (x as Edge).target === nodeName);
     return edge !== undefined;
+}
+
+export function monitor_h() {
+    let heartbeats = require('heartbeats');
+    let heart = heartbeats.createHeart(1000);
+    heart.createEvent(1, function(){
+        let status:string = "";
+        RequestUtils.getStatus();
+        if (status !== State.workflowStatus) {
+            status = State.workflowStatus;
+            if (status === "Failed") {
+                NotificationManager.error(status, "Status", timeoutMillis);
+                heart.kill();
+            }
+            else {
+                NotificationManager.success(status, "Status", timeoutMillis);
+                heart.kill();
+            }
+        }
+    });
+}
+
+function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+export async function monitor() {
+    console.log("Monitor initiated.");
+    let status:string = "";
+    while (status !== "Succeeded") {
+        await delay(1000);
+        RequestUtils.getStatus();
+        if (status !== State.workflowStatus) {
+            status = State.workflowStatus;
+            if (status === "Failed") {
+                NotificationManager.error(status, "Status", timeoutMillis);
+                break;
+            }
+            else {
+                NotificationManager.success(status, "Status", timeoutMillis);
+            }
+
+        }
+    }
+    console.log("Monitor finished.");
 }
 
 export default class RequestUtils {
@@ -231,6 +275,16 @@ export default class RequestUtils {
         }).catch((error) => {
             console.log(error);
             NotificationManager.error('Delete Failed', error.toString(), timeoutMillis);
+        });
+    }
+
+    static getStatus() {
+        const newAxios=axios.create()
+        newAxios.get(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName,
+            {}).then((response) => {
+                State.workflowStatus = response.data.metadata.labels["workflows.argoproj.io/phase"];
+        }).catch((error) => {
+            console.log(error);
         });
     }
 }

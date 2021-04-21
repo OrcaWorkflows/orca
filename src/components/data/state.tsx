@@ -1,9 +1,6 @@
 import {Task} from "./interface";
 import {Elements} from "react-flow-renderer";
 
-export interface RedisConf {
-    host:string;
-}
 
 export class NodeConf {
     id:string;
@@ -55,7 +52,8 @@ export class State {
     static nodeConfList: Array<NodeConf> = [];
     static workflowName: string = "";
     static currentNodeClick: string = "";
-    static redisConf:RedisConf;
+    static redisConf:string = "192.168.2.101:6379";
+    static workflowStatus:string = "";
 }
 
 export default State;

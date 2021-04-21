@@ -5,7 +5,7 @@ import {Formik} from 'formik';
 import DisplayForm from "./displaysystemform";
 import {findIndex, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {RedisConf} from "../../data/state";
+import State from "../../data/state";
 
 const SystemForm = forwardRef((props, ref) => {
     const [SystemFormValues, setSystemFormValues] = useState({});
@@ -22,21 +22,16 @@ const SystemForm = forwardRef((props, ref) => {
     });
 
     const initialValues = {
-        host: "",
+        "redis_host": State.redisConf,
     };
 
     const setInitialValues = () => {
-        const index:number = findIndex(State.currentNodeClick);
-        if (State.nodeConfList[index].hasOwnProperty("host")) {
-            initialValues.host = State.redisConf.host;
-        }
-
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
         setSystemFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        State.redisConf.host = JSON.parse(JSON.stringify(values, null, 2))["host"];
+        State.redisConf = JSON.parse(JSON.stringify(values, null, 2))["host"];
         actions.setSubmitting(false);
         NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
     };
@@ -44,7 +39,7 @@ const SystemForm = forwardRef((props, ref) => {
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"form-label"}>Elasticsearch Configurations</label>
+            <label className={"form-label"}>System Configurations</label>
             <Formik
                 initialValues={setInitialValues()}
                 onSubmit={handleSubmit}

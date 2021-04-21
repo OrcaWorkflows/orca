@@ -1,6 +1,6 @@
 import React from 'react';
 import {Workflow} from "../data/interface";
-import RequestUtils, {createTasksForEdge} from "../event/utils";
+import RequestUtils, {createTasksForEdge, monitor, monitor_h} from "../event/utils";
 import State from "../data/state";
 import {Edge} from "react-flow-renderer";
 import {NotificationContainer, NotificationManager} from "react-notifications";
@@ -28,6 +28,7 @@ const TopBar = () => {
                 State.tasks = [];
                 console.log(error);
             });
+            monitor();
         }
         catch (e) {
             NotificationManager.error('Submit Failed', "Error", timeoutMillis);
@@ -38,7 +39,8 @@ const TopBar = () => {
         <div className={"parent-top-bar"}>
             <NotificationContainer/>
             <button onClick={submit} className="topbarbutton">Submit</button>
-            <button onClick={() => RequestUtils.resubmit()} className="topbarbutton">Resubmit</button>
+            <button onClick={() => {RequestUtils.resubmit();
+                monitor();}} className="topbarbutton">Resubmit</button>
             <button onClick={() => RequestUtils.suspend()} className="topbarbutton">Suspend</button>
             <button onClick={() => RequestUtils.resume()} className="topbarbutton">Resume</button>
             <button onClick={() => RequestUtils.stop()} className="topbarbutton">Stop</button>
