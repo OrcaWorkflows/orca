@@ -5,7 +5,7 @@ import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {findIndex, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {ElasticsearchConf} from "../../data/state";
+import State, {ElasticsearchConf} from "../../../data/state";
 
 const ESForm = forwardRef((props, ref) => {
     const [ESFormValues, setESFormValues] = useState({});

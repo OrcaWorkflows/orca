@@ -20,14 +20,15 @@ import KafkaForm from "../nodeforms/kafka";
 import ESForm from "../nodeforms/elasticsearch";
 import SystemForm from "../nodeforms/system";
 import 'react-notifications/lib/notifications.css';
-import mouseImage from "../../assets/mouseclick.png";
+import mouseImage from "../../../assets/mouseclick.png";
 
 
-import {State, NodeConf} from "../data/state";
+import {State, NodeConf} from "../../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
-import {SEPERATOR} from "../../index";
+import {SEPERATOR} from "../../../index";
+import SideHeader from "../../navigation/sideheader";
 
 const initialNodes: Elements | (() => Elements) = [];
 const initialEdges: Elements | (() => Elements) = [];
@@ -107,53 +108,57 @@ const DnDFlow = () => {
         setActiveTab(opName);
     }
     return (
-        <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
-            <ReactFlowProvider >
-                <Sidebar/>
-                <div className="reactflow-wrapper">
-                    <TopBar/>
-                    <ReactFlow
-                        elements={nodes.concat(edges)}
-                        onConnect={onConnect}
-                        onElementsRemove={onElementsRemove}
-                        onLoad={onLoad}
-                        onDrop={onDrop}
-                        onDragOver={onDragOver}
-                        nodeTypes={nodeTypes}
-                        onContextMenu={handleClick}
-                    >
-                        <Controls/>
-                    </ReactFlow>
-                </div>
-            </ReactFlowProvider>
-            <div className={"forms"}>
-                <div className="tab">
-                    <button className={activeTab === "Configurations" ? "tablinks active" : "tablinks"}  onClick={() => openTab('Configurations')} >Configurations</button>
-                    <button className={activeTab === "System" ? "tablinks active" : "tablinks"} onClick={() => openTab('System')}>System</button>
-                    <button className={activeTab === "Details" ? "tablinks active" : "tablinks"} onClick={() => openTab('Details')}>Details</button>
-                </div>
-                {activeTab === "Configurations" && <div>
-                    {! (showForm !== "") &&
-                    <div className={"form-div"} >
-                        <label className={"form-label"}>No Configuration Selected</label>
-                        <img className={"mouse-image"} src={mouseImage} alt={""}/>
-                        <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
-                    </div>}
-                    {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
-                    {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
-                    {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
-                    {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
-                </div>}
-                {activeTab === "System" && <div className={"tabchild"}>
-                    <SystemForm/>
-                </div>}
+            <div className="dndflow" onContextMenu={(e)=> e.preventDefault()}>
+                <ReactFlowProvider >
+                    <div style={{display: "flex"}}>
+                        <SideHeader/>
+                        <Sidebar/>
+                    </div>
 
-                {activeTab === "Details" && <div className={"tabchild"}>
-                    <h3>Details</h3>
-                    <p>Details.</p>
-                </div>}
+                    <div className="reactflow-wrapper">
+                        <TopBar/>
+                        <ReactFlow
+                            elements={nodes.concat(edges)}
+                            onConnect={onConnect}
+                            onElementsRemove={onElementsRemove}
+                            onLoad={onLoad}
+                            onDrop={onDrop}
+                            onDragOver={onDragOver}
+                            nodeTypes={nodeTypes}
+                            onContextMenu={handleClick}
+                        >
+                            <Controls/>
+                        </ReactFlow>
+                    </div>
+                </ReactFlowProvider>
+                <div className={"forms"}>
+                    <div className="tab">
+                        <button className={activeTab === "Configurations" ? "tablinks active" : "tablinks"}  onClick={() => openTab('Configurations')} >Configurations</button>
+                        <button className={activeTab === "System" ? "tablinks active" : "tablinks"} onClick={() => openTab('System')}>System</button>
+                        <button className={activeTab === "Details" ? "tablinks active" : "tablinks"} onClick={() => openTab('Details')}>Details</button>
+                    </div>
+                    {activeTab === "Configurations" && <div>
+                        {! (showForm !== "") &&
+                        <div className={"form-div"} >
+                            <label className={"form-label"}>No Configuration Selected</label>
+                            <img className={"mouse-image"} src={mouseImage} alt={""}/>
+                            <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
+                        </div>}
+                        {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
+                        {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
+                        {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
+                        {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
+                    </div>}
+                    {activeTab === "System" && <div className={"tabchild"}>
+                        <SystemForm/>
+                    </div>}
+
+                    {activeTab === "Details" && <div className={"tabchild"}>
+                        <h3>Details</h3>
+                        <p>Details.</p>
+                    </div>}
+                </div>
             </div>
-        </div>
     );
 };
 

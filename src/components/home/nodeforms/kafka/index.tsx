@@ -4,7 +4,7 @@ import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {findIndex, timeoutMillis} from "../helper";
-import State, {KafkaConf} from "../../data/state";
+import State, {KafkaConf} from "../../../data/state";
 
 const KafkaForm = forwardRef((props, ref) => {
     const [KafkaFormValues, setKafkaFormValues] = useState({});

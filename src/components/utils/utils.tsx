@@ -2,7 +2,7 @@ import axios from "axios";
 import {Task, Workflow} from "../data/interface";
 import State, {ElasticsearchConf, KafkaConf, S3Conf} from "../data/state";
 import {Edge} from "react-flow-renderer";
-import {timeoutMillis} from "../nodeforms/helper";
+import {timeoutMillis} from "../home/nodeforms/helper";
 import {NotificationManager} from "react-notifications";
 import {SEPERATOR} from "../../index";
 
@@ -11,8 +11,9 @@ const Read = "Read";
 const Write = "Write";
 
 const API=process.env.API || "http://192.168.2.102:5000/";
-const WORKFLOWS = "workflows/";
-const SERVICE_ACCOUNT_NAME = "argo/";
+const WORKFLOWS = "workflows";
+const SERVICE_ACCOUNT_NAME = "argo";
+const DIVIDER = "/";
 
 function findIndex(node_id:string) {
     for (let i = 0; i < State.nodeConfList.length; i++) {
@@ -203,7 +204,7 @@ export default class RequestUtils {
 
     static resubmit() {
         const newAxios=axios.create();
-        newAxios.put(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName + "/resubmit",
+        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName + "/resubmit",
             {}).then((response) => {
                 console.log(response.data);
             NotificationManager.success('Successfully Resubmitted Workflow', 'Success', timeoutMillis);
@@ -216,7 +217,7 @@ export default class RequestUtils {
     static suspend() {
         console.log("Suspend initiated.");
         const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName + "/suspend",
+        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName + "/suspend",
             {}).then((response) => {
                 console.log(response);
                 NotificationManager.success('Successfully Suspended Workflow', 'Success', timeoutMillis);
@@ -229,7 +230,7 @@ export default class RequestUtils {
     static resume() {
         console.log("Resume initiated.");
         const newAxios=axios.create()
-        newAxios.post(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName +"/resume",
+        newAxios.post(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/resume",
             {}).then((response) => {
                 console.log(response);
                 NotificationManager.success('Successfully Resumed Workflow', 'Success', timeoutMillis);
@@ -242,7 +243,7 @@ export default class RequestUtils {
     static stop() {
         console.log("Stop initiated.");
         const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName +"/stop",
+        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/stop",
             {}).then((response) => {
                 console.log(response);
                 NotificationManager.success('Successfully Stopped Workflow', 'Success', timeoutMillis);
@@ -255,7 +256,7 @@ export default class RequestUtils {
     static terminate() {
         console.log("Terminate initiated.");
         const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName +"/terminate",
+        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/terminate",
             {}).then((response) => {
                 console.log(response);
                 NotificationManager.success('Successfully Terminated Workflow', 'Success', timeoutMillis);
@@ -268,7 +269,7 @@ export default class RequestUtils {
     static delete() {
         console.log("Delete initiated.");
         const newAxios=axios.create()
-        newAxios.delete(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName,
+        newAxios.delete(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName,
             {}).then((response) => {
                 console.log(response);
                 NotificationManager.success('Successfully Deleted Workflow', 'Success', timeoutMillis);
@@ -280,9 +281,19 @@ export default class RequestUtils {
 
     static getStatus() {
         const newAxios=axios.create()
-        newAxios.get(API + WORKFLOWS + SERVICE_ACCOUNT_NAME + State.workflowName,
+        newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName,
             {}).then((response) => {
                 State.workflowStatus = response.data.metadata.labels["workflows.argoproj.io/phase"];
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    static getAllWorkflows() {
+        const newAxios=axios.create()
+        newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME,
+            {}).then((response) => {
+            State.workflows = response.data.items;
         }).catch((error) => {
             console.log(error);
         });

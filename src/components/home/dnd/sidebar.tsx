@@ -68,7 +68,7 @@ const sidebar = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Collapsible trigger={"ELK Stack"} open={true}>
+                            <Collapsible trigger={"Elastic Stack"} open={true}>
                                 <Table className={"sidebar-table"}>
                                     <tbody>
                                         <NodeRow node={"Elasticsearch"}/>

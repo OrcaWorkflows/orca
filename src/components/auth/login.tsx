@@ -1,9 +1,9 @@
 import React from 'react';
 import {Field, Form, Formik} from "formik";
-import {AntInput, AntPassword} from "../nodeforms/createantfields";
-import {isRequired} from "../nodeforms/validatefields";
+import {AntInput, AntPassword} from "../home/nodeforms/createantfields";
+import {isRequired} from "../home/nodeforms/validatefields";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {timeoutMillis} from "../nodeforms/helper";
+import {timeoutMillis} from "../home/nodeforms/helper";
 import './auth.scss'
 import logo from "../../assets/logo/vector/default-monochrome-black.svg";
 import { useHistory } from 'react-router-dom';
@@ -21,7 +21,7 @@ const Login = () => {
     };
 
     const handleRegister = () => {
-        NotificationManager.error('Currently Registration is Closed. Please Try again later.', 'Error', timeoutMillis);
+        NotificationManager.error('Registration is Closed. Please Try again later.', 'Error', timeoutMillis);
     };
 
     return (

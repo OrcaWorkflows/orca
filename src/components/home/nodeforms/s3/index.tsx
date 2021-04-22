@@ -4,7 +4,7 @@ import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {findIndex, timeoutMillis} from "../helper"
-import State, {S3Conf} from "../../data/state";
+import State, {S3Conf} from "../../../data/state";
 
 const S3Form = forwardRef((props, ref) => {
     const [S3FormValues, setS3FormValues] = useState();

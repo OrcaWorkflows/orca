@@ -1,7 +1,7 @@
 import React from 'react';
-import {Workflow} from "../data/interface";
-import RequestUtils, {createTasksForEdge, monitor, monitor_h} from "../event/utils";
-import State from "../data/state";
+import {Workflow} from "../../data/interface";
+import RequestUtils, {createTasksForEdge, monitor, monitor_h} from "../../utils/utils";
+import State from "../../data/state";
 import {Edge} from "react-flow-renderer";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {timeoutMillis} from "../nodeforms/helper";

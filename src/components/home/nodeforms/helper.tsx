@@ -1,5 +1,5 @@
 import delay from "delay";
-import State from "../data/state";
+import State from "../../data/state";
 
 export const timeoutMillis = 2000;
 

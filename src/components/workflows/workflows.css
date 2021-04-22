@@ -1,0 +1,19 @@
+.workflows-root {
+    display: flex;
+    background-color: #8a8a8a;
+    width: 100%;
+    height: 100%;
+}
+
+.workflows-table {
+    font-size: x-large;
+    align-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
+    width: 100%;
+}
+
+.workflow-table-root {
+    background-color: #6a6a6a;
+}
