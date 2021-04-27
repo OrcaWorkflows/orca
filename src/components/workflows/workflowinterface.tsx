@@ -11,12 +11,12 @@ export interface Metadata {
     uid: string;
 }
 
-export interface Workflow {
+export interface WorkflowRes {
     metadata: Metadata;
     spec: any; // To be implemented
     status: any; // To be implemented
 }
 
-export interface Workflows {
-    items: Array<Workflow>;
+export interface WorkflowListRes {
+    items: Array<WorkflowRes>;
 }

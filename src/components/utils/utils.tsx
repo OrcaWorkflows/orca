@@ -5,6 +5,7 @@ import {Edge} from "react-flow-renderer";
 import {timeoutMillis} from "../home/nodeforms/helper";
 import {NotificationManager} from "react-notifications";
 import {SEPERATOR} from "../../index";
+import {WorkflowListRes, WorkflowRes} from "../workflows/workflowinterface";
 
 
 const Read = "Read";
@@ -289,12 +290,10 @@ export default class RequestUtils {
         });
     }
 
-    static getAllWorkflows() {
+    static getAllWorkflows(): Promise<any> {
         const newAxios=axios.create()
-        newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME,
-            {}).then((response) => {
-            State.workflows = response.data.items;
-        }).catch((error) => {
+        return newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME,
+            {}).then((response) => response.data).catch((error) => {
             console.log(error);
         });
     }

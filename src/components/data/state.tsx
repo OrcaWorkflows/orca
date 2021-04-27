@@ -1,6 +1,6 @@
 import {Task} from "./interface";
 import {Elements} from "react-flow-renderer";
-import {Workflows} from "../workflows/workflowinterface";
+import {WorkflowRes} from "../workflows/workflowinterface";
 
 
 export class NodeConf {
@@ -55,7 +55,7 @@ export class State {
     static currentNodeClick: string = "";
     static redisConf:string = "192.168.2.101:6379";
     static workflowStatus:string = "";
-    static workflows:Workflows;
+    static workflows:Array<WorkflowRes>;
 }
 
 export default State;

@@ -12,6 +12,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import State from "../data/state";
+import {useCallback, useEffect, useState} from "react";
+import RequestUtils from "../utils/utils";
+import {WorkflowListRes} from "./workflowinterface";
 
 
 function createData(name:string, calories:number, fat:number, carbs:number, protein:number) {
@@ -28,6 +31,18 @@ const rows = [
 ];
 
 export const Workflows = () => {
+    const [data, setData] = useState<any[]>([]);
+
+
+    const fetchData = useCallback(async () => {
+        let a = await RequestUtils.getAllWorkflows();
+        setData(a.items);
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    },[fetchData]);
+
     return (
         <div className={"workflows-root"}>
             <SideHeader/>
@@ -44,15 +59,15 @@ export const Workflows = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
+                            {data.map((d) => (
+                                <TableRow key={d.metadata.name}>
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        {d.metadata.name}
                                     </TableCell>
-                                    <TableCell align="right">{row.calories}</TableCell>
-                                    <TableCell align="right">{row.fat}</TableCell>
-                                    <TableCell align="right">{row.carbs}</TableCell>
-                                    <TableCell align="right">{row.protein}</TableCell>
+                                    <TableCell align="right">{d.metadata.name}</TableCell>
+                                    <TableCell align="right">{d.metadata.name}</TableCell>
+                                    <TableCell align="right">{d.metadata.name}</TableCell>
+                                    <TableCell align="right">{d.metadata.name}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
