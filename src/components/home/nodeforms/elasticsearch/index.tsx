@@ -3,9 +3,10 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
-import {findIndex, timeoutMillis} from "../helper";
+import {findIndex} from "../../../utils/helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {ElasticsearchConf} from "../../../data/state";
+import State, {ElasticsearchConf, NodeConf} from "../../../data/state";
+import {notificationTimeoutMillis} from "../../../../config";
 
 const ESForm = forwardRef((props, ref) => {
     const [ESFormValues, setESFormValues] = useState({});
@@ -28,9 +29,10 @@ const ESForm = forwardRef((props, ref) => {
 
     const setInitialValues = () => {
         const index:number = findIndex(State.currentNodeClick);
-        if (State.nodeConfList[index].hasOwnProperty("host")) {
-            initialValues.host = (State.nodeConfList[index] as ElasticsearchConf).host;
-            initialValues.index_name = (State.nodeConfList[index] as ElasticsearchConf).index_name;
+        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
+        if (nodeConfList[index].hasOwnProperty("host")) {
+            initialValues.host = (nodeConfList[index] as ElasticsearchConf).host;
+            initialValues.index_name = (nodeConfList[index] as ElasticsearchConf).index_name;
         }
 
         return initialValues;
@@ -38,15 +40,17 @@ const ESForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         setESFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
         const indexToUpdate:number = findIndex(State.currentNodeClick);
         let newElasticsearchConf:ElasticsearchConf = {
             id: State.currentNodeClick,
             host: values.host,
             index_name: values.index_name,
         }
-        State.nodeConfList[indexToUpdate] = newElasticsearchConf;
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
+        nodeConfList[indexToUpdate] = newElasticsearchConf;
+        localStorage.setItem("nodes", JSON.stringify(nodeConfList));
+        NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
     return (

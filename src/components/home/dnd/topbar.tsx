@@ -1,37 +1,47 @@
 import React from 'react';
 import {Workflow} from "../../data/interface";
-import RequestUtils, {createTasksForEdge, monitor, monitor_h} from "../../utils/utils";
+import {createTaskForEdge, monitor} from "../../utils/utils";
 import State from "../../data/state";
-import {Edge} from "react-flow-renderer";
+import {Edge, Elements} from "react-flow-renderer";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {timeoutMillis} from "../nodeforms/helper";
 import {AxiosResponse} from "axios";
+import {notificationTimeoutMillis} from "../../../config";
+import {
+    deleteWorkflow,
+    resubmitWorkflow,
+    resumeWorkflow,
+    stopWorkflow,
+    submitWorkflow,
+    suspendWorkflow, terminateWorkflow
+} from "../../../actions/workflow_actions";
 
 const TopBar = () => {
     const submit = () => {
         try {
-            for (let key in State.edges) {
-                if (State.edges.hasOwnProperty(key)){
-                    let edge:Edge = (State.edges[key] as Edge);
-                    createTasksForEdge(edge);
+            let edges:Elements = JSON.parse(localStorage.getItem("edges") as string) as Elements;
+            for (let key in edges) {
+                if (edges.hasOwnProperty(key)){
+                    let edge:Edge = (edges[key] as Edge);
+                    createTaskForEdge(edge);
                 }
             }
-            RequestUtils.submit(new class implements Workflow {
+            submitWorkflow(new class implements Workflow {
                 name= "test-";
                 tasks = State.tasks;
             }, (response:AxiosResponse) => {
-                State.workflowName = response.data.metadata.name;
+                console.log(response.data);
+                localStorage.setItem("workflowName", response.data.metadata.name)
                 State.tasks = [];
-                NotificationManager.success('Successfully Submitted Workflow', 'Success', timeoutMillis);
+                NotificationManager.success('Successfully Submitted Workflow', 'Success', notificationTimeoutMillis);
             }, (error:any) => {
-                NotificationManager.error('Submit Failed. Check the server.', "Error", timeoutMillis);
+                NotificationManager.error('Submit Failed. Check the server.', "Error", notificationTimeoutMillis);
                 State.tasks = [];
                 console.log(error);
             });
             monitor();
         }
         catch (e) {
-            NotificationManager.error('Submit Failed', "Error", timeoutMillis);
+            NotificationManager.error('Submit Failed', "Error", notificationTimeoutMillis);
         }
     };
 
@@ -39,15 +49,14 @@ const TopBar = () => {
         <div className={"parent-top-bar"}>
             <NotificationContainer/>
             <button onClick={submit} className="topbarbutton">Submit</button>
-            <button onClick={() => {RequestUtils.resubmit();
+            <button onClick={() => {resubmitWorkflow(localStorage.getItem("workflowName") as string);
                 monitor();}} className="topbarbutton">Resubmit</button>
-            <button onClick={() => RequestUtils.suspend()} className="topbarbutton">Suspend</button>
-            <button onClick={() => RequestUtils.resume()} className="topbarbutton">Resume</button>
-            <button onClick={() => RequestUtils.stop()} className="topbarbutton">Stop</button>
-            <button onClick={() => RequestUtils.terminate()} className="topbarbutton">Terminate</button>
-            <button onClick={() => RequestUtils.delete()} className="topbarbutton">Delete</button>
+            <button onClick={() => suspendWorkflow(localStorage.getItem("workflowName") as string)} className="topbarbutton">Suspend</button>
+            <button onClick={() => resumeWorkflow(localStorage.getItem("workflowName") as string)} className="topbarbutton">Resume</button>
+            <button onClick={() => stopWorkflow(localStorage.getItem("workflowName") as string)} className="topbarbutton">Stop</button>
+            <button onClick={() => terminateWorkflow(localStorage.getItem("workflowName") as string)} className="topbarbutton">Terminate</button>
+            <button onClick={() => deleteWorkflow(localStorage.getItem("workflowName") as string)} className="topbarbutton">Delete</button>
         </div>
-
     );
 }
 

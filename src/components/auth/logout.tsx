@@ -6,7 +6,8 @@ import "./auth.scss"
 const Logout = () => {
     const history = useHistory();
     const logout = () => {
-        localStorage.removeItem("user");
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
         history.push("/");
     }
 

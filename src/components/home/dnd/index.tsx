@@ -1,7 +1,7 @@
-import React, {DragEvent, useRef, useState} from 'react';
+import React, {DragEvent, useEffect, useRef, useState} from 'react';
 import ReactFlow, {
     addEdge,
-    ArrowHeadType, Connection,
+    ArrowHeadType, Connection, ControlButton,
     Controls,
     Edge,
     Elements, Node,
@@ -21,29 +21,31 @@ import ESForm from "../nodeforms/elasticsearch";
 import SystemForm from "../nodeforms/system";
 import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../../assets/mouseclick.png";
-
+import { SaveOutlined, DownloadOutlined } from '@ant-design/icons';
 
 import {State, NodeConf} from "../../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
-import {SEPERATOR} from "../../../index";
+import {SEPARATOR} from "../../../index";
 import SideHeader from "../../navigation/sideheader";
+import PubSubForm from "../nodeforms/pubsub";
+import {getCanvas, setCanvas} from "../../../actions/canvas_actions";
+import {Button, IconButton} from "@material-ui/core";
+import {Save} from "@material-ui/icons";
+import {NotificationManager} from "react-notifications";
+import {notificationTimeoutMillis} from "../../../config";
 
-const initialNodes: Elements | (() => Elements) = [];
-const initialEdges: Elements | (() => Elements) = [];
+
+let initialNodes: Elements | (() => Elements) = [];
+let initialEdges: Elements | (() => Elements) = [];
+
 // eslint-disable-next-line
 let counter:number = 0;
 
-const onDragOver = (event: DragEvent) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-};
-
-const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka"];
+const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka", "PubSub"];
 
 const DnDFlow = () => {
-
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
     const [nodes, setNodes] = useState<Elements>(initialNodes);
     const [edges, setEdges] = useState<Elements>(initialEdges);
@@ -55,12 +57,24 @@ const DnDFlow = () => {
     const refES = useRef<HTMLDivElement>(null);
     const refDefaultForm = useRef(null);
 
+    useEffect(() => {
+        getCanvas().then(r => {
+            localStorage.setItem("nodes", JSON.stringify(r.nodes));
+            localStorage.setItem("edges", JSON.stringify(r.edges));
+            setNodes(r.nodes);
+            setEdges(r.edges);
+    });},[]);
+
     const onConnect = (params: Edge | Connection) => {
-        console.log(params);
         (params as Edge).animated = true;
         (params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
         setEdges((edges) => addEdge(params, edges));
     }
+
+    const onDragOver = (event: DragEvent) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    };
 
     const onElementsRemove = (elementsToRemove: Elements) => {
         setNodes((nodes) => removeElements(elementsToRemove, nodes));
@@ -75,7 +89,7 @@ const DnDFlow = () => {
             const type = event.dataTransfer.getData('application/reactflow');
             const position = reactFlowInstance.project({x: event.clientX - 330, y: event.clientY - 140});
             const newNode: Node = {
-                id: `${type}` + SEPERATOR + counter,
+                id: `${type}` + SEPARATOR + counter,
                 type,
                 position,
                 data: {label: `${type}`},
@@ -85,11 +99,8 @@ const DnDFlow = () => {
             let nodeConf:NodeConf = {
                 id: newNode.id
             }
-            State.nodeConfList.push(nodeConf);
         }
     };
-
-    State.edges = edges;
     const handleClick = (element: any) => {
         if (element.target.nextElementSibling != null){
             const node_type = element.target.nextElementSibling.dataset.nodeid;
@@ -103,6 +114,24 @@ const DnDFlow = () => {
             } );
         }
     };
+
+    const onNodeDragStop = (event: React.MouseEvent, node:Node) => {
+        event.preventDefault();
+        nodes.forEach(
+            (element) => {
+           if (element.id === node.id) {
+               (element as Node).position.x = event.clientX - 330;
+               (element as Node).position.y = event.clientY - 140;
+           }
+        });
+        setCanvas(nodes, edges);
+    }
+
+    const saveWorkflow = () => {
+        console.log(nodes);
+        setCanvas(nodes, edges);
+        NotificationManager.success('Successfully Saved Workflow', 'Success', notificationTimeoutMillis);
+    }
 
     const openTab = (opName:any) => {
         setActiveTab(opName);
@@ -126,9 +155,15 @@ const DnDFlow = () => {
                             onDragOver={onDragOver}
                             nodeTypes={nodeTypes}
                             onContextMenu={handleClick}
+                            onNodeDragStop={onNodeDragStop}
                         >
-                            <Controls/>
+                            <Controls>
+                                <ControlButton onClick={saveWorkflow}>
+                                    <Save />
+                                </ControlButton>
+                            </Controls>
                         </ReactFlow>
+
                     </div>
                 </ReactFlowProvider>
                 <div className={"forms"}>
@@ -137,6 +172,7 @@ const DnDFlow = () => {
                         <button className={activeTab === "System" ? "tablinks active" : "tablinks"} onClick={() => openTab('System')}>System</button>
                         <button className={activeTab === "Details" ? "tablinks active" : "tablinks"} onClick={() => openTab('Details')}>Details</button>
                     </div>
+
                     {activeTab === "Configurations" && <div>
                         {! (showForm !== "") &&
                         <div className={"form-div"} >
@@ -147,7 +183,8 @@ const DnDFlow = () => {
                         {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
                         {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
                         {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
-                        {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPERATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
+                        {(showForm.indexOf("PubSub") >= 0) && <PubSubForm ref={refES}/>}
+                        {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPARATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                     </div>}
                     {activeTab === "System" && <div className={"tabchild"}>
                         <SystemForm/>

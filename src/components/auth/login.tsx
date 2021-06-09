@@ -3,10 +3,11 @@ import {Field, Form, Formik} from "formik";
 import {AntInput, AntPassword} from "../home/nodeforms/createantfields";
 import {isRequired} from "../home/nodeforms/validatefields";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {timeoutMillis} from "../home/nodeforms/helper";
 import './auth.scss'
 import logo from "../../assets/logo/vector/default-monochrome-black.svg";
+import {signinUser} from "../../actions/auth_actions";
 import { useHistory } from 'react-router-dom';
+import {notificationTimeoutMillis} from "../../config";
 
 const Login = () => {
     const initialValues = {
@@ -16,12 +17,11 @@ const Login = () => {
     const history = useHistory();
     const handleSubmit = (values: any, actions: any) => {
         actions.setSubmitting(false);
-        localStorage.setItem("user", values["username"]);
-        history.push("/");
+        signinUser(values["username"], values["password"], history);
     };
 
     const handleRegister = () => {
-        NotificationManager.error('Registration is Closed. Please Try again later.', 'Error', timeoutMillis);
+        NotificationManager.error('Registration is Closed. Please Try again later.', 'Error', notificationTimeoutMillis);
     };
 
     return (
@@ -69,4 +69,5 @@ const Login = () => {
         </div>
     );
 }
+
 export default Login;

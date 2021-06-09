@@ -3,9 +3,8 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displaysystemform";
-import {findIndex, timeoutMillis} from "../helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State from "../../../data/state";
+import {notificationTimeoutMillis} from "../../../../config";
 
 const SystemForm = forwardRef((props, ref) => {
     const [SystemFormValues, setSystemFormValues] = useState({});
@@ -22,7 +21,6 @@ const SystemForm = forwardRef((props, ref) => {
     });
 
     const initialValues = {
-        "redis_host": State.redisConf,
     };
 
     const setInitialValues = () => {
@@ -31,9 +29,8 @@ const SystemForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         setSystemFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        State.redisConf = JSON.parse(JSON.stringify(values, null, 2))["host"];
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
+        NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
     return (

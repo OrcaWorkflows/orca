@@ -20,7 +20,7 @@ const Account = () => {
             </AccountCircleIcon>
             <div className={"username"}>
                 <label>
-                    {localStorage.getItem("user")}
+                    {localStorage.getItem("username")}
                 </label>
             </div>
         </div>

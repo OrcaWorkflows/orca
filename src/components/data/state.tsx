@@ -24,6 +24,21 @@ export class S3Conf extends NodeConf {
     }
 }
 
+export class PubSubConf extends NodeConf {
+    project_id: string;
+    topic: string;
+    topic_action: string;
+    timeout: number;
+
+    constructor(id:string, project_id:string, topic:string, topic_action:string, timeout:number) {
+        super(id);
+        this.project_id = project_id;
+        this.topic = topic;
+        this.topic_action = topic_action;
+        this.timeout = timeout;
+    }
+}
+
 export class KafkaConf extends NodeConf {
     broker_host: string;
     topic_name: string;
@@ -48,12 +63,7 @@ export class ElasticsearchConf extends NodeConf {
 
 export class State {
     static tasks: Array<Task> = [];
-    static edges: Elements = [];
-    static nodes: Elements = [];
-    static nodeConfList: Array<NodeConf> = [];
-    static workflowName: string = "";
     static currentNodeClick: string = "";
-    static redisConf:string = "192.168.2.101:6379";
     static workflowStatus:string = "";
     static workflows:Array<WorkflowRes>;
 }
