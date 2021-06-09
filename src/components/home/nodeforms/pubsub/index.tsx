@@ -1,56 +1,58 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
-import DisplayForm from "./displayawsform";
+import DisplayForm from "./displaygcpform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
 import {findIndex} from "../../../utils/helper"
-import State, {NodeConf, S3Conf} from "../../../data/state";
+import State, {NodeConf, PubSubConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 
-const S3Form = forwardRef((props, ref) => {
-    const [S3FormValues, setS3FormValues] = useState();
+const PubSubForm = forwardRef((props, ref) => {
+    const [PubSubFormValues, setPubSubFormValues] = useState();
 
-    const getS3FormValues = () => {
-        return S3FormValues;
+    const getPubSubFormValues = () => {
+        return PubSubFormValues;
     }
 
     useImperativeHandle(ref, () => {
         return {
-            getFormValues: getS3FormValues
+            getFormValues: getPubSubFormValues
         };
     });
 
     const initialValues = {
-        bucket_name: "",
-        file_path: "",
-        file_type: "",
+        project_id: "akis-295110",
+        topic: "",
+        topic_action: "",
+        timeout: 10,
     };
 
     const setInitialValues = () => {
         const index:number = findIndex(State.currentNodeClick);
         let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        console.log(nodeConfList[0]);
-        if (nodeConfList[index].hasOwnProperty("bucket_name")) {
-            initialValues.bucket_name = (nodeConfList[index] as S3Conf).bucket_name;
-            initialValues.file_path = (nodeConfList[index] as S3Conf).file_path;
-            initialValues.file_type = (nodeConfList[index] as S3Conf).file_type;
+        if (nodeConfList[index].hasOwnProperty("topic")) {
+            initialValues.project_id = (nodeConfList[index] as PubSubConf).project_id;
+            initialValues.topic = (nodeConfList[index] as PubSubConf).topic;
+            initialValues.topic_action = (nodeConfList[index] as PubSubConf).topic_action;
+            initialValues.timeout = (nodeConfList[index] as PubSubConf).timeout;
         }
 
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        setPubSubFormValues(JSON.parse(JSON.stringify(values, null, 2)));
         let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
         const indexToUpdate:number = findIndex(State.currentNodeClick);
-        let newS3Conf:S3Conf = {
+        let newPubSubConf:PubSubConf = {
             id: State.currentNodeClick,
-            bucket_name: values.bucket_name,
-            file_path: values.file_path,
-            file_type: values.file_type,
+            project_id: values.project_id,
+            topic: values.topic,
+            topic_action: values.topic_action,
+            timeout: values.timeout,
         }
         actions.setSubmitting(false);
-        nodeConfList[indexToUpdate] = newS3Conf;
+        nodeConfList[indexToUpdate] = newPubSubConf;
         localStorage.setItem("nodes", JSON.stringify(nodeConfList));
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
@@ -58,7 +60,7 @@ const S3Form = forwardRef((props, ref) => {
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"form-label"}>S3 Configurations</label>
+            <label className={"form-label"}>PubSub Configurations</label>
                 <Formik
                     initialValues={setInitialValues()}
                     onSubmit={handleSubmit}
@@ -67,4 +69,4 @@ const S3Form = forwardRef((props, ref) => {
         </div>)
 });
 
-export default S3Form;
+export default PubSubForm;

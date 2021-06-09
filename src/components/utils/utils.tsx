@@ -1,54 +1,87 @@
-import axios from "axios";
-import {Task, Workflow} from "../data/interface";
-import State, {ElasticsearchConf, KafkaConf, S3Conf} from "../data/state";
+import {Task} from "../data/interface";
+import State, {ElasticsearchConf, KafkaConf, NodeConf, PubSubConf, S3Conf} from "../data/state";
 import {Edge} from "react-flow-renderer";
-import {timeoutMillis} from "../home/nodeforms/helper";
 import {NotificationManager} from "react-notifications";
-import {SEPERATOR} from "../../index";
-import {WorkflowListRes, WorkflowRes} from "../workflows/workflowinterface";
+import {SEPARATOR} from "../../index";
+import {notificationTimeoutMillis} from "../../config";
+import {getWorkflowStatus} from "../../actions/workflow_actions";
+import {findIndex} from "./helper";
 
 
-const Read = "Read";
-const Write = "Write";
-
-const API=process.env.API || "http://192.168.2.102:5000/";
-const WORKFLOWS = "workflows";
-const SERVICE_ACCOUNT_NAME = "argo";
-const DIVIDER = "/";
-
-function findIndex(node_id:string) {
-    for (let i = 0; i < State.nodeConfList.length; i++) {
-        if (State.nodeConfList[i].id === node_id) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-function isConfGiven(nodeName:string):boolean {
+function isConfGiven(nodeName:string, nodeConfList:Array<NodeConf>):boolean {
     const index = findIndex(nodeName);
-    if (nodeName.indexOf("S3") >= 0 && State.nodeConfList[index].hasOwnProperty("bucket_name")) {
+    if (nodeName.indexOf("S3") >= 0 && nodeConfList[index].hasOwnProperty("bucket_name")) {
         return true;
     }
-    else if (nodeName.indexOf("Kafka") >= 0 && State.nodeConfList[index].hasOwnProperty("broker_host")) {
+    else if (nodeName.indexOf("Kafka") >= 0 && nodeConfList[index].hasOwnProperty("broker_host")) {
         return true;
     }
-    else if (nodeName.indexOf("Elasticsearch") >= 0 && State.nodeConfList[index].hasOwnProperty("host")) {
+    else if (nodeName.indexOf("Elasticsearch") >= 0 && nodeConfList[index].hasOwnProperty("host")) {
         return true;
     }
-    NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", timeoutMillis);
+    else if (nodeName.indexOf("PubSub") >= 0 && nodeConfList[index].hasOwnProperty("topic")) {
+        return true;
+    }
+    NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", notificationTimeoutMillis);
     return false;
 }
 
-function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
-    let nodeName = "";
-    if (type === "Read") {
-        nodeName = edge.source;
-    } else if (type === "Write") {
-        nodeName = edge.target;
+function appendRequiredVariables(task: Task, name: string, index: number, nodeConfList:Array<NodeConf>) {
+    if (name.indexOf("S3") >= 0) {
+        task.arguments.parameters.push({
+            "name": "AWS_S3_BUCKET_NAME",
+            "value": (nodeConfList[index] as S3Conf).bucket_name
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_S3_FILE_PATH",
+            "value": (nodeConfList[index] as S3Conf).file_path
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_S3_FILE_TYPE",
+            "value": (nodeConfList[index] as S3Conf).file_type
+        });
+    } else if (name.indexOf("Kafka") >= 0) {
+        task.arguments.parameters.push({
+            "name": "BOOTSTRAP_SERVERS",
+            "value": (nodeConfList[index] as KafkaConf).broker_host
+        });
+        task.arguments.parameters.push({
+            "name": "KAFKA_TOPIC",
+            "value": (nodeConfList[index] as KafkaConf).topic_name
+        });
+    } else if (name.indexOf("Elasticsearch") >= 0) {
+        task.arguments.parameters.push({
+            "name": "ELASTICSEARCH_HOST",
+            "value": (nodeConfList[index] as ElasticsearchConf).host
+        });
+        task.arguments.parameters.push({
+            "name": "ELASTICSEARCH_INDEX",
+            "value": (nodeConfList[index] as ElasticsearchConf).index_name
+        });
+    } else if (name.indexOf("PubSub") >= 0) {
+        task.arguments.parameters.push({
+            "name": "GOOGLE_PROJECT_ID",
+            "value": (nodeConfList[index] as PubSubConf).project_id
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_PUBSUB_TOPIC",
+            "value": (nodeConfList[index] as PubSubConf).topic
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_PUBSUB_TOPIC_ACTION",
+            "value": (nodeConfList[index] as PubSubConf).topic_action
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_PUBSUB_TIMEOUT",
+            "value": (nodeConfList[index] as PubSubConf).timeout.toString()
+        });
     }
+}
+
+function taskGenerator(edge:Edge, dependencies:Array<string>, nodeConfList:Array<NodeConf>) {
+    let nodeName = edge.source + SEPARATOR + edge.target;
     let task: Task = {
-        name: nodeName + SEPERATOR + type,
+        name: nodeName,
         dependencies: dependencies,
         templateRef: {
             "name": "orca-operators",
@@ -56,94 +89,39 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, type:string) {
         },
         arguments: {
             parameters: [
-                {"name": "OPERATOR", "value": nodeName.toLowerCase().split(SEPERATOR)[0]},
-                {"name": "OPERATOR_TYPE", "value": type},
-                {"name": "REDIS_URL", "value": State.redisConf.split(":")[0]},
-                {"name": "REDIS_PORT", "value": State.redisConf.split(":")[1]},
+                {"name": "OPERATOR_SOURCE", "value": edge.source.toLowerCase().split(SEPARATOR)[0]},
+                {"name": "OPERATOR_TARGET", "value": edge.target.toLowerCase().split(SEPARATOR)[0]}
             ]
         }
     }
-    if (type === "Read") {
-        task.arguments.parameters.push({"name": "REDIS_PUSH_KEY", "value": "testMult"});
-        task.arguments.parameters.push({"name": "REDIS_POP_KEY", "value": "None"});
-    } else if (type === "Write") {
-        task.arguments.parameters.push({"name": "REDIS_PUSH_KEY", "value": "None"});
-        task.arguments.parameters.push({"name": "REDIS_POP_KEY", "value": "testMult"});
-    }
-    let index = findIndex(nodeName);
-    if (nodeName.indexOf("S3") >= 0) {
-        task.arguments.parameters.push({
-            "name": "AWS_S3_BUCKET_NAME",
-            "value": (State.nodeConfList[index] as S3Conf).bucket_name
-        });
-        task.arguments.parameters.push({
-            "name": "AWS_S3_FILE_PATH",
-            "value": (State.nodeConfList[index] as S3Conf).file_path
-        });
-        task.arguments.parameters.push({
-            "name": "AWS_S3_FILE_TYPE",
-            "value": (State.nodeConfList[index] as S3Conf).file_type
-        });
-    } else if (nodeName.indexOf("Kafka") >= 0) {
-        task.arguments.parameters.push({
-            "name": "BOOTSTRAP_SERVERS",
-            "value": (State.nodeConfList[index] as KafkaConf).broker_host
-        });
-        task.arguments.parameters.push({
-            "name": "KAFKA_TOPIC",
-            "value": (State.nodeConfList[index] as KafkaConf).topic_name
-        });
-    } else if (nodeName.indexOf("Elasticsearch") >= 0) {
-        task.arguments.parameters.push({
-            "name": "ELASTICSEARCH_HOST",
-            "value": (State.nodeConfList[index] as ElasticsearchConf).host
-        });
-        task.arguments.parameters.push({
-            "name": "ELASTICSEARCH_INDEX",
-            "value": (State.nodeConfList[index] as ElasticsearchConf).index_name
-        });
-    }
+    let sourceIndex = findIndex(edge.source);
+    let targetIndex = findIndex(edge.target);
+
+    appendRequiredVariables(task, edge.source, sourceIndex, nodeConfList);
+    appendRequiredVariables(task, edge.target, targetIndex, nodeConfList);
+    console.log(task);
     return task;
 }
 
 
-export function createTasksForEdge(edge: Edge) {
-    if (! isConfGiven(edge.source)) {
+export function createTaskForEdge(edge: Edge) {
+    let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
+    if (! isConfGiven(edge.source, nodeConfList)) {
         throw new Error();
     }
-    if (! isConfGiven(edge.target)) {
+    if (! isConfGiven(edge.target, nodeConfList)) {
         throw new Error();
     }
-    let flag1:boolean = false;
-    let flag2:boolean = false;
-    for (let key in State.tasks) {
-        if (State.tasks.hasOwnProperty(key)){
-            let tempTask:Task = (State.tasks[key] as Task);
-            if (tempTask.name.split("-")[0] + "-" + tempTask.name.split("-")[1] === edge.target) {
-                tempTask.dependencies.push(edge.source + SEPERATOR + Read);
-                flag1 = true;
-            }
-            if (tempTask.name === edge.source + SEPERATOR + Read) {
-                flag2 = true;
+    const dependencies:Array<string> = [];
+    State.tasks.forEach(
+        (task) => {
+            if (edge.source === task.name.split("-")[2] + SEPARATOR + task.name.split("-")[3]) {
+                dependencies.push(task.name);
             }
         }
-    }
-    const dep = hasDependency(edge.source);
-    const dependencies:Array<string> = [];
-    if (dep) {
-        dependencies.push(edge.source + SEPERATOR + Write);
-    }
-    if (! flag2) {
-        State.tasks.push(taskGenerator(edge, dependencies, Read));
-    }
-    if (! flag1) {
-        State.tasks.push(taskGenerator(edge, [edge.source + SEPERATOR + Read], Write));
-    }
-}
-
-export function hasDependency(nodeName:string):boolean {
-    const edge = State.edges.find(x => (x as Edge).target === nodeName);
-    return edge !== undefined;
+    )
+    State.tasks.push(taskGenerator(edge, dependencies, nodeConfList));
+    console.log(State.tasks);
 }
 
 export function monitor_h() {
@@ -151,15 +129,15 @@ export function monitor_h() {
     let heart = heartbeats.createHeart(1000);
     heart.createEvent(1, function(){
         let status:string = "";
-        RequestUtils.getStatus();
+        getWorkflowStatus(localStorage.getItem("workflowName") as string);
         if (status !== State.workflowStatus) {
             status = State.workflowStatus;
             if (status === "Failed") {
-                NotificationManager.error(status, "Status", timeoutMillis);
+                NotificationManager.error(status, "Status", notificationTimeoutMillis);
                 heart.kill();
             }
             else {
-                NotificationManager.success(status, "Status", timeoutMillis);
+                NotificationManager.success(status, "Status", notificationTimeoutMillis);
                 heart.kill();
             }
         }
@@ -172,129 +150,21 @@ function delay(ms: number) {
 
 export async function monitor() {
     console.log("Monitor initiated.");
-    let status:string = "";
+    /*let status:string = "";
     while (status !== "Succeeded") {
         await delay(1000);
-        RequestUtils.getStatus();
+        getWorkflowStatus(State.workflowName);
         if (status !== State.workflowStatus) {
             status = State.workflowStatus;
             if (status === "Failed") {
-                NotificationManager.error(status, "Status", timeoutMillis);
+                NotificationManager.error(status, "Status", notificationTimeoutMillis);
                 break;
             }
             else {
-                NotificationManager.success(status, "Status", timeoutMillis);
+                NotificationManager.success(status, "Status", notificationTimeoutMillis);
             }
 
         }
-    }
+    }*/
     console.log("Monitor finished.");
-}
-
-export default class RequestUtils {
-    static submit(data:Workflow, onSuccess:any, onError:any) {
-        console.log("Submit initiated.");
-        const newAxios=axios.create({
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        newAxios.post(API+"submit",data,
-            {}).then(onSuccess).catch(onError);
-    }
-
-    static resubmit() {
-        const newAxios=axios.create();
-        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName + "/resubmit",
-            {}).then((response) => {
-                console.log(response.data);
-            NotificationManager.success('Successfully Resubmitted Workflow', 'Success', timeoutMillis);
-            }).catch((error) => {
-            console.log(error);
-            NotificationManager.error('Resubmit Failed', error.toString(), timeoutMillis);
-        });
-    }
-
-    static suspend() {
-        console.log("Suspend initiated.");
-        const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName + "/suspend",
-            {}).then((response) => {
-                console.log(response);
-                NotificationManager.success('Successfully Suspended Workflow', 'Success', timeoutMillis);
-            }).catch((error) => {
-                console.log(error);
-                NotificationManager.error('Suspend Failed', error.toString(), timeoutMillis);
-            });
-    }
-
-    static resume() {
-        console.log("Resume initiated.");
-        const newAxios=axios.create()
-        newAxios.post(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/resume",
-            {}).then((response) => {
-                console.log(response);
-                NotificationManager.success('Successfully Resumed Workflow', 'Success', timeoutMillis);
-        }).catch((error) => {
-            console.log(error);
-            NotificationManager.error('Resume Failed', error.toString(), timeoutMillis);
-        });
-    }
-
-    static stop() {
-        console.log("Stop initiated.");
-        const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/stop",
-            {}).then((response) => {
-                console.log(response);
-                NotificationManager.success('Successfully Stopped Workflow', 'Success', timeoutMillis);
-        }).catch((error) => {
-            console.log(error);
-            NotificationManager.error('Stop Failed', error.toString(), timeoutMillis);
-        });
-    }
-
-    static terminate() {
-        console.log("Terminate initiated.");
-        const newAxios=axios.create()
-        newAxios.put(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName +"/terminate",
-            {}).then((response) => {
-                console.log(response);
-                NotificationManager.success('Successfully Terminated Workflow', 'Success', timeoutMillis);
-        }).catch((error) => {
-            console.log(error);
-            NotificationManager.error('Terminate Failed', error.toString(), timeoutMillis);
-        });
-    }
-
-    static delete() {
-        console.log("Delete initiated.");
-        const newAxios=axios.create()
-        newAxios.delete(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName,
-            {}).then((response) => {
-                console.log(response);
-                NotificationManager.success('Successfully Deleted Workflow', 'Success', timeoutMillis);
-        }).catch((error) => {
-            console.log(error);
-            NotificationManager.error('Delete Failed', error.toString(), timeoutMillis);
-        });
-    }
-
-    static getStatus() {
-        const newAxios=axios.create()
-        newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME + DIVIDER + State.workflowName,
-            {}).then((response) => {
-                State.workflowStatus = response.data.metadata.labels["workflows.argoproj.io/phase"];
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
-    static getAllWorkflows(): Promise<any> {
-        const newAxios=axios.create()
-        return newAxios.get(API + WORKFLOWS + DIVIDER + SERVICE_ACCOUNT_NAME,
-            {}).then((response) => response.data).catch((error) => {
-            console.log(error);
-        });
-    }
 }

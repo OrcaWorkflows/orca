@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {useHistory} from "react-router-dom";
@@ -20,7 +20,6 @@ import {blue} from "@material-ui/core/colors";
 import ViewListIcon from '@material-ui/icons/ViewList';
 import DescriptionIcon from '@material-ui/icons/Description';
 import SettingsIcon from '@material-ui/icons/Settings';
-import State from "../data/state";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({

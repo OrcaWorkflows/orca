@@ -3,8 +3,9 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {findIndex, timeoutMillis} from "../helper";
-import State, {KafkaConf} from "../../../data/state";
+import {findIndex} from "../../../utils/helper";
+import State, {KafkaConf, NodeConf} from "../../../data/state";
+import {notificationTimeoutMillis} from "../../../../config";
 
 const KafkaForm = forwardRef((props, ref) => {
     const [KafkaFormValues, setKafkaFormValues] = useState({});
@@ -26,9 +27,10 @@ const KafkaForm = forwardRef((props, ref) => {
 
     const setInitialValues = () => {
         const index:number = findIndex(State.currentNodeClick);
-        if (State.nodeConfList[index].hasOwnProperty("broker_host")) {
-            initialValues.broker_host = (State.nodeConfList[index] as KafkaConf).broker_host;
-            initialValues.topic_name = (State.nodeConfList[index] as KafkaConf).topic_name;
+        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
+        if (nodeConfList[index].hasOwnProperty("broker_host")) {
+            initialValues.broker_host = (nodeConfList[index] as KafkaConf).broker_host;
+            initialValues.topic_name = (nodeConfList[index] as KafkaConf).topic_name;
         }
 
         return initialValues;
@@ -36,15 +38,17 @@ const KafkaForm = forwardRef((props, ref) => {
 
     const handleSubmit = (values: any, actions: any) => {
         setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
         const indexToUpdate:number = findIndex(State.currentNodeClick);
         let newKafkaConf:KafkaConf = {
             id: State.currentNodeClick,
             broker_host: values.broker_host,
             topic_name: values.topic_name,
         }
-        State.nodeConfList[indexToUpdate] = newKafkaConf;
         actions.setSubmitting(false);
-        NotificationManager.success('Successfully Saved Configurations', 'Success', timeoutMillis);
+        nodeConfList[indexToUpdate] = newKafkaConf;
+        localStorage.setItem("nodes", JSON.stringify(nodeConfList));
+        NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
     return (

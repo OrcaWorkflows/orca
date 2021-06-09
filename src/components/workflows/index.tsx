@@ -12,7 +12,7 @@ import {
     TablePagination
 } from "@material-ui/core";
 import {useCallback, useEffect, useState} from "react";
-import RequestUtils from "../utils/utils";
+import {getAllWorkflows} from "../../actions/workflow_actions";
 
 
 interface Column {
@@ -65,7 +65,7 @@ export const Workflows = () => {
     };
 
     const fetchData = useCallback(async () => {
-        let a = await RequestUtils.getAllWorkflows();
+        let a = await getAllWorkflows();
         setData(a.items);
     }, []);
 
