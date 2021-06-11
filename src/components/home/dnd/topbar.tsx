@@ -25,19 +25,17 @@ const TopBar = () => {
                     createTaskForEdge(edge);
                 }
             }
-            submitWorkflow(new class implements Workflow {
+            /*submitWorkflow(new class implements Workflow {
                 name= "test-";
                 tasks = State.tasks;
             }, (response:AxiosResponse) => {
-                console.log(response.data);
                 localStorage.setItem("workflowName", response.data.metadata.name)
                 State.tasks = [];
                 NotificationManager.success('Successfully Submitted Workflow', 'Success', notificationTimeoutMillis);
             }, (error:any) => {
                 NotificationManager.error('Submit Failed. Check the server.', "Error", notificationTimeoutMillis);
                 State.tasks = [];
-                console.log(error);
-            });
+            });*/
             monitor();
         }
         catch (e) {

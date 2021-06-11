@@ -1,6 +1,8 @@
 import {Task} from "./interface";
+import React from 'react';
 import {Elements} from "react-flow-renderer";
 import {WorkflowRes} from "../workflows/workflowinterface";
+
 
 
 export class NodeConf {
@@ -28,14 +30,26 @@ export class PubSubConf extends NodeConf {
     project_id: string;
     topic: string;
     topic_action: string;
-    timeout: number;
-
-    constructor(id:string, project_id:string, topic:string, topic_action:string, timeout:number) {
+    constructor(id:string, project_id:string, topic:string, topic_action:string) {
         super(id);
         this.project_id = project_id;
         this.topic = topic;
         this.topic_action = topic_action;
-        this.timeout = timeout;
+    }
+}
+
+export class BigQueryConf extends NodeConf {
+    project_id: string;
+    dataset_id: string;
+    table_id: string;
+    query: string;
+
+    constructor(id:string, project_id:string, dataset_id:string, table_id:string, query:string) {
+        super(id);
+        this.project_id = project_id;
+        this.dataset_id = dataset_id;
+        this.table_id = table_id;
+        this.query = query;
     }
 }
 

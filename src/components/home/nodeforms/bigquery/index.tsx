@@ -3,55 +3,56 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displaygcpform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {findIndex} from "../../../utils/helper"
-import State, {PubSubConf} from "../../../data/state";
+import State, {BigQueryConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
 
-const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
-    const [PubSubFormValues, setPubSubFormValues] = useState();
+const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+    const [BigQueryFormValues, setBigQueryFormValues] = useState();
 
-    const getPubSubFormValues = () => {
-        return PubSubFormValues;
+    const getBigQueryFormValues = () => {
+        return BigQueryFormValues;
     }
 
     useImperativeHandle(ref, () => {
         return {
-            getFormValues: getPubSubFormValues
+            getFormValues: getBigQueryFormValues
         };
     });
 
     const initialValues = {
         project_id: "akis-295110",
-        topic: "",
-        topic_action: ""
+        dataset_id: "",
+        table_id: "",
+        query: "",
     };
 
     const setInitialValues = () => {
         const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
-            const nodeConf : PubSubConf = (props.nodes[index] as Node).data.conf;
-            initialValues.project_id = nodeConf.project_id;
-            initialValues.topic = nodeConf.topic;
-            initialValues.topic_action = nodeConf.topic_action;
+            const nodeConf : BigQueryConf = (props.nodes[index] as Node).data.conf;
+            initialValues.dataset_id = nodeConf.dataset_id;
+            initialValues.table_id = nodeConf.table_id;
+            initialValues.query = nodeConf.query;
         }
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        setPubSubFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
-        let newPubSubConf:PubSubConf = {
+        setBigQueryFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        let newBigQueryConf:BigQueryConf = {
             id: State.currentNodeClick,
             project_id: values.project_id,
-            topic: values.topic,
-            topic_action: values.topic_action,
+            dataset_id: values.dataset_id,
+            table_id: values.table_id,
+            query: values.query,
         }
         actions.setSubmitting(false);
-        let node:FlowElement = props.nodes[index]
-        const newNode = {...node, data:{...node.data, conf: newPubSubConf}}
+        let node:FlowElement = props.nodes[indexToUpdate]
+        const newNode = {...node, data:{...node.data, conf: newBigQueryConf}}
         const newNodes = [...props.nodes]
-        newNodes[index] = newNode
+        newNodes[indexToUpdate] = newNode
         props.setNodes(newNodes);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
@@ -59,7 +60,7 @@ const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Eleme
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"form-label"}>PubSub Configurations</label>
+            <label className={"form-label"}>BigQuery Configurations</label>
                 <Formik
                     initialValues={setInitialValues()}
                     onSubmit={handleSubmit}
@@ -68,4 +69,4 @@ const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Eleme
         </div>)
 });
 
-export default PubSubForm;
+export default BigQueryForm;

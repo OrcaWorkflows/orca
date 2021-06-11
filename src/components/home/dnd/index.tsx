@@ -35,6 +35,7 @@ import {Button, IconButton} from "@material-ui/core";
 import {Save} from "@material-ui/icons";
 import {NotificationManager} from "react-notifications";
 import {notificationTimeoutMillis} from "../../../config";
+import BigQueryForm from "../nodeforms/bigquery";
 
 
 let initialNodes: Elements | (() => Elements) = [];
@@ -43,7 +44,7 @@ let initialEdges: Elements | (() => Elements) = [];
 // eslint-disable-next-line
 let counter:number = 0;
 
-const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka", "PubSub"];
+const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka", "PubSub", "BigQuery"];
 
 const DnDFlow = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
@@ -55,14 +56,18 @@ const DnDFlow = () => {
     const refS3 = useRef<HTMLDivElement>(null);
     const refKafka = useRef<HTMLDivElement>(null);
     const refES = useRef<HTMLDivElement>(null);
+    const refPubSub = useRef<HTMLDivElement>(null);
+    const refBigQueryForm = useRef<HTMLDivElement>(null);
     const refDefaultForm = useRef(null);
 
     useEffect(() => {
         getCanvas().then(r => {
-            localStorage.setItem("nodes", JSON.stringify(r.nodes));
-            localStorage.setItem("edges", JSON.stringify(r.edges));
-            setNodes(r.nodes);
-            setEdges(r.edges);
+            localStorage.setItem("canvasID", JSON.stringify(r.id));
+            localStorage.setItem("nodes", JSON.stringify(r.property.nodes));
+            localStorage.setItem("edges", JSON.stringify(r.property.edges));
+            console.log("Nodes set, ", r.property.nodes);
+            setNodes(r.property.nodes);
+            setEdges(r.property.edges);
     });},[]);
 
     const onConnect = (params: Edge | Connection) => {
@@ -96,9 +101,6 @@ const DnDFlow = () => {
             };
             counter++;
             setNodes((es) => es.concat(newNode));
-            let nodeConf:NodeConf = {
-                id: newNode.id
-            }
         }
     };
     const handleClick = (element: any) => {
@@ -126,13 +128,11 @@ const DnDFlow = () => {
         });
         setCanvas(nodes, edges);
     }
-
     const saveWorkflow = () => {
-        console.log(nodes);
+        // setNodes(JSON.parse(localStorage.getItem("nodes") as string) as Elements);
         setCanvas(nodes, edges);
         NotificationManager.success('Successfully Saved Workflow', 'Success', notificationTimeoutMillis);
     }
-
     const openTab = (opName:any) => {
         setActiveTab(opName);
     }
@@ -180,10 +180,11 @@ const DnDFlow = () => {
                             <img className={"mouse-image"} src={mouseImage} alt={""}/>
                             <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
                         </div>}
-                        {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3}/>}
-                        {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka}/>}
-                        {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES}/>}
-                        {(showForm.indexOf("PubSub") >= 0) && <PubSubForm ref={refES}/>}
+                        {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3} nodes={nodes} setNodes={setNodes}/>}
+                        {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka} nodes={nodes} setNodes={setNodes}/>}
+                        {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES} nodes={nodes} setNodes={setNodes}/>}
+                        {(showForm.indexOf("PubSub") >= 0) && <PubSubForm ref={refPubSub} nodes={nodes} setNodes={setNodes}/>}
+                        {(showForm.indexOf("BigQuery") >= 0) && <BigQueryForm ref={refBigQueryForm} nodes={nodes} setNodes={setNodes}/>}
                         {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPARATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
                     </div>}
                     {activeTab === "System" && <div className={"tabchild"}>

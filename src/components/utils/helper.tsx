@@ -1,9 +1,8 @@
-import {NodeConf} from "../data/state";
+import {Elements} from "react-flow-renderer/dist/types";
 
-export function findIndex(node_id:string) {
-    let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-    for (let i = 0; i < nodeConfList.length; i++) {
-        if (nodeConfList[i].id === node_id) {
+export function findIndex(node_id:string, nodes:Elements) {
+    for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].id === node_id) {
             return i;
         }
     }

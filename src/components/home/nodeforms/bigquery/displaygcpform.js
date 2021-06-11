@@ -21,18 +21,27 @@ const display = () => ({handleSubmit, submitCount}) => (
         />
         <Field
             component={AntInput}
-            name="topic"
-            type="topic_name"
-            placeholder="Topic"
+            name="dataset_id"
+            type="dataset_id"
+            placeholder="Dataset ID"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback
         />
         <Field
             component={AntInput}
-            name="topic_action"
-            type="topic_action"
-            placeholder="Topic Action"
+            name="table_id"
+            type="table_id"
+            placeholder="Table ID"
+            submitCount={submitCount}
+            validate={isRequired}
+            hasFeedback
+        />
+        <Field
+            component={AntInput}
+            name="query"
+            type="query"
+            placeholder="Query"
             submitCount={submitCount}
             validate={isRequired}
             hasFeedback

@@ -3,11 +3,11 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {findIndex} from "../../../utils/helper";
-import State, {KafkaConf, NodeConf} from "../../../data/state";
+import State, {KafkaConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
+import {Elements, FlowElement, Node} from "react-flow-renderer";
 
-const KafkaForm = forwardRef((props, ref) => {
+const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
     const [KafkaFormValues, setKafkaFormValues] = useState({});
 
     const getKafkaFormValues = () => {
@@ -26,28 +26,29 @@ const KafkaForm = forwardRef((props, ref) => {
     };
 
     const setInitialValues = () => {
-        const index:number = findIndex(State.currentNodeClick);
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        if (nodeConfList[index].hasOwnProperty("broker_host")) {
-            initialValues.broker_host = (nodeConfList[index] as KafkaConf).broker_host;
-            initialValues.topic_name = (nodeConfList[index] as KafkaConf).topic_name;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
+            const nodeConf : KafkaConf = (props.nodes[index] as Node).data.conf;
+            initialValues.topic_name = nodeConf.topic_name;
+            initialValues.broker_host = nodeConf.broker_host;
         }
-
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
         setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        const indexToUpdate:number = findIndex(State.currentNodeClick);
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
         let newKafkaConf:KafkaConf = {
             id: State.currentNodeClick,
             broker_host: values.broker_host,
             topic_name: values.topic_name,
         }
         actions.setSubmitting(false);
-        nodeConfList[indexToUpdate] = newKafkaConf;
-        localStorage.setItem("nodes", JSON.stringify(nodeConfList));
+        let node:FlowElement = props.nodes[index]
+        const newNode = {...node, data:{...node.data, conf: newKafkaConf}}
+        const newNodes = [...props.nodes]
+        newNodes[index] = newNode
+        props.setNodes(newNodes);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 

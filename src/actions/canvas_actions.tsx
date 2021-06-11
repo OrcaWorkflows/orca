@@ -5,10 +5,11 @@ import {Elements} from "react-flow-renderer";
 
 export function getCanvas() : Promise<any> {
     return axios.get(API + API_PATH + CANVAS, )
-        .then(response => response.data.property);
+        .then(response => response.data);
 }
 
 export function setCanvas(nodes:Elements, edges:Elements) {
+    console.log("Set canvas", nodes);
     axios.post(API + API_PATH + CANVAS,
         {
             id: localStorage.getItem("canvasID"),

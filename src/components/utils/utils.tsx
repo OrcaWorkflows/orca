@@ -1,6 +1,6 @@
 import {Task} from "../data/interface";
-import State, {ElasticsearchConf, KafkaConf, NodeConf, PubSubConf, S3Conf} from "../data/state";
-import {Edge} from "react-flow-renderer";
+import State, {BigQueryConf, ElasticsearchConf, KafkaConf, NodeConf, PubSubConf, S3Conf} from "../data/state";
+import {Edge, Elements} from "react-flow-renderer";
 import {NotificationManager} from "react-notifications";
 import {SEPARATOR} from "../../index";
 import {notificationTimeoutMillis} from "../../config";
@@ -9,7 +9,7 @@ import {findIndex} from "./helper";
 
 
 function isConfGiven(nodeName:string, nodeConfList:Array<NodeConf>):boolean {
-    const index = findIndex(nodeName);
+    /*const index = findIndex(nodeName);
     if (nodeName.indexOf("S3") >= 0 && nodeConfList[index].hasOwnProperty("bucket_name")) {
         return true;
     }
@@ -22,7 +22,10 @@ function isConfGiven(nodeName:string, nodeConfList:Array<NodeConf>):boolean {
     else if (nodeName.indexOf("PubSub") >= 0 && nodeConfList[index].hasOwnProperty("topic")) {
         return true;
     }
-    NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", notificationTimeoutMillis);
+    else if (nodeName.indexOf("BigQuery") >= 0 && nodeConfList[index].hasOwnProperty("table_id")) {
+        return true;
+    }
+    NotificationManager.error('You have not configured ' + nodeName + ' Node', "Error", notificationTimeoutMillis);*/
     return false;
 }
 
@@ -60,7 +63,7 @@ function appendRequiredVariables(task: Task, name: string, index: number, nodeCo
         });
     } else if (name.indexOf("PubSub") >= 0) {
         task.arguments.parameters.push({
-            "name": "GOOGLE_PROJECT_ID",
+            "name": "GOOGLE_PUBSUB_PROJECT_ID",
             "value": (nodeConfList[index] as PubSubConf).project_id
         });
         task.arguments.parameters.push({
@@ -71,17 +74,30 @@ function appendRequiredVariables(task: Task, name: string, index: number, nodeCo
             "name": "GOOGLE_PUBSUB_TOPIC_ACTION",
             "value": (nodeConfList[index] as PubSubConf).topic_action
         });
+    } else if (name.indexOf("BigQuery") >= 0) {
         task.arguments.parameters.push({
-            "name": "GOOGLE_PUBSUB_TIMEOUT",
-            "value": (nodeConfList[index] as PubSubConf).timeout.toString()
+            "name": "GOOGLE_BIGQUERY_PROJECT_ID",
+            "value": (nodeConfList[index] as BigQueryConf).project_id
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_BIGQUERY_DATASET_ID",
+            "value": (nodeConfList[index] as BigQueryConf).dataset_id
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_BIGQUERY_TABLE_ID",
+            "value": (nodeConfList[index] as BigQueryConf).table_id
+        });
+        task.arguments.parameters.push({
+            "name": "GOOGLE_BIGQUERY_QUERY",
+            "value": (nodeConfList[index] as BigQueryConf).query
         });
     }
 }
 
 function taskGenerator(edge:Edge, dependencies:Array<string>, nodeConfList:Array<NodeConf>) {
-    let nodeName = edge.source + SEPARATOR + edge.target;
+    const taskName = edge.source + SEPARATOR + edge.target;
     let task: Task = {
-        name: nodeName,
+        name: taskName,
         dependencies: dependencies,
         templateRef: {
             "name": "orca-operators",
@@ -94,18 +110,18 @@ function taskGenerator(edge:Edge, dependencies:Array<string>, nodeConfList:Array
             ]
         }
     }
-    let sourceIndex = findIndex(edge.source);
-    let targetIndex = findIndex(edge.target);
+    //let sourceIndex = findIndex(edge.source);
+    //let targetIndex = findIndex(edge.target);
 
-    appendRequiredVariables(task, edge.source, sourceIndex, nodeConfList);
-    appendRequiredVariables(task, edge.target, targetIndex, nodeConfList);
-    console.log(task);
+    //appendRequiredVariables(task, edge.source, sourceIndex, nodeConfList);
+    //appendRequiredVariables(task, edge.target, targetIndex, nodeConfList);
     return task;
 }
 
 
 export function createTaskForEdge(edge: Edge) {
     let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
+    let edgeList:Elements = JSON.parse(localStorage.getItem("edges") as string) as Elements;
     if (! isConfGiven(edge.source, nodeConfList)) {
         throw new Error();
     }
@@ -113,10 +129,10 @@ export function createTaskForEdge(edge: Edge) {
         throw new Error();
     }
     const dependencies:Array<string> = [];
-    State.tasks.forEach(
-        (task) => {
-            if (edge.source === task.name.split("-")[2] + SEPARATOR + task.name.split("-")[3]) {
-                dependencies.push(task.name);
+    edgeList.forEach(
+        (e) => {
+            if (edge.source === (e as Edge).target) {
+                dependencies.push((e as Edge).source + SEPARATOR + (e as Edge).target);
             }
         }
     )
