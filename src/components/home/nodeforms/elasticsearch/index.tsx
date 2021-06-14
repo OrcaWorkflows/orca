@@ -3,15 +3,13 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
-import {findIndex} from "../../../utils/helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {ElasticsearchConf, NodeConf, S3Conf} from "../../../data/state";
+import State, {ElasticsearchConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
 
 const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
     const [ESFormValues, setESFormValues] = useState({});
-
 
     const getESFormValues = () => {
         return ESFormValues;

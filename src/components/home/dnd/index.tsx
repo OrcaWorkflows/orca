@@ -21,9 +21,8 @@ import ESForm from "../nodeforms/elasticsearch";
 import SystemForm from "../nodeforms/system";
 import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../../assets/mouseclick.png";
-import { SaveOutlined, DownloadOutlined } from '@ant-design/icons';
 
-import {State, NodeConf} from "../../data/state";
+import {State} from "../../data/state";
 
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
@@ -31,7 +30,6 @@ import {SEPARATOR} from "../../../index";
 import SideHeader from "../../navigation/sideheader";
 import PubSubForm from "../nodeforms/pubsub";
 import {getCanvas, setCanvas} from "../../../actions/canvas_actions";
-import {Button, IconButton} from "@material-ui/core";
 import {Save} from "@material-ui/icons";
 import {NotificationManager} from "react-notifications";
 import {notificationTimeoutMillis} from "../../../config";
@@ -65,7 +63,6 @@ const DnDFlow = () => {
             localStorage.setItem("canvasID", JSON.stringify(r.id));
             localStorage.setItem("nodes", JSON.stringify(r.property.nodes));
             localStorage.setItem("edges", JSON.stringify(r.property.edges));
-            console.log("Nodes set, ", r.property.nodes);
             setNodes(r.property.nodes);
             setEdges(r.property.edges);
     });},[]);
@@ -129,7 +126,6 @@ const DnDFlow = () => {
         setCanvas(nodes, edges);
     }
     const saveWorkflow = () => {
-        // setNodes(JSON.parse(localStorage.getItem("nodes") as string) as Elements);
         setCanvas(nodes, edges);
         NotificationManager.success('Successfully Saved Workflow', 'Success', notificationTimeoutMillis);
     }
@@ -145,7 +141,7 @@ const DnDFlow = () => {
                     </div>
 
                     <div className="reactflow-wrapper">
-                        <TopBar/>
+                        <TopBar nodes={nodes} edges={edges}/>
                         <ReactFlow
                             elements={nodes.concat(edges)}
                             onConnect={onConnect}
