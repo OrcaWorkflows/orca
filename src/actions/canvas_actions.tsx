@@ -5,7 +5,7 @@ import {Elements} from "react-flow-renderer";
 
 export function getCanvas() : Promise<any> {
     return axios.get(API + API_PATH + CANVAS, )
-        .then(response => response.data.property);
+        .then(response => response.data);
 }
 
 export function setCanvas(nodes:Elements, edges:Elements) {

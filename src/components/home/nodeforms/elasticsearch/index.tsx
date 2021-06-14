@@ -3,14 +3,13 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
-import {findIndex} from "../../../utils/helper";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {ElasticsearchConf, NodeConf} from "../../../data/state";
+import State, {ElasticsearchConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
+import {Elements, FlowElement, Node} from "react-flow-renderer";
 
-const ESForm = forwardRef((props, ref) => {
+const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
     const [ESFormValues, setESFormValues] = useState({});
-
 
     const getESFormValues = () => {
         return ESFormValues;
@@ -28,28 +27,29 @@ const ESForm = forwardRef((props, ref) => {
     };
 
     const setInitialValues = () => {
-        const index:number = findIndex(State.currentNodeClick);
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        if (nodeConfList[index].hasOwnProperty("host")) {
-            initialValues.host = (nodeConfList[index] as ElasticsearchConf).host;
-            initialValues.index_name = (nodeConfList[index] as ElasticsearchConf).index_name;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
+            const nodeConf : ElasticsearchConf = (props.nodes[index] as Node).data.conf;
+            initialValues.host = nodeConf.host;
+            initialValues.index_name = nodeConf.index_name;
         }
-
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
         setESFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        const indexToUpdate:number = findIndex(State.currentNodeClick);
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
         let newElasticsearchConf:ElasticsearchConf = {
             id: State.currentNodeClick,
             host: values.host,
             index_name: values.index_name,
         }
         actions.setSubmitting(false);
-        nodeConfList[indexToUpdate] = newElasticsearchConf;
-        localStorage.setItem("nodes", JSON.stringify(nodeConfList));
+        let node:FlowElement = props.nodes[index]
+        const newNode = {...node, data:{...node.data, conf: newElasticsearchConf}}
+        const newNodes = [...props.nodes]
+        newNodes[index] = newNode
+        props.setNodes(newNodes);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 

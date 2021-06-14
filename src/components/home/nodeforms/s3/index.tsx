@@ -3,11 +3,12 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {findIndex} from "../../../utils/helper"
-import State, {NodeConf, S3Conf} from "../../../data/state";
+import State, {S3Conf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
+import {Elements, FlowElement, Node} from "react-flow-renderer";
 
-const S3Form = forwardRef((props, ref) => {
+
+const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
     const [S3FormValues, setS3FormValues] = useState();
 
     const getS3FormValues = () => {
@@ -27,22 +28,19 @@ const S3Form = forwardRef((props, ref) => {
     };
 
     const setInitialValues = () => {
-        const index:number = findIndex(State.currentNodeClick);
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        console.log(nodeConfList[0]);
-        if (nodeConfList[index].hasOwnProperty("bucket_name")) {
-            initialValues.bucket_name = (nodeConfList[index] as S3Conf).bucket_name;
-            initialValues.file_path = (nodeConfList[index] as S3Conf).file_path;
-            initialValues.file_type = (nodeConfList[index] as S3Conf).file_type;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
+            const nodeConf : S3Conf = (props.nodes[index] as Node).data.conf;
+            initialValues.bucket_name = nodeConf.bucket_name;
+            initialValues.file_path = nodeConf.file_path;
+            initialValues.file_type = nodeConf.file_type;
         }
-
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
         setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        let nodeConfList:Array<NodeConf> = JSON.parse(localStorage.getItem("nodes") as string) as Array<NodeConf>;
-        const indexToUpdate:number = findIndex(State.currentNodeClick);
+        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
         let newS3Conf:S3Conf = {
             id: State.currentNodeClick,
             bucket_name: values.bucket_name,
@@ -50,8 +48,11 @@ const S3Form = forwardRef((props, ref) => {
             file_type: values.file_type,
         }
         actions.setSubmitting(false);
-        nodeConfList[indexToUpdate] = newS3Conf;
-        localStorage.setItem("nodes", JSON.stringify(nodeConfList));
+        let node:FlowElement = props.nodes[indexToUpdate]
+        const newNode = {...node, data:{...node.data, conf: newS3Conf}}
+        const newNodes = [...props.nodes]
+        newNodes[indexToUpdate] = newNode
+        props.setNodes(newNodes);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
