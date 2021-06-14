@@ -10,6 +10,8 @@ COPY ./ /usr/src/app
 COPY package.json /usr/src/app/package.json
 EXPOSE 3000
 
+ENV API http://orca-service:8080/
+
 RUN npm config set registry https://registry.npmjs.org/
 RUN npm install --verbose
 RUN npm install react-scripts@3.0.1 -g --verbose
