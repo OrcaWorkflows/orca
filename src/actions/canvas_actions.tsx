@@ -9,7 +9,6 @@ export function getCanvas() : Promise<any> {
 }
 
 export function setCanvas(nodes:Elements, edges:Elements) {
-    console.log("Set canvas", nodes);
     axios.post(API + API_PATH + CANVAS,
         {
             id: localStorage.getItem("canvasID"),
