@@ -1,5 +1,5 @@
 export const notificationTimeoutMillis = 2000;
-export const API=process.env.API || "http://192.168.2.102:8080/";
+export const API=process.env.API || "http://192.168.1.201:30301/";
 export const SERVICE_ACCOUNT_NAME = "argo";
 export const DIVIDER = "/";
 export const API_PATH = "api/";
