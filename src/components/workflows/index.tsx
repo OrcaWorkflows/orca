@@ -11,7 +11,7 @@ import {
     Table,
     TablePagination
 } from "@material-ui/core";
-import {useCallback, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import {getAllWorkflows} from "../../actions/workflow_actions";
 
 
@@ -64,14 +64,11 @@ export const Workflows = () => {
         setPage(0);
     };
 
-    const fetchData = useCallback(async () => {
-        let a = await getAllWorkflows();
-        setData(a.items);
-    }, []);
-
     useEffect(() => {
-        fetchData();
-    },[fetchData]);
+        getAllWorkflows().then(r => {
+            setData(r.items);
+        });
+    },[]);
 
     return (
         <div className={"workflows-root"}>

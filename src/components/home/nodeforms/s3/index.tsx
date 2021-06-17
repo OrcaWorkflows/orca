@@ -6,9 +6,10 @@ import {NotificationContainer, NotificationManager} from "react-notifications";
 import State, {S3Conf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
+import {setCanvas} from "../../../../actions/canvas_actions";
 
 
-const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
     const [S3FormValues, setS3FormValues] = useState();
 
     const getS3FormValues = () => {
@@ -28,7 +29,8 @@ const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
     };
 
     const setInitialValues = () => {
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick");
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
             const nodeConf : S3Conf = (props.nodes[index] as Node).data.conf;
             initialValues.bucket_name = nodeConf.bucket_name;
@@ -40,19 +42,21 @@ const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
 
     const handleSubmit = (values: any, actions: any) => {
         setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
+        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         let newS3Conf:S3Conf = {
-            id: State.currentNodeClick,
+            id: currentNodeClick,
             bucket_name: values.bucket_name,
             file_path: values.file_path,
             file_type: values.file_type,
         }
         actions.setSubmitting(false);
-        let node:FlowElement = props.nodes[indexToUpdate]
-        const newNode = {...node, data:{...node.data, conf: newS3Conf}}
-        const newNodes = [...props.nodes]
-        newNodes[indexToUpdate] = newNode
+        let node:FlowElement = props.nodes[indexToUpdate];
+        const newNode = {...node, data:{...node.data, conf: newS3Conf}};
+        const newNodes = [...props.nodes];
+        newNodes[indexToUpdate] = newNode;
         props.setNodes(newNodes);
+        setCanvas(newNodes, props.edges);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 

@@ -1,6 +1,5 @@
 import {Task} from "./interface";
 import React from 'react';
-import {Elements} from "react-flow-renderer";
 import {WorkflowRes} from "../workflows/workflowinterface";
 
 
@@ -77,7 +76,6 @@ export class ElasticsearchConf extends NodeConf {
 
 export class State {
     static tasks: Array<Task> = [];
-    static currentNodeClick: string = "";
     static workflowStatus:string = "";
     static workflows:Array<WorkflowRes>;
 }

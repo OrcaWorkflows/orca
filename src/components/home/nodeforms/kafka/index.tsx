@@ -6,8 +6,9 @@ import {NotificationContainer, NotificationManager} from "react-notifications";
 import State, {KafkaConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
+import {setCanvas} from "../../../../actions/canvas_actions";
 
-const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
     const [KafkaFormValues, setKafkaFormValues] = useState({});
 
     const getKafkaFormValues = () => {
@@ -26,7 +27,8 @@ const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elemen
     };
 
     const setInitialValues = () => {
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick");
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
             const nodeConf : KafkaConf = (props.nodes[index] as Node).data.conf;
             initialValues.topic_name = nodeConf.topic_name;
@@ -37,9 +39,10 @@ const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elemen
 
     const handleSubmit = (values: any, actions: any) => {
         setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         let newKafkaConf:KafkaConf = {
-            id: State.currentNodeClick,
+            id: currentNodeClick,
             broker_host: values.broker_host,
             topic_name: values.topic_name,
         }
@@ -49,6 +52,7 @@ const KafkaForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elemen
         const newNodes = [...props.nodes]
         newNodes[index] = newNode
         props.setNodes(newNodes);
+        setCanvas(newNodes, props.edges);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
