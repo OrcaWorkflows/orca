@@ -3,7 +3,7 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displaygcpform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {BigQueryConf} from "../../../data/state";
+import {BigQueryConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
 import {setCanvas} from "../../../../actions/canvas_actions";

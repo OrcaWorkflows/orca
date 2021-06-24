@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API, API_PATH, DIVIDER, notificationTimeoutMillis, SERVICE_ACCOUNT_NAME, WORKFLOW, WORKFLOWS} from "../config";
+import {API, API_PATH, DIVIDER, notificationTimeoutMillis, SERVICE_ACCOUNT_NAME, WORKFLOW} from "../config";
 import {Workflow} from "../components/data/interface";
 import State from "../components/data/state";
 import {NotificationManager} from "react-notifications";

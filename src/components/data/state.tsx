@@ -1,5 +1,4 @@
 import {Task} from "./interface";
-import React from 'react';
 import {WorkflowRes} from "../workflows/workflowinterface";
 
 

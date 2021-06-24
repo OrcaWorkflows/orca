@@ -12,7 +12,8 @@ import {
     resumeWorkflow,
     stopWorkflow,
     submitWorkflow,
-    suspendWorkflow, terminateWorkflow
+    suspendWorkflow,
+    terminateWorkflow
 } from "../../../actions/workflow_actions";
 
 const TopBar = (props : {nodes:Elements, edges:Elements}) => {
