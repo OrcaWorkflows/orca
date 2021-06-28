@@ -24,6 +24,23 @@ export class S3Conf extends NodeConf {
     }
 }
 
+export class EMRConf extends NodeConf {
+    script_uri: string;
+    input_uri: string;
+    master_instance_type: string;
+    slave_instance_type: string;
+    instance_count: string;
+
+    constructor(id:string, script_uri:string, input_uri:string, master_instance_type:string, slave_instance_type:string, instance_count:string) {
+        super(id);
+        this.script_uri = script_uri;
+        this.input_uri = input_uri;
+        this.master_instance_type = master_instance_type;
+        this.slave_instance_type = slave_instance_type;
+        this.instance_count = instance_count;
+    }
+}
+
 export class PubSubConf extends NodeConf {
     project_id: string;
     topic: string;

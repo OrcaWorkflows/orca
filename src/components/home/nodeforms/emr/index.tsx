@@ -1,58 +1,64 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 
 import {Formik} from 'formik';
-import DisplayForm from "./displays3form";
+import DisplayForm from "./displayemrform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import {S3Conf} from "../../../data/state";
+import {EMRConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
 import {setCanvas} from "../../../../actions/canvas_actions";
 
 
-const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
-    const [S3FormValues, setS3FormValues] = useState();
+const EMRForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
+    const [EMRFormValues, setEMRFormValues] = useState();
 
-    const getS3FormValues = () => {
-        return S3FormValues;
+    const getEMRFormValues = () => {
+        return EMRFormValues;
     }
 
     useImperativeHandle(ref, () => {
         return {
-            getFormValues: getS3FormValues
+            getFormValues: getEMRFormValues
         };
     });
 
     const initialValues = {
-        bucket_name: "",
-        file_path: "",
-        file_type: "",
+        script_uri: "",
+        input_uri: "",
+        master_instance_type: "m5.xlarge",
+        slave_instance_type: "m5.xlarge",
+        instance_count: "3"
     };
 
     const setInitialValues = () => {
         const currentNodeClick = localStorage.getItem("currentNodeClick");
         const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
-            const nodeConf : S3Conf = (props.nodes[index] as Node).data.conf;
-            initialValues.bucket_name = nodeConf.bucket_name;
-            initialValues.file_path = nodeConf.file_path;
-            initialValues.file_type = nodeConf.file_type;
+            const nodeConf : EMRConf = (props.nodes[index] as Node).data.conf;
+            initialValues.script_uri = nodeConf.script_uri;
+            initialValues.input_uri = nodeConf.input_uri;
+            initialValues.master_instance_type = nodeConf.master_instance_type;
+            initialValues.slave_instance_type = nodeConf.slave_instance_type;
+            initialValues.instance_count = nodeConf.instance_count;
         }
         return initialValues;
     };
 
     const handleSubmit = (values: any, actions: any) => {
-        setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
+        setEMRFormValues(JSON.parse(JSON.stringify(values, null, 2)));
         const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
         const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
-        let newS3Conf:S3Conf = {
+        let newEMRConf:EMRConf = {
             id: currentNodeClick,
-            bucket_name: values.bucket_name,
-            file_path: values.file_path,
-            file_type: values.file_type,
+            script_uri: values.script_uri,
+            input_uri: values.input_uri,
+            master_instance_type: values.master_instance_type,
+            slave_instance_type: values.slave_instance_type,
+            instance_count: values.instance_count,
         }
         actions.setSubmitting(false);
         let node:FlowElement = props.nodes[indexToUpdate];
-        const newNode = {...node, data:{...node.data, conf: newS3Conf}};
+        const newNode = {...node, data:{...node.data, conf: newEMRConf}};
         const newNodes = [...props.nodes];
         newNodes[indexToUpdate] = newNode;
         props.setNodes(newNodes);
@@ -63,7 +69,7 @@ const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
     return (
         <div className={"container"}>
             <NotificationContainer/>
-            <label className={"form-label"}>S3 Configurations</label>
+            <label className={"form-label"}>EMR Configurations</label>
                 <Formik
                     initialValues={setInitialValues()}
                     onSubmit={handleSubmit}
@@ -72,4 +78,4 @@ const S3Form = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
         </div>)
 });
 
-export default S3Form;
+export default EMRForm;

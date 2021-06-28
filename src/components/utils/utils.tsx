@@ -1,5 +1,5 @@
 import {Task} from "../data/interface";
-import State, {BigQueryConf, ElasticsearchConf, KafkaConf, PubSubConf, S3Conf} from "../data/state";
+import State, {BigQueryConf, ElasticsearchConf, EMRConf, KafkaConf, PubSubConf, S3Conf} from "../data/state";
 import {Edge, Elements, FlowElement, Node} from "react-flow-renderer";
 import {NotificationManager} from "react-notifications";
 import {SEPARATOR} from "../../index";
@@ -9,6 +9,9 @@ import {notificationTimeoutMillis} from "../../config";
 function isConfGiven(nodes:Elements, index:number):boolean {
     const nodeName = nodes[index].id;
     if (nodeName.indexOf("S3") >= 0 && nodes[index].data.conf.hasOwnProperty("bucket_name")) {
+        return true;
+    }
+    else if (nodeName.indexOf("EMR") >= 0 && nodes[index].data.conf.hasOwnProperty("script_uri")) {
         return true;
     }
     else if (nodeName.indexOf("Kafka") >= 0 && nodes[index].data.conf.hasOwnProperty("broker_host")) {
@@ -40,6 +43,27 @@ function appendRequiredVariables(nodes:Elements, task: Task, name: string, index
         task.arguments.parameters.push({
             "name": "AWS_S3_FILE_TYPE",
             "value": (nodes[index].data.conf as S3Conf).file_type
+        });
+    } else if (name.indexOf("EMR") >= 0) {
+        task.arguments.parameters.push({
+            "name": "AWS_EMR_STEP_SCRIPT_URI",
+            "value": (nodes[index].data.conf as EMRConf).script_uri
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_EMR_STEP_INPUT_URI",
+            "value": (nodes[index].data.conf as EMRConf).input_uri
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_EMR_MASTER_INSTANCE_TYPE",
+            "value": (nodes[index].data.conf as EMRConf).master_instance_type
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_EMR_SLAVE_INSTANCE_TYPE",
+            "value": (nodes[index].data.conf as EMRConf).slave_instance_type
+        });
+        task.arguments.parameters.push({
+            "name": "AWS_EMR_INSTANCE_COUNT",
+            "value": (nodes[index].data.conf as EMRConf).instance_count
         });
     } else if (name.indexOf("Kafka") >= 0) {
         task.arguments.parameters.push({
