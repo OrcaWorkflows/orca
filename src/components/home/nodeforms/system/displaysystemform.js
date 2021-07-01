@@ -1,11 +1,5 @@
 import React from "react";
-import {Form, Field} from "formik";
-import {
-    AntInput
-} from "../createantfields";
-import {
-    isRequired
-} from "../validatefields";
+import {Form} from "formik";
 
 const display = () => ({handleSubmit, submitCount}) => (
     <Form onSubmit={handleSubmit}>

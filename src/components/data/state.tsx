@@ -1,6 +1,4 @@
 import {Task} from "./interface";
-import React from 'react';
-import {Elements} from "react-flow-renderer";
 import {WorkflowRes} from "../workflows/workflowinterface";
 
 
@@ -23,6 +21,23 @@ export class S3Conf extends NodeConf {
         this.bucket_name = bucket_name;
         this.file_path = file_path;
         this.file_type = file_type;
+    }
+}
+
+export class EMRConf extends NodeConf {
+    script_uri: string;
+    input_uri: string;
+    master_instance_type: string;
+    slave_instance_type: string;
+    instance_count: string;
+
+    constructor(id:string, script_uri:string, input_uri:string, master_instance_type:string, slave_instance_type:string, instance_count:string) {
+        super(id);
+        this.script_uri = script_uri;
+        this.input_uri = input_uri;
+        this.master_instance_type = master_instance_type;
+        this.slave_instance_type = slave_instance_type;
+        this.instance_count = instance_count;
     }
 }
 
@@ -77,7 +92,6 @@ export class ElasticsearchConf extends NodeConf {
 
 export class State {
     static tasks: Array<Task> = [];
-    static currentNodeClick: string = "";
     static workflowStatus:string = "";
     static workflows:Array<WorkflowRes>;
 }

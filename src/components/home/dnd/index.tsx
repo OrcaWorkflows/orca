@@ -22,8 +22,6 @@ import SystemForm from "../nodeforms/system";
 import 'react-notifications/lib/notifications.css';
 import mouseImage from "../../../assets/mouseclick.png";
 
-import {State} from "../../data/state";
-
 import {nodeTypes} from "./nodes/nodegenerator";
 import DefaultForm from "../nodeforms/default";
 import {SEPARATOR} from "../../../index";
@@ -34,15 +32,13 @@ import {Save} from "@material-ui/icons";
 import {NotificationManager} from "react-notifications";
 import {notificationTimeoutMillis} from "../../../config";
 import BigQueryForm from "../nodeforms/bigquery";
+import EMRForm from "../nodeforms/emr";
 
 
 let initialNodes: Elements | (() => Elements) = [];
 let initialEdges: Elements | (() => Elements) = [];
 
-// eslint-disable-next-line
-let counter:number = 0;
-
-const implementedNodes:Array<string> = ["S3", "Elasticsearch", "Kafka", "PubSub", "BigQuery"];
+const implementedNodes:Array<string> = ["S3", "EMR", "Elasticsearch", "Kafka", "PubSub", "BigQuery"];
 
 const DnDFlow = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
@@ -50,13 +46,9 @@ const DnDFlow = () => {
     const [edges, setEdges] = useState<Elements>(initialEdges);
     const [showForm , setShowForm] = useState<string>("");
     const [activeTab, setActiveTab] = useState("Configurations");
+    const [counter, setCounter] = useState<number>(0);
 
-    const refS3 = useRef<HTMLDivElement>(null);
-    const refKafka = useRef<HTMLDivElement>(null);
-    const refES = useRef<HTMLDivElement>(null);
-    const refPubSub = useRef<HTMLDivElement>(null);
-    const refBigQueryForm = useRef<HTMLDivElement>(null);
-    const refDefaultForm = useRef(null);
+    const refHtml = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         getCanvas().then(r => {
@@ -65,6 +57,7 @@ const DnDFlow = () => {
             localStorage.setItem("edges", JSON.stringify(r.property.edges));
             setNodes(r.property.nodes);
             setEdges(r.property.edges);
+            setCounter(r.property.nodes.length);
     });},[]);
 
     const onConnect = (params: Edge | Connection) => {
@@ -96,7 +89,7 @@ const DnDFlow = () => {
                 position,
                 data: {label: `${type}`},
             };
-            counter++;
+            setCounter(counter+1);
             setNodes((es) => es.concat(newNode));
         }
     };
@@ -107,7 +100,7 @@ const DnDFlow = () => {
                 let newState = ""
                 if(prevShowForm !== node_type){
                     newState = node_type;
-                    State.currentNodeClick = node_type;
+                    localStorage.setItem("currentNodeClick", node_type);
                 }
                 return newState
             } );
@@ -176,12 +169,13 @@ const DnDFlow = () => {
                             <img className={"mouse-image"} src={mouseImage} alt={""}/>
                             <label className={"form-label"}>Please Right Click on Any Node on Canvas to Activate Configuration Panel</label>
                         </div>}
-                        {(showForm.indexOf("S3") >= 0) && <S3Form ref={refS3} nodes={nodes} setNodes={setNodes}/>}
-                        {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refKafka} nodes={nodes} setNodes={setNodes}/>}
-                        {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refES} nodes={nodes} setNodes={setNodes}/>}
-                        {(showForm.indexOf("PubSub") >= 0) && <PubSubForm ref={refPubSub} nodes={nodes} setNodes={setNodes}/>}
-                        {(showForm.indexOf("BigQuery") >= 0) && <BigQueryForm ref={refBigQueryForm} nodes={nodes} setNodes={setNodes}/>}
-                        {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPARATOR)[0]) === -1) && <DefaultForm ref={refDefaultForm}/>}
+                        {(showForm.indexOf("S3") >= 0) && <S3Form ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm.indexOf("EMR") >= 0) && <EMRForm ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm.indexOf("Kafka") >= 0) && <KafkaForm ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm.indexOf("Elasticsearch") >= 0) && <ESForm ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm.indexOf("PubSub") >= 0) && <PubSubForm ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm.indexOf("BigQuery") >= 0) && <BigQueryForm ref={refHtml} nodes={nodes} setNodes={setNodes} edges={edges}/>}
+                        {(showForm !== "" && implementedNodes.indexOf(showForm.split(SEPARATOR)[0]) === -1) && <DefaultForm ref={refHtml}/>}
                     </div>}
                     {activeTab === "System" && <div className={"tabchild"}>
                         <SystemForm/>

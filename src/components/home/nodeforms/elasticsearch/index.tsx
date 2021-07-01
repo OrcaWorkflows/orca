@@ -4,11 +4,12 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displayawsform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {ElasticsearchConf} from "../../../data/state";
+import {ElasticsearchConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
+import {setCanvas} from "../../../../actions/canvas_actions";
 
-const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
     const [ESFormValues, setESFormValues] = useState({});
 
     const getESFormValues = () => {
@@ -27,7 +28,8 @@ const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
     };
 
     const setInitialValues = () => {
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick");
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
             const nodeConf : ElasticsearchConf = (props.nodes[index] as Node).data.conf;
             initialValues.host = nodeConf.host;
@@ -38,9 +40,10 @@ const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
 
     const handleSubmit = (values: any, actions: any) => {
         setESFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         let newElasticsearchConf:ElasticsearchConf = {
-            id: State.currentNodeClick,
+            id: currentNodeClick,
             host: values.host,
             index_name: values.index_name,
         }
@@ -50,6 +53,7 @@ const ESForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements 
         const newNodes = [...props.nodes]
         newNodes[index] = newNode
         props.setNodes(newNodes);
+        setCanvas(newNodes, props.edges);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 

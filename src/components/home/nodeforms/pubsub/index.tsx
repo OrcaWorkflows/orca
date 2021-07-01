@@ -3,11 +3,12 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displaygcpform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {PubSubConf} from "../../../data/state";
+import {PubSubConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
+import {setCanvas} from "../../../../actions/canvas_actions";
 
-const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
     const [PubSubFormValues, setPubSubFormValues] = useState();
 
     const getPubSubFormValues = () => {
@@ -27,7 +28,8 @@ const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Eleme
     };
 
     const setInitialValues = () => {
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick");
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
             const nodeConf : PubSubConf = (props.nodes[index] as Node).data.conf;
             initialValues.project_id = nodeConf.project_id;
@@ -39,9 +41,10 @@ const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Eleme
 
     const handleSubmit = (values: any, actions: any) => {
         setPubSubFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         let newPubSubConf:PubSubConf = {
-            id: State.currentNodeClick,
+            id: currentNodeClick,
             project_id: values.project_id,
             topic: values.topic,
             topic_action: values.topic_action,
@@ -52,6 +55,7 @@ const PubSubForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Eleme
         const newNodes = [...props.nodes]
         newNodes[index] = newNode
         props.setNodes(newNodes);
+        setCanvas(newNodes, props.edges);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 

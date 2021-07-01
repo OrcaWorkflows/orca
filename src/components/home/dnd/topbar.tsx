@@ -12,7 +12,8 @@ import {
     resumeWorkflow,
     stopWorkflow,
     submitWorkflow,
-    suspendWorkflow, terminateWorkflow
+    suspendWorkflow,
+    terminateWorkflow
 } from "../../../actions/workflow_actions";
 
 const TopBar = (props : {nodes:Elements, edges:Elements}) => {
@@ -27,11 +28,13 @@ const TopBar = (props : {nodes:Elements, edges:Elements}) => {
             submitWorkflow(new class implements Workflow {
                 name= "test-";
                 tasks = State.tasks;
+                canvasID = localStorage.getItem("canvasID");
             }, (response:AxiosResponse) => {
                 localStorage.setItem("workflowName", response.data.metadata.name)
                 State.tasks = [];
                 NotificationManager.success('Successfully Submitted Workflow', 'Success', notificationTimeoutMillis);
             }, (error:any) => {
+                console.log("Submit failed, " + error.toString());
                 NotificationManager.error('Submit Failed. Check the server.', "Error", notificationTimeoutMillis);
                 State.tasks = [];
             });

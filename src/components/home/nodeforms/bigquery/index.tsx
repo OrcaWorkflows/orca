@@ -3,11 +3,12 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Formik} from 'formik';
 import DisplayForm from "./displaygcpform";
 import {NotificationContainer, NotificationManager} from "react-notifications";
-import State, {BigQueryConf} from "../../../data/state";
+import {BigQueryConf} from "../../../data/state";
 import {notificationTimeoutMillis} from "../../../../config";
 import {Elements, FlowElement, Node} from "react-flow-renderer";
+import {setCanvas} from "../../../../actions/canvas_actions";
 
-const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void)}, ref) => {
+const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Elements | ((prevVar: Elements) => Elements)) => void), edges: Elements}, ref) => {
     const [BigQueryFormValues, setBigQueryFormValues] = useState();
 
     const getBigQueryFormValues = () => {
@@ -28,7 +29,8 @@ const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Ele
     };
 
     const setInitialValues = () => {
-        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick");
+        const index = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         if ((props.nodes[index] as Node).data.hasOwnProperty("conf")) {
             const nodeConf : BigQueryConf = (props.nodes[index] as Node).data.conf;
             initialValues.dataset_id = nodeConf.dataset_id;
@@ -40,9 +42,10 @@ const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Ele
 
     const handleSubmit = (values: any, actions: any) => {
         setBigQueryFormValues(JSON.parse(JSON.stringify(values, null, 2)));
-        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === State.currentNodeClick);
+        const currentNodeClick = localStorage.getItem("currentNodeClick") as string;
+        const indexToUpdate = props.nodes.findIndex((node:FlowElement) => (node as Node).id === currentNodeClick);
         let newBigQueryConf:BigQueryConf = {
-            id: State.currentNodeClick,
+            id: currentNodeClick,
             project_id: values.project_id,
             dataset_id: values.dataset_id,
             table_id: values.table_id,
@@ -54,6 +57,7 @@ const BigQueryForm = forwardRef((props: {nodes: Elements, setNodes: ((value: Ele
         const newNodes = [...props.nodes]
         newNodes[indexToUpdate] = newNode
         props.setNodes(newNodes);
+        setCanvas(newNodes, props.edges);
         NotificationManager.success('Successfully Saved Configurations', 'Success', notificationTimeoutMillis);
     };
 
