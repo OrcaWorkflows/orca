@@ -1,24 +1,24 @@
 export interface Name {
-    name: string
+	name: string;
 }
 export interface TemplateRef extends Name {
-    template: string
+	template: string;
 }
 
 export interface EnvironmentVar extends Name {
-    value: string
+	value: string;
 }
 
 export interface Parameters {
-    parameters: Array<EnvironmentVar>
+	parameters: Array<EnvironmentVar>;
 }
 
-export interface Task extends Name{
-    templateRef: TemplateRef,
-    arguments: Parameters,
-    dependencies: Array<string>
+export interface Task extends Name {
+	templateRef: TemplateRef;
+	arguments: Parameters;
+	dependencies: Array<string>;
 }
 
 export interface Workflow extends Name {
-    tasks: Array<Task>
+	tasks: Array<Task>;
 }
