@@ -1,112 +1,111 @@
 body {
-    font-family: sans-serif;
-    color: #111;
+	font-family: sans-serif;
+	color: #111;
 }
 
 html,
 body,
 #root {
-    margin: 0;
-    height: 100%;
+	margin: 0;
+	height: 100%;
 }
 
 #root {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: #8a8a8a;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background-color: #8a8a8a;
 }
 
 header {
-    padding: 10px;
-    display: flex;
-    font-weight: 700;
-    align-items: center;
-    background: #464646;
-    height: 68px;
+	padding: 10px;
+	display: flex;
+	font-weight: 700;
+	align-items: center;
+	background: #464646;
+	height: 68px;
 }
 
 .logo {
-    text-decoration: none;
-    display: flow;
-    line-height: 1;
-    text-align: left;
-    position: absolute;
-    color: black;
-    padding-left: 100px;
+	text-decoration: none;
+	display: flow;
+	line-height: 1;
+	text-align: left;
+	position: absolute;
+	color: black;
+	padding-left: 100px;
 }
 
 img {
-    max-width: 100%;
-    height: auto;
+	max-width: 100%;
+	height: auto;
 }
 
 .logo-item {
-    width: 80px;
-    min-height: 50px;
-    max-height: 50px;
-    float: left;
-    padding: 3px;
-    margin-inline: 8px;
-    margin-left: 80px;
+	width: 80px;
+	min-height: 50px;
+	max-height: 50px;
+	float: left;
+	padding: 3px;
+	margin-inline: 8px;
+	margin-left: 80px;
 }
 
 header a,
 header a:focus,
 header a:active,
 header a:visited {
-    color: #111;
+	color: #111;
 }
 
 header a:hover {
-    color: #333;
+	color: #333;
 }
 
 header select {
-    margin-left: auto;
+	margin-left: auto;
 }
 
 .overview-example__add {
-    display: none;
+	display: none;
 }
 
 .react-flow__node a {
-    font-weight: 700;
-    color: #111;
+	font-weight: 700;
+	color: #111;
 }
 
 .react-flow__node.dark-node {
-    background: #0041d0;
-    color: #f8f8f8;
+	background: #0041d0;
+	color: #f8f8f8;
 }
 
 .react-flow__node.dark {
-    background: #557;
-    color: #f8f8f8;
+	background: #557;
+	color: #f8f8f8;
 }
 
 .react-flow__node-selectorNode {
-    font-size: 12px;
-    background: #f0f2f3;
-    border: 1px solid #555555;
-    border-radius: 5px;
-    text-align: center;
+	font-size: 12px;
+	background: #f0f2f3;
+	border: 1px solid #555555;
+	border-radius: 5px;
+	text-align: center;
 }
 
 .react-flow__node-selectorNode .react-flow__handle {
-    border-color: #f0f2f3;
+	border-color: #f0f2f3;
 }
 
 @media screen and (min-width: 768px) {
-    .overview-example__add {
-        display: block;
-    }
+	.overview-example__add {
+		display: block;
+	}
 }
 
 .header-table {
-    width: 100%;
-    vertical-align: top;
-    border-collapse: collapse;
-    overflow: auto;
+	width: 100%;
+	vertical-align: top;
+	border-collapse: collapse;
+	overflow: auto;
 }
-
