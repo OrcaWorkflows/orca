@@ -1,7 +1,7 @@
 .dndflow {
 	flex-direction: column;
 	display: flex;
-	height: 100%;
+
 	background: #2d2d2d;
 }
 .parent-top-bar {
@@ -58,7 +58,6 @@
 
 .dndflow .reactflow-wrapper {
 	flex-grow: 1;
-	height: 93%;
 }
 
 @media screen and (min-width: 768px) {
@@ -91,7 +90,6 @@
 .sidebar-scroll {
 	width: 100%;
 	overflow-y: scroll;
-	height: 93vh;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }

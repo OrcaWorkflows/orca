@@ -1,6 +1,5 @@
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useHistory } from "react-router-dom";
-import "./auth.scss";
 
 const Logout = () => {
 	const history = useHistory();

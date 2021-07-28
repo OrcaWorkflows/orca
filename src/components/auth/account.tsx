@@ -1,5 +1,4 @@
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import "./auth.scss";
 
 const Account = () => {
 	const styleForButton = {
