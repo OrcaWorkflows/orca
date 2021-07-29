@@ -1,9 +1,9 @@
 import { Edge, Elements, FlowElement, Node } from "react-flow-renderer";
 import { NotificationManager } from "react-notifications";
 
-import { notificationTimeoutMillis } from "../../config";
-import { SEPARATOR } from "../../index";
-import { Task } from "../data/interface";
+import { notificationTimeoutMillis } from "../config";
+import { SEPARATOR } from "../index";
+import { Task } from "../views/data/interface";
 import State, {
 	BigQueryConf,
 	ElasticsearchConf,
@@ -11,7 +11,7 @@ import State, {
 	KafkaConf,
 	PubSubConf,
 	S3Conf,
-} from "../data/state";
+} from "../views/data/state";
 
 function isConfGiven(nodes: Elements, index: number): boolean {
 	const nodeName = nodes[index].id;

@@ -1,8 +1,6 @@
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
 
-import { Workflow } from "../components/data/interface";
-import State from "../components/data/state";
 import {
 	API,
 	API_PATH,
@@ -11,6 +9,8 @@ import {
 	SERVICE_ACCOUNT_NAME,
 	WORKFLOW,
 } from "../config";
+import { Workflow } from "../views/data/interface";
+import State from "../views/data/state";
 
 export function submitWorkflow(data: Workflow, onSuccess: any, onError: any) {
 	console.log("Submit initiated.");

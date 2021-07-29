@@ -1,4 +1,5 @@
-import { WorkflowRes } from "../workflows/workflowinterface";
+import { WorkflowRes } from "views/main/workflows/workflowinterface";
+
 import { Task } from "./interface";
 
 export class NodeConf {

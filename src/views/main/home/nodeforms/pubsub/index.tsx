@@ -7,12 +7,12 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { setCanvas } from "../../../../actions/canvas_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { S3Conf } from "../../../data/state";
-import DisplayForm from "./displays3form";
+import { setCanvas } from "../../../../../actions/canvas_actions";
+import { notificationTimeoutMillis } from "../../../../../config";
+import { PubSubConf } from "../../../../data/state";
+import DisplayForm from "./displaygcpform";
 
-const S3Form = forwardRef(
+const PubSubForm = forwardRef(
 	(
 		props: {
 			nodes: Elements;
@@ -21,22 +21,22 @@ const S3Form = forwardRef(
 		},
 		ref
 	) => {
-		const [S3FormValues, setS3FormValues] = useState();
+		const [PubSubFormValues, setPubSubFormValues] = useState();
 
-		const getS3FormValues = () => {
-			return S3FormValues;
+		const getPubSubFormValues = () => {
+			return PubSubFormValues;
 		};
 
 		useImperativeHandle(ref, () => {
 			return {
-				getFormValues: getS3FormValues,
+				getFormValues: getPubSubFormValues,
 			};
 		});
 
 		const initialValues = {
-			bucket_name: "",
-			file_path: "",
-			file_type: "",
+			project_id: "akis-295110",
+			topic: "",
+			topic_action: "",
 		};
 
 		const setInitialValues = () => {
@@ -50,33 +50,33 @@ const S3Form = forwardRef(
 					"conf"
 				)
 			) {
-				const nodeConf: S3Conf = (props.nodes[index] as Node).data.conf;
-				initialValues.bucket_name = nodeConf.bucket_name;
-				initialValues.file_path = nodeConf.file_path;
-				initialValues.file_type = nodeConf.file_type;
+				const nodeConf: PubSubConf = (props.nodes[index] as Node).data.conf;
+				initialValues.project_id = nodeConf.project_id;
+				initialValues.topic = nodeConf.topic;
+				initialValues.topic_action = nodeConf.topic_action;
 			}
 			return initialValues;
 		};
 
 		const handleSubmit = (values: any, actions: any) => {
-			setS3FormValues(JSON.parse(JSON.stringify(values, null, 2)));
+			setPubSubFormValues(JSON.parse(JSON.stringify(values, null, 2)));
 			const currentNodeClick = localStorage.getItem(
 				"currentNodeClick"
 			) as string;
-			const indexToUpdate = props.nodes.findIndex(
+			const index = props.nodes.findIndex(
 				(node: FlowElement) => (node as Node).id === currentNodeClick
 			);
-			const newS3Conf: S3Conf = {
+			const newPubSubConf: PubSubConf = {
 				id: currentNodeClick,
-				bucket_name: values.bucket_name,
-				file_path: values.file_path,
-				file_type: values.file_type,
+				project_id: values.project_id,
+				topic: values.topic,
+				topic_action: values.topic_action,
 			};
 			actions.setSubmitting(false);
-			const node: FlowElement = props.nodes[indexToUpdate];
-			const newNode = { ...node, data: { ...node.data, conf: newS3Conf } };
+			const node: FlowElement = props.nodes[index];
+			const newNode = { ...node, data: { ...node.data, conf: newPubSubConf } };
 			const newNodes = [...props.nodes];
-			newNodes[indexToUpdate] = newNode;
+			newNodes[index] = newNode;
 			props.setNodes(newNodes);
 			setCanvas(newNodes, props.edges);
 			NotificationManager.success(
@@ -89,7 +89,7 @@ const S3Form = forwardRef(
 		return (
 			<div className={"container"}>
 				<NotificationContainer />
-				<label className={"form-label"}>S3 Configurations</label>
+				<label className={"form-label"}>PubSub Configurations</label>
 				<Formik
 					initialValues={setInitialValues()}
 					onSubmit={handleSubmit}
@@ -99,6 +99,6 @@ const S3Form = forwardRef(
 		);
 	}
 );
-S3Form.displayName = "S3Form";
+PubSubForm.displayName = "PubSubForm";
 
-export default S3Form;
+export default PubSubForm;

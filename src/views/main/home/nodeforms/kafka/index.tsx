@@ -7,12 +7,12 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { setCanvas } from "../../../../actions/canvas_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { BigQueryConf } from "../../../data/state";
-import DisplayForm from "./displaygcpform";
+import { setCanvas } from "../../../../../actions/canvas_actions";
+import { notificationTimeoutMillis } from "../../../../../config";
+import { KafkaConf } from "../../../../data/state";
+import DisplayForm from "./displayawsform";
 
-const BigQueryForm = forwardRef(
+const KafkaForm = forwardRef(
 	(
 		props: {
 			nodes: Elements;
@@ -21,23 +21,21 @@ const BigQueryForm = forwardRef(
 		},
 		ref
 	) => {
-		const [BigQueryFormValues, setBigQueryFormValues] = useState();
+		const [KafkaFormValues, setKafkaFormValues] = useState({});
 
-		const getBigQueryFormValues = () => {
-			return BigQueryFormValues;
+		const getKafkaFormValues = () => {
+			return KafkaFormValues;
 		};
 
 		useImperativeHandle(ref, () => {
 			return {
-				getFormValues: getBigQueryFormValues,
+				getFormValues: getKafkaFormValues,
 			};
 		});
 
 		const initialValues = {
-			project_id: "akis-295110",
-			dataset_id: "",
-			table_id: "",
-			query: "",
+			topic_name: "",
+			broker_host: "",
 		};
 
 		const setInitialValues = () => {
@@ -51,37 +49,31 @@ const BigQueryForm = forwardRef(
 					"conf"
 				)
 			) {
-				const nodeConf: BigQueryConf = (props.nodes[index] as Node).data.conf;
-				initialValues.dataset_id = nodeConf.dataset_id;
-				initialValues.table_id = nodeConf.table_id;
-				initialValues.query = nodeConf.query;
+				const nodeConf: KafkaConf = (props.nodes[index] as Node).data.conf;
+				initialValues.topic_name = nodeConf.topic_name;
+				initialValues.broker_host = nodeConf.broker_host;
 			}
 			return initialValues;
 		};
 
 		const handleSubmit = (values: any, actions: any) => {
-			setBigQueryFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+			setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
 			const currentNodeClick = localStorage.getItem(
 				"currentNodeClick"
 			) as string;
-			const indexToUpdate = props.nodes.findIndex(
+			const index = props.nodes.findIndex(
 				(node: FlowElement) => (node as Node).id === currentNodeClick
 			);
-			const newBigQueryConf: BigQueryConf = {
+			const newKafkaConf: KafkaConf = {
 				id: currentNodeClick,
-				project_id: values.project_id,
-				dataset_id: values.dataset_id,
-				table_id: values.table_id,
-				query: values.query,
+				broker_host: values.broker_host,
+				topic_name: values.topic_name,
 			};
 			actions.setSubmitting(false);
-			const node: FlowElement = props.nodes[indexToUpdate];
-			const newNode = {
-				...node,
-				data: { ...node.data, conf: newBigQueryConf },
-			};
+			const node: FlowElement = props.nodes[index];
+			const newNode = { ...node, data: { ...node.data, conf: newKafkaConf } };
 			const newNodes = [...props.nodes];
-			newNodes[indexToUpdate] = newNode;
+			newNodes[index] = newNode;
 			props.setNodes(newNodes);
 			setCanvas(newNodes, props.edges);
 			NotificationManager.success(
@@ -94,7 +86,7 @@ const BigQueryForm = forwardRef(
 		return (
 			<div className={"container"}>
 				<NotificationContainer />
-				<label className={"form-label"}>BigQuery Configurations</label>
+				<label className={"form-label"}>Kafka Configurations</label>
 				<Formik
 					initialValues={setInitialValues()}
 					onSubmit={handleSubmit}
@@ -104,6 +96,6 @@ const BigQueryForm = forwardRef(
 		);
 	}
 );
+KafkaForm.displayName = "KafkaForm";
 
-BigQueryForm.displayName = "BigQueryForm";
-export default BigQueryForm;
+export default KafkaForm;

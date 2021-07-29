@@ -1,6 +1,6 @@
 import logo from "assets/logo/vector/default-monochrome-black.svg";
-import Account from "components/auth/account";
-import Logout from "components/auth/logout";
+import Account from "views/auth/account";
+import Logout from "views/auth/logout";
 
 const Header = () => (
 	<div className={"main-header"}>
