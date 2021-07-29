@@ -20,10 +20,10 @@ import "./scss/dnd.css";
 import "./scss/nodes.scss";
 import "react-notifications/lib/notifications.css";
 
-import { getCanvas, setCanvas } from "../../../actions/canvas_actions";
-import mouseImage from "../../../assets/mouseclick.png";
-import { notificationTimeoutMillis } from "../../../config";
-import { SEPARATOR } from "../../../index";
+import { getCanvas, setCanvas } from "../../../../actions/canvas_actions";
+import mouseImage from "../../../../assets/mouseclick.png";
+import { notificationTimeoutMillis } from "../../../../config";
+import { SEPARATOR } from "../../../../index";
 import SideHeader from "../../navigation/sideheader";
 import BigQueryForm from "../nodeforms/bigquery";
 import DefaultForm from "../nodeforms/default";

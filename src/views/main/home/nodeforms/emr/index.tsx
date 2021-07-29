@@ -7,12 +7,12 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { setCanvas } from "../../../../actions/canvas_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { KafkaConf } from "../../../data/state";
-import DisplayForm from "./displayawsform";
+import { setCanvas } from "../../../../../actions/canvas_actions";
+import { notificationTimeoutMillis } from "../../../../../config";
+import { EMRConf } from "../../../../data/state";
+import DisplayForm from "./displayemrform";
 
-const KafkaForm = forwardRef(
+const EMRForm = forwardRef(
 	(
 		props: {
 			nodes: Elements;
@@ -21,21 +21,24 @@ const KafkaForm = forwardRef(
 		},
 		ref
 	) => {
-		const [KafkaFormValues, setKafkaFormValues] = useState({});
+		const [EMRFormValues, setEMRFormValues] = useState();
 
-		const getKafkaFormValues = () => {
-			return KafkaFormValues;
+		const getEMRFormValues = () => {
+			return EMRFormValues;
 		};
 
 		useImperativeHandle(ref, () => {
 			return {
-				getFormValues: getKafkaFormValues,
+				getFormValues: getEMRFormValues,
 			};
 		});
 
 		const initialValues = {
-			topic_name: "",
-			broker_host: "",
+			script_uri: "",
+			input_uri: "",
+			master_instance_type: "m5.xlarge",
+			slave_instance_type: "m5.xlarge",
+			instance_count: "3",
 		};
 
 		const setInitialValues = () => {
@@ -49,31 +52,37 @@ const KafkaForm = forwardRef(
 					"conf"
 				)
 			) {
-				const nodeConf: KafkaConf = (props.nodes[index] as Node).data.conf;
-				initialValues.topic_name = nodeConf.topic_name;
-				initialValues.broker_host = nodeConf.broker_host;
+				const nodeConf: EMRConf = (props.nodes[index] as Node).data.conf;
+				initialValues.script_uri = nodeConf.script_uri;
+				initialValues.input_uri = nodeConf.input_uri;
+				initialValues.master_instance_type = nodeConf.master_instance_type;
+				initialValues.slave_instance_type = nodeConf.slave_instance_type;
+				initialValues.instance_count = nodeConf.instance_count;
 			}
 			return initialValues;
 		};
 
 		const handleSubmit = (values: any, actions: any) => {
-			setKafkaFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+			setEMRFormValues(JSON.parse(JSON.stringify(values, null, 2)));
 			const currentNodeClick = localStorage.getItem(
 				"currentNodeClick"
 			) as string;
-			const index = props.nodes.findIndex(
+			const indexToUpdate = props.nodes.findIndex(
 				(node: FlowElement) => (node as Node).id === currentNodeClick
 			);
-			const newKafkaConf: KafkaConf = {
+			const newEMRConf: EMRConf = {
 				id: currentNodeClick,
-				broker_host: values.broker_host,
-				topic_name: values.topic_name,
+				script_uri: values.script_uri,
+				input_uri: values.input_uri,
+				master_instance_type: values.master_instance_type,
+				slave_instance_type: values.slave_instance_type,
+				instance_count: values.instance_count,
 			};
 			actions.setSubmitting(false);
-			const node: FlowElement = props.nodes[index];
-			const newNode = { ...node, data: { ...node.data, conf: newKafkaConf } };
+			const node: FlowElement = props.nodes[indexToUpdate];
+			const newNode = { ...node, data: { ...node.data, conf: newEMRConf } };
 			const newNodes = [...props.nodes];
-			newNodes[index] = newNode;
+			newNodes[indexToUpdate] = newNode;
 			props.setNodes(newNodes);
 			setCanvas(newNodes, props.edges);
 			NotificationManager.success(
@@ -86,7 +95,7 @@ const KafkaForm = forwardRef(
 		return (
 			<div className={"container"}>
 				<NotificationContainer />
-				<label className={"form-label"}>Kafka Configurations</label>
+				<label className={"form-label"}>EMR Configurations</label>
 				<Formik
 					initialValues={setInitialValues()}
 					onSubmit={handleSubmit}
@@ -96,6 +105,6 @@ const KafkaForm = forwardRef(
 		);
 	}
 );
-KafkaForm.displayName = "KafkaForm";
+EMRForm.displayName = "EMRForm";
 
-export default KafkaForm;
+export default EMRForm;

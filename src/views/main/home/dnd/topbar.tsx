@@ -13,11 +13,11 @@ import {
 	submitWorkflow,
 	suspendWorkflow,
 	terminateWorkflow,
-} from "../../../actions/workflow_actions";
-import { notificationTimeoutMillis } from "../../../config";
-import { Workflow } from "../../data/interface";
-import State from "../../data/state";
-import { createTaskForEdge } from "../../utils/utils";
+} from "../../../../actions/workflow_actions";
+import { notificationTimeoutMillis } from "../../../../config";
+import { createTaskForEdge } from "../../../../utils/utils";
+import { Workflow } from "../../../data/interface";
+import State from "../../../data/state";
 
 const TopBar = (props: { nodes: Elements; edges: Elements }) => {
 	const submit = () => {

@@ -7,12 +7,12 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { setCanvas } from "../../../../actions/canvas_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { EMRConf } from "../../../data/state";
-import DisplayForm from "./displayemrform";
+import { setCanvas } from "../../../../../actions/canvas_actions";
+import { notificationTimeoutMillis } from "../../../../../config";
+import { BigQueryConf } from "../../../../data/state";
+import DisplayForm from "./displaygcpform";
 
-const EMRForm = forwardRef(
+const BigQueryForm = forwardRef(
 	(
 		props: {
 			nodes: Elements;
@@ -21,24 +21,23 @@ const EMRForm = forwardRef(
 		},
 		ref
 	) => {
-		const [EMRFormValues, setEMRFormValues] = useState();
+		const [BigQueryFormValues, setBigQueryFormValues] = useState();
 
-		const getEMRFormValues = () => {
-			return EMRFormValues;
+		const getBigQueryFormValues = () => {
+			return BigQueryFormValues;
 		};
 
 		useImperativeHandle(ref, () => {
 			return {
-				getFormValues: getEMRFormValues,
+				getFormValues: getBigQueryFormValues,
 			};
 		});
 
 		const initialValues = {
-			script_uri: "",
-			input_uri: "",
-			master_instance_type: "m5.xlarge",
-			slave_instance_type: "m5.xlarge",
-			instance_count: "3",
+			project_id: "akis-295110",
+			dataset_id: "",
+			table_id: "",
+			query: "",
 		};
 
 		const setInitialValues = () => {
@@ -52,35 +51,35 @@ const EMRForm = forwardRef(
 					"conf"
 				)
 			) {
-				const nodeConf: EMRConf = (props.nodes[index] as Node).data.conf;
-				initialValues.script_uri = nodeConf.script_uri;
-				initialValues.input_uri = nodeConf.input_uri;
-				initialValues.master_instance_type = nodeConf.master_instance_type;
-				initialValues.slave_instance_type = nodeConf.slave_instance_type;
-				initialValues.instance_count = nodeConf.instance_count;
+				const nodeConf: BigQueryConf = (props.nodes[index] as Node).data.conf;
+				initialValues.dataset_id = nodeConf.dataset_id;
+				initialValues.table_id = nodeConf.table_id;
+				initialValues.query = nodeConf.query;
 			}
 			return initialValues;
 		};
 
 		const handleSubmit = (values: any, actions: any) => {
-			setEMRFormValues(JSON.parse(JSON.stringify(values, null, 2)));
+			setBigQueryFormValues(JSON.parse(JSON.stringify(values, null, 2)));
 			const currentNodeClick = localStorage.getItem(
 				"currentNodeClick"
 			) as string;
 			const indexToUpdate = props.nodes.findIndex(
 				(node: FlowElement) => (node as Node).id === currentNodeClick
 			);
-			const newEMRConf: EMRConf = {
+			const newBigQueryConf: BigQueryConf = {
 				id: currentNodeClick,
-				script_uri: values.script_uri,
-				input_uri: values.input_uri,
-				master_instance_type: values.master_instance_type,
-				slave_instance_type: values.slave_instance_type,
-				instance_count: values.instance_count,
+				project_id: values.project_id,
+				dataset_id: values.dataset_id,
+				table_id: values.table_id,
+				query: values.query,
 			};
 			actions.setSubmitting(false);
 			const node: FlowElement = props.nodes[indexToUpdate];
-			const newNode = { ...node, data: { ...node.data, conf: newEMRConf } };
+			const newNode = {
+				...node,
+				data: { ...node.data, conf: newBigQueryConf },
+			};
 			const newNodes = [...props.nodes];
 			newNodes[indexToUpdate] = newNode;
 			props.setNodes(newNodes);
@@ -95,7 +94,7 @@ const EMRForm = forwardRef(
 		return (
 			<div className={"container"}>
 				<NotificationContainer />
-				<label className={"form-label"}>EMR Configurations</label>
+				<label className={"form-label"}>BigQuery Configurations</label>
 				<Formik
 					initialValues={setInitialValues()}
 					onSubmit={handleSubmit}
@@ -105,6 +104,6 @@ const EMRForm = forwardRef(
 		);
 	}
 );
-EMRForm.displayName = "EMRForm";
 
-export default EMRForm;
+BigQueryForm.displayName = "BigQueryForm";
+export default BigQueryForm;

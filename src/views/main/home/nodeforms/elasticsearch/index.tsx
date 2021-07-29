@@ -7,9 +7,9 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { setCanvas } from "../../../../actions/canvas_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { ElasticsearchConf } from "../../../data/state";
+import { setCanvas } from "../../../../../actions/canvas_actions";
+import { notificationTimeoutMillis } from "../../../../../config";
+import { ElasticsearchConf } from "../../../../data/state";
 import DisplayForm from "./displayawsform";
 
 const ESForm = forwardRef(

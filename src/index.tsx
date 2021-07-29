@@ -10,18 +10,17 @@ import {
 	Switch,
 } from "react-router-dom";
 
-import Login from "components/auth/Login";
-import Signup from "components/auth/Signup";
 import { AuthRoute, MainRoute } from "routes";
 import theme from "theme";
-
+import Login from "views/auth/Login";
+import Signup from "views/auth/Signup";
 import "./index.css";
-import DragNDrop from "./components/home/dnd/index";
-import { createNodes } from "./components/home/dnd/nodes/nodegenerator";
-import Schedule from "./components/schedule";
-import Settings from "./components/settings";
-import Templates from "./components/templates";
-import Workflows from "./components/workflows";
+import DragNDrop from "views/main/home/dnd/index";
+import { createNodes } from "views/main/home/dnd/nodes/nodegenerator";
+import Schedule from "views/main/schedule";
+import Settings from "views/main/settings";
+import Templates from "views/main/templates";
+import Workflows from "views/main/workflows";
 
 axios.interceptors.request.use(
 	(config) => {

@@ -6,7 +6,7 @@ import {
 	NotificationManager,
 } from "react-notifications";
 
-import { notificationTimeoutMillis } from "../../../../config";
+import { notificationTimeoutMillis } from "../../../../../config";
 import DisplayForm from "./displaysystemform";
 
 const SystemForm = forwardRef((_props, ref) => {

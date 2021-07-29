@@ -11,7 +11,7 @@ import {
 	TablePagination,
 } from "@material-ui/core";
 
-import { getAllWorkflows } from "../../actions/workflow_actions";
+import { getAllWorkflows } from "../../../actions/workflow_actions";
 import "./workflows.css";
 import SideHeader from "../navigation/sideheader";
 
