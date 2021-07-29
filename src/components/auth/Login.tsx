@@ -17,8 +17,8 @@ const useStyles = makeStyles({
 });
 
 const loginValidationSchema = yup.object({
-	username: yup.string().required("Zorunlu alan"),
-	password: yup.string().required("Zorunlu alan"),
+	username: yup.string().required(),
+	password: yup.string().required(),
 });
 
 const Login = (): JSX.Element => {
@@ -71,7 +71,6 @@ const Login = (): JSX.Element => {
 											<TextField
 												{...field}
 												error={!!(meta.touched && meta.error)}
-												helperText={meta.touched && meta.error}
 												label="User Name"
 												required
 											/>
@@ -86,7 +85,6 @@ const Login = (): JSX.Element => {
 											<TextField
 												{...field}
 												error={!!(meta.touched && meta.error)}
-												helperText={meta.touched && meta.error}
 												label="Password"
 												required
 												type="password"

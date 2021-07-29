@@ -7,9 +7,9 @@ const palette = {
 		contrastText: "#af52bf",
 	},
 	secondary: {
-		light: "#af52bf",
-		main: "#9c27b0",
-		dark: "#6d1b7b",
+		light: "#83e345",
+		main: "#64dd17",
+		dark: "#469a10",
 		contrastText: "#212121",
 	},
 	error: {
