@@ -1,26 +1,26 @@
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import axios from "axios";
 import jwtDecoder from "jwt-decode";
 import moment from "moment";
 import ReactDOM from "react-dom";
 import {
-	BrowserRouter,
 	BrowserRouter as Router,
-	Switch,
+	Redirect,
 	Route,
-	withRouter,
+	Switch,
 } from "react-router-dom";
 
-import logo from "./assets/logo/vector/default-monochrome-black.svg";
-import Account from "./components/auth/account";
-import Login from "./components/auth/login";
-import Logout from "./components/auth/logout";
+import { AuthRoute, MainRoute } from "routes";
+import theme from "theme";
+import Login from "views/auth/Login";
+import Signup from "views/auth/Signup";
 import "./index.css";
-import DragNDrop from "./components/home/dnd/index";
-import { createNodes } from "./components/home/dnd/nodes/nodegenerator";
-import Schedule from "./components/schedule";
-import Settings from "./components/settings";
-import Templates from "./components/templates";
-import Workflows from "./components/workflows";
+import DragNDrop from "views/main/home/dnd/index";
+import { createNodes } from "views/main/home/dnd/nodes/nodegenerator";
+import Schedule from "views/main/schedule";
+import Settings from "views/main/settings";
+import Templates from "views/main/templates";
+import Workflows from "views/main/workflows";
 
 axios.interceptors.request.use(
 	(config) => {
@@ -63,63 +63,25 @@ if (token) {
 
 // Create Custom Nodes
 createNodes();
-
 export const SEPARATOR = "-";
 
-export const getHidden = () => {
-	const isLoggedIn = localStorage.getItem("token");
-	return isLoggedIn != null;
-};
-
-const Header = withRouter(() => {
-	return (
-		<div className={"main-header"}>
-			<header>
-				<div className={"logo-item"}>
-					<img src={logo} alt={"Logo"} />
-				</div>
-				<Account />
-				<Logout />
-			</header>
-		</div>
-	);
-});
-
-const OrcaRouter = () => {
-	if (!localStorage.getItem("token")) {
-		console.log("Token is not set!");
-		return <Login />;
-	}
-	console.log("Token is set!");
-	return (
-		<div className="wrapper">
-			<BrowserRouter>
-				<Switch>
-					<Route path="/home">
-						<DragNDrop />
-					</Route>
-					<Route path="/workflows">
-						<Workflows />
-					</Route>
-					<Route path="/templates">
-						<Templates />
-					</Route>
-					<Route path="/schedule">
-						<Schedule />
-					</Route>
-					<Route path="/settings">
-						<Settings />
-					</Route>
-				</Switch>
-			</BrowserRouter>
-		</div>
-	);
-};
+const NotFoundRedirect = () => <Redirect to="/" />;
 
 ReactDOM.render(
-	<Router forceRefresh={true}>
-		{getHidden() ? <Header /> : ""}
-		<OrcaRouter />
+	<Router>
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<Switch>
+				<AuthRoute component={Login} path="/" exact />
+				<AuthRoute component={Signup} path="/signup" exact />
+				<MainRoute component={DragNDrop} path="/home" protect exact />
+				<MainRoute component={Workflows} path="/workflows" protect exact />
+				<MainRoute component={Templates} path="/templates" protect exact />
+				<MainRoute component={Schedule} path="/schedule" protect exact />
+				<MainRoute component={Settings} path="/settings" protect exact />
+				<Route component={NotFoundRedirect} />
+			</Switch>
+		</ThemeProvider>
 	</Router>,
 	document.getElementById("root")
 );

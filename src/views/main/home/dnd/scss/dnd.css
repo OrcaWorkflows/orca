@@ -1,0 +1,156 @@
+.dndflow {
+	flex-direction: column;
+	display: flex;
+
+	background: #2d2d2d;
+}
+.parent-top-bar {
+	width: 100%;
+}
+
+.topbarbutton {
+	background-color: #a0aaa0; /* Green */
+	border: 2px #a0aaa0;
+	color: black;
+	cursor: pointer;
+	border-radius: 5px;
+	padding: 12px;
+	width: 13%;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	transition-duration: 0.2s;
+	margin-left: 1.111%;
+}
+
+.topbarbutton:hover {
+	background-color: #3e8e41; /* Green */
+	border: 2px #a0aaa0;
+	color: black;
+	padding: 12px;
+	border-radius: 8px;
+	width: 13%;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+		0 17px 50px 0 rgba(0, 0, 0, 0.19);
+	margin-left: 1.111%;
+}
+
+.tabchild {
+	margin-left: 20px;
+}
+
+.dndflow aside {
+	border-right: 1px solid #eee;
+	padding: 15px 10px;
+	font-size: 12px;
+	background: #273827;
+}
+
+.dndflow aside .description {
+	margin-bottom: 10px;
+}
+
+.dndflow .reactflow-wrapper {
+	flex-grow: 1;
+}
+
+@media screen and (min-width: 768px) {
+	.dndflow {
+		flex-direction: row;
+	}
+
+	.dndflow aside {
+		width: 20%;
+		max-width: 250px;
+	}
+}
+
+.operator-handle {
+	box-sizing: inherit;
+	margin-top: -5px;
+	margin-bottom: -5px;
+}
+
+.sidebar {
+	background-color: #464646;
+	border-right: 1px solid #1e1e1e;
+	border-left: 1px solid #1e1e1e;
+	width: 260px;
+	overflow: hidden;
+	display: inline-table;
+	position: relative;
+}
+
+.sidebar-scroll {
+	width: 100%;
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+	display: none;
+}
+
+.sidebar-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.tr,
+td {
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	overflow: hidden;
+}
+
+td:first-child {
+	text-align: left;
+	width: 60px;
+}
+
+.tr {
+	border: 1px solid black;
+}
+
+.Collapsible {
+	height: 100%;
+	vertical-align: top;
+	display: block;
+	cursor: pointer;
+}
+
+.Collapsible__trigger {
+	height: 30px;
+	display: inline-block;
+	background-color: #1e1e1e;
+	width: 100%;
+	color: lightgrey;
+	vertical-align: top;
+	border-collapse: collapse;
+	overflow: auto;
+	text-align: center;
+	border: 1px solid black;
+}
+
+.Collapsible__contentInner {
+}
+
+.title {
+	text-align: center;
+	font-weight: bold;
+}
+
+.mouse-image {
+	display: block;
+	margin: 0 auto;
+	width: 100px;
+	padding-top: 30px;
+}
