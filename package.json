@@ -3,6 +3,8 @@
 	"version": "1.0.0",
 	"dependencies": {
 		"@material-ui/core": "^4.12.2",
+		"@material-ui/icons": "^4.11.2",
+		"@material-ui/lab": "^4.0.0-alpha.60",
 		"antd": "^4.15.0",
 		"axios": "^0.21.1",
 		"bootstrap": "^4.6.0",
@@ -19,19 +21,21 @@
 		"react-collapsed": "^3.0.2",
 		"react-collapsible": "^2.8.3",
 		"react-dom": "^17.0.2",
+		"react-feather": "^2.0.9",
 		"react-flow-renderer": "9.4.2",
 		"react-icons": "^4.2.0",
 		"react-notifications": "^1.7.2",
 		"react-notifications-component": "^3.1.0",
 		"react-pro-sidebar": "^0.6.0",
+		"react-query": "^3.19.1",
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "4.0.3",
 		"sass": "^1.32.8",
 		"styled-components": "^5.2.3",
-		"yup": "^0.32.9"
+		"yup": "^0.32.9",
+		"yup-phone": "^1.2.19"
 	},
 	"devDependencies": {
-		"@material-ui/icons": "^4.11.2",
 		"@types/dagre": "^0.7.44",
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.1",

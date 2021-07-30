@@ -1,55 +1,57 @@
-import { Button, Grid, TextField, makeStyles } from "@material-ui/core";
+import {
+	Button,
+	Grid,
+	Link,
+	SvgIcon,
+	TextField,
+	Typography,
+	makeStyles,
+} from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
-// import {
-// 	NotificationContainer,
-// 	// NotificationManager,
-// } from "react-notifications";
-import { useHistory } from "react-router-dom";
+import { Key } from "react-feather";
+import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 
-import { signinUser } from "actions/auth_actions";
+import { useSignin, Values } from "actions/auth/useSignin";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
-
-// import { notificationTimeoutMillis } from "../../config";
+import { Alert } from "components";
 
 const useStyles = makeStyles({
 	fullHeight: { height: "100%" },
+	signupLink: {
+		"&:hover $signupIcon": {
+			transition: "transform 0.3s ease",
+			transform: "translateX(10px)",
+		},
+	},
+	signupIcon: {
+		verticalAlign: "middle",
+	},
 });
 
-const loginValidationSchema = yup.object({
+const signinValidationSchema = yup.object({
 	username: yup.string().required(),
 	password: yup.string().required(),
 });
 
-const Login = (): JSX.Element => {
+const Signin = (): JSX.Element => {
 	const classes = useStyles();
 
 	const initialValues = {
 		username: "",
 		password: "",
 	};
-	const history = useHistory();
-	const handleSubmit = (values: any, actions: any) => {
-		actions.setSubmitting(false);
-		signinUser(values["username"], values["password"], history);
-	};
 
-	// const handleRegister = () => {
-	// 	NotificationManager.error(
-	// 		"Registration is Closed. Please Try again later.",
-	// 		"Error",
-	// 		notificationTimeoutMillis
-	// 	);
-	// };
+	const { isError, mutate } = useSignin();
+	const handleSubmit = async (values: Values) => mutate(values);
 
 	return (
 		<>
-			{/* <NotificationContainer /> */}
 			<Formik
 				initialValues={initialValues}
 				onSubmit={handleSubmit}
 				validateOnMount
-				validationSchema={loginValidationSchema}
+				validationSchema={signinValidationSchema}
 			>
 				{({ isSubmitting, isValid }) => (
 					<Form className={classes.fullHeight}>
@@ -95,15 +97,40 @@ const Login = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Button disabled={isSubmitting || !isValid} type="submit">
-									Login
+									Sign-in
 								</Button>
+							</Grid>
+							<Grid item>
+								<Typography display="inline" variant="subtitle2">
+									Don&apos;t have an account?{" "}
+								</Typography>
+								<Link
+									className={classes.signupLink}
+									component={RouterLink}
+									to="/signup"
+								>
+									Sign up now!{" "}
+									<SvgIcon
+										className={classes.signupIcon}
+										color="secondary"
+										fontSize="small"
+									>
+										<Key />
+									</SvgIcon>
+								</Link>
 							</Grid>
 						</Grid>
 					</Form>
 				)}
 			</Formik>
+			{isError && (
+				<Alert
+					message="Please check your credentials and try again."
+					severity="error"
+				/>
+			)}
 		</>
 	);
 };
 
-export default Login;
+export default Signin;
