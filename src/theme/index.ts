@@ -5,6 +5,9 @@ import palette from "./palette";
 import props from "./props";
 
 const baseTheme: ThemeOptions = {
+	typography: {
+		fontFamily: "Nunito",
+	},
 	palette,
 	overrides,
 	props,

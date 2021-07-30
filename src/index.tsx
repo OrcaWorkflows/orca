@@ -3,6 +3,8 @@ import axios from "axios";
 import jwtDecoder from "jwt-decode";
 import moment from "moment";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import {
 	BrowserRouter as Router,
 	Redirect,
@@ -12,7 +14,7 @@ import {
 
 import { AuthRoute, MainRoute } from "routes";
 import theme from "theme";
-import Login from "views/auth/Login";
+import Signin from "views/auth/Signin";
 import Signup from "views/auth/Signup";
 import "./index.css";
 import DragNDrop from "views/main/home/dnd/index";
@@ -65,23 +67,28 @@ if (token) {
 createNodes();
 export const SEPARATOR = "-";
 
+const queryClient = new QueryClient();
+
 const NotFoundRedirect = () => <Redirect to="/" />;
 
 ReactDOM.render(
-	<Router>
+	<QueryClientProvider client={queryClient}>
+		<ReactQueryDevtools initialIsOpen={false} />{" "}
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Switch>
-				<AuthRoute component={Login} path="/" exact />
-				<AuthRoute component={Signup} path="/signup" exact />
-				<MainRoute component={DragNDrop} path="/home" protect exact />
-				<MainRoute component={Workflows} path="/workflows" protect exact />
-				<MainRoute component={Templates} path="/templates" protect exact />
-				<MainRoute component={Schedule} path="/schedule" protect exact />
-				<MainRoute component={Settings} path="/settings" protect exact />
-				<Route component={NotFoundRedirect} />
-			</Switch>
+			<Router>
+				<Switch>
+					<AuthRoute component={Signin} path="/" exact />
+					<AuthRoute component={Signup} path="/signup" exact />
+					<MainRoute component={DragNDrop} path="/home" protect exact />
+					<MainRoute component={Workflows} path="/workflows" protect exact />
+					<MainRoute component={Templates} path="/templates" protect exact />
+					<MainRoute component={Schedule} path="/schedule" protect exact />
+					<MainRoute component={Settings} path="/settings" protect exact />
+					<Route component={NotFoundRedirect} />
+				</Switch>
+			</Router>
 		</ThemeProvider>
-	</Router>,
+	</QueryClientProvider>,
 	document.getElementById("root")
 );
