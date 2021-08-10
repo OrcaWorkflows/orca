@@ -67,118 +67,115 @@ const Signup = (): JSX.Element => {
 				validateOnMount
 				validationSchema={signupValidationSchema}
 			>
-				{({ isSubmitting, isValid, values, errors, setValues }) => {
-					console.log(errors);
-					return (
-						<Form className={classes.fullHeight}>
-							<Grid
-								className={classes.fullHeight}
-								container
-								direction="column"
-								alignItems="center"
-								justifyContent="center"
-								spacing={2}
-							>
-								<Grid item>
-									<OrcaLogo title="ORCA" />
-								</Grid>
-								<Grid item>
-									<Field name="email">
-										{({ field, meta }: { field: any; meta: any }) => (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Email"
-												required
-											/>
-										)}
-									</Field>
-								</Grid>
-								<Grid item>
-									<Field name="username">
-										{({ field, meta }: { field: any; meta: any }) => (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="User Name"
-												required
-											/>
-										)}
-									</Field>
-								</Grid>
-								<Grid item>
-									<Field name="password">
-										{({ field, meta }: { field: any; meta: any }) => (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Password"
-												required
-												type="password"
-											/>
-										)}
-									</Field>
-									<Typography display="block" variant="caption">
-										Min. 8 characters and at least one of:
-									</Typography>
-									<Typography display="block" variant="caption">
-										[a-z], [A-Z], [0,9], [[!@#$%^&*]]
-									</Typography>
-								</Grid>
-								<Grid item>
-									<Field name="phoneNumber">
-										{({ field, meta }: { field: any; meta: any }) => (
-											<TextField
-												{...field}
-												onChange={(event) => {
-													event.target.value.length
-														? setValues({
-																...values,
-																emptyPhoneNumber: false,
-														  })
-														: setValues({
-																...values,
-																emptyPhoneNumber: true,
-														  });
-													field.onChange(event);
-												}}
-												error={!!(meta.touched && meta.error)}
-												label="Phone number"
-											/>
-										)}
-									</Field>
-									<Typography display="block" variant="caption">
-										Please use the international format.
-									</Typography>
-								</Grid>
-								<Grid item>
-									<Button disabled={isSubmitting || !isValid} type="submit">
-										Sign-up
-									</Button>
-								</Grid>
-								<Grid item>
-									<Typography display="inline" variant="subtitle2">
-										Already have an account?{" "}
-									</Typography>
-									<Link
-										className={classes.signinLink}
-										component={RouterLink}
-										to="/"
-									>
-										Sign in now!{" "}
-										<SvgIcon
-											className={classes.signinIcon}
-											color="secondary"
-											fontSize="small"
-										>
-											<LogIn />
-										</SvgIcon>
-									</Link>
-								</Grid>
+				{({ isSubmitting, isValid, values, setValues }) => (
+					<Form className={classes.fullHeight}>
+						<Grid
+							className={classes.fullHeight}
+							container
+							direction="column"
+							alignItems="center"
+							justifyContent="center"
+							spacing={2}
+						>
+							<Grid item>
+								<OrcaLogo title="ORCA" />
 							</Grid>
-						</Form>
-					);
-				}}
+							<Grid item>
+								<Field name="email">
+									{({ field, meta }: { field: any; meta: any }) => (
+										<TextField
+											{...field}
+											error={!!(meta.touched && meta.error)}
+											label="Email"
+											required
+										/>
+									)}
+								</Field>
+							</Grid>
+							<Grid item>
+								<Field name="username">
+									{({ field, meta }: { field: any; meta: any }) => (
+										<TextField
+											{...field}
+											error={!!(meta.touched && meta.error)}
+											label="User Name"
+											required
+										/>
+									)}
+								</Field>
+							</Grid>
+							<Grid item>
+								<Field name="password">
+									{({ field, meta }: { field: any; meta: any }) => (
+										<TextField
+											{...field}
+											error={!!(meta.touched && meta.error)}
+											label="Password"
+											required
+											type="password"
+										/>
+									)}
+								</Field>
+								<Typography display="block" variant="caption">
+									Min. 8 characters and at least one of:
+								</Typography>
+								<Typography display="block" variant="caption">
+									[a-z], [A-Z], [0,9], [[!@#$%^&*]]
+								</Typography>
+							</Grid>
+							<Grid item>
+								<Field name="phoneNumber">
+									{({ field, meta }: { field: any; meta: any }) => (
+										<TextField
+											{...field}
+											onChange={(event) => {
+												event.target.value.length
+													? setValues({
+															...values,
+															emptyPhoneNumber: false,
+													  })
+													: setValues({
+															...values,
+															emptyPhoneNumber: true,
+													  });
+												field.onChange(event);
+											}}
+											error={!!(meta.touched && meta.error)}
+											label="Phone number"
+										/>
+									)}
+								</Field>
+								<Typography display="block" variant="caption">
+									Please use the international format.
+								</Typography>
+							</Grid>
+							<Grid item>
+								<Button disabled={isSubmitting || !isValid} type="submit">
+									Sign-up
+								</Button>
+							</Grid>
+							<Grid item>
+								<Typography display="inline" variant="subtitle2">
+									Already have an account?{" "}
+								</Typography>
+								<Link
+									className={classes.signinLink}
+									component={RouterLink}
+									to="/"
+								>
+									Sign in now!{" "}
+									<SvgIcon
+										className={classes.signinIcon}
+										color="secondary"
+										fontSize="small"
+									>
+										<LogIn />
+									</SvgIcon>
+								</Link>
+							</Grid>
+						</Grid>
+					</Form>
+				)}
 			</Formik>
 			{isError && <ServerError />}
 		</>

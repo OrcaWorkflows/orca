@@ -2,7 +2,6 @@ import { Edge, Elements, FlowElement, Node } from "react-flow-renderer";
 import { NotificationManager } from "react-notifications";
 
 import { notificationTimeoutMillis } from "../config";
-import { SEPARATOR } from "../index";
 import { Task } from "../views/data/interface";
 import State, {
 	BigQueryConf,
@@ -12,6 +11,8 @@ import State, {
 	PubSubConf,
 	S3Conf,
 } from "../views/data/state";
+
+export const SEPARATOR = "-";
 
 function isConfGiven(nodes: Elements, index: number): boolean {
 	const nodeName = nodes[index].id;

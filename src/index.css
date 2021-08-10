@@ -1,12 +1,3 @@
-header {
-	padding: 10px;
-	display: flex;
-	font-weight: 700;
-	align-items: center;
-	background: #464646;
-	height: 68px;
-}
-
 .logo {
 	text-decoration: none;
 	display: flow;
@@ -30,21 +21,6 @@ img {
 	padding: 3px;
 	margin-inline: 8px;
 	margin-left: 80px;
-}
-
-header a,
-header a:focus,
-header a:active,
-header a:visited {
-	color: #111;
-}
-
-header a:hover {
-	color: #333;
-}
-
-header select {
-	margin-left: auto;
 }
 
 .overview-example__add {
@@ -82,11 +58,4 @@ header select {
 	.overview-example__add {
 		display: block;
 	}
-}
-
-.header-table {
-	width: 100%;
-	vertical-align: top;
-	border-collapse: collapse;
-	overflow: auto;
 }

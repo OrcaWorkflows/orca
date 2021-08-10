@@ -1,17 +1,23 @@
-import logo from "assets/logo/vector/default-monochrome-black.svg";
+import { AppBar, Toolbar, makeStyles } from "@material-ui/core";
+
+import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-white.svg";
 import Account from "layouts/Main/Header/Account";
 import Logout from "layouts/Main/Header/Logout";
 
-const Header = () => (
-	<div className={"main-header"}>
-		<header>
-			<div className={"logo-item"}>
-				<img src={logo} alt={"Logo"} />
-			</div>
-			<Account />
-			<Logout />
-		</header>
-	</div>
-);
+const useStyles = makeStyles({ margin: { margin: "auto" } });
+
+const Header = (): JSX.Element => {
+	const classes = useStyles();
+
+	return (
+		<AppBar>
+			<Toolbar variant="dense">
+				<OrcaLogo className={classes.margin} title="ORCA" />
+				<Account />
+				<Logout />
+			</Toolbar>
+		</AppBar>
+	);
+};
 
 export default Header;

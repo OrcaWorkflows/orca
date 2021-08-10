@@ -1,25 +1,19 @@
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { IconButton } from "@material-ui/core";
+import { LogOut } from "react-feather";
 import { useHistory } from "react-router-dom";
 
-const Logout = () => {
+const Logout = (): JSX.Element => {
 	const history = useHistory();
+
 	const logout = () => {
 		localStorage.clear();
 		history.push("/");
 	};
 
-	const styleForButton = {
-		cursor: "pointer",
-		width: "40px",
-		height: "40px",
-	};
-
 	return (
-		<div className={"logout-container"}>
-			<ExitToAppIcon style={styleForButton} onClick={logout}>
-				Logout
-			</ExitToAppIcon>
-		</div>
+		<IconButton onClick={logout}>
+			<LogOut />
+		</IconButton>
 	);
 };
 

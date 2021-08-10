@@ -13,7 +13,6 @@ import {
 
 import { getAllWorkflows } from "../../../actions/workflow_actions";
 import "./workflows.css";
-import SideHeader from "../navigation/sideheader";
 
 interface Column {
 	id: string;
@@ -72,7 +71,6 @@ export const Workflows = () => {
 
 	return (
 		<div className={"workflows-root"}>
-			<SideHeader />
 			<div className={"workflows-table"}>
 				<TableContainer component={Paper}>
 					<Table className={"workflow-table-root"} aria-label="simple table">

@@ -1,5 +1,4 @@
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
-import axios from "axios";
 import jwtDecoder from "jwt-decode";
 import moment from "moment";
 import ReactDOM from "react-dom";
@@ -17,41 +16,19 @@ import theme from "theme";
 import Signin from "views/auth/Signin";
 import Signup from "views/auth/Signup";
 import "./index.css";
-import DragNDrop from "views/main/home/dnd/index";
-import { createNodes } from "views/main/home/dnd/nodes/nodegenerator";
+import Home from "views/main/home";
 import Schedule from "views/main/schedule";
 import Settings from "views/main/settings";
 import Templates from "views/main/templates";
 import Workflows from "views/main/workflows";
 
-axios.interceptors.request.use(
-	(config) => {
-		const token = localStorage.getItem("token");
-		if (token) {
-			config.headers["Authorization"] = "Bearer " + token;
-		}
-		return config;
-	},
-	(error) => {
-		Promise.reject(error);
-	}
-);
-
-axios.interceptors.response.use((response) => {
-	const token = response.headers.authorization;
-	if (token && token !== localStorage.getItem("token")) {
-		localStorage.setItem("token", token);
-	}
-	return response;
-});
-
-const token = localStorage.getItem("token");
+import "overlayscrollbars/css/OverlayScrollbars.css";
 
 interface MyToken {
 	name: string;
 	exp: number;
 }
-
+const token = localStorage.getItem("token");
 if (token) {
 	try {
 		const expireTime = jwtDecoder<MyToken>(token).exp;
@@ -63,14 +40,8 @@ if (token) {
 	}
 }
 
-// Create Custom Nodes
-createNodes();
-export const SEPARATOR = "-";
-
-const queryClient = new QueryClient();
-
 const NotFoundRedirect = () => <Redirect to="/" />;
-
+const queryClient = new QueryClient();
 ReactDOM.render(
 	<QueryClientProvider client={queryClient}>
 		<ReactQueryDevtools initialIsOpen={false} />{" "}
@@ -80,7 +51,7 @@ ReactDOM.render(
 				<Switch>
 					<AuthRoute component={Signin} path="/" exact />
 					<AuthRoute component={Signup} path="/signup" exact />
-					<MainRoute component={DragNDrop} path="/home" protect exact />
+					<MainRoute component={Home} path="/home/:canvasId?" protect exact />
 					<MainRoute component={Workflows} path="/workflows" protect exact />
 					<MainRoute component={Templates} path="/templates" protect exact />
 					<MainRoute component={Schedule} path="/schedule" protect exact />

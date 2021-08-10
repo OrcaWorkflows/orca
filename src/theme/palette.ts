@@ -1,15 +1,15 @@
 const palette = {
-	background: { default: "#8a8a8a" },
+	background: { default: "#8a8a8a", paper: "#424242" },
 	primary: {
 		light: "#bdbdbd",
 		main: "#424242",
 		dark: "#212121",
-		contrastText: "#33877c",
+		contrastText: "#dacfed",
 	},
 	secondary: {
-		light: "#33877c",
-		main: "#00695c",
-		dark: "#004940",
+		light: "#dacfed",
+		main: "#d1c4e9",
+		dark: "#9289a3",
 		contrastText: "#212121",
 	},
 	error: {

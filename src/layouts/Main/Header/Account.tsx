@@ -1,22 +1,11 @@
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { IconButton } from "@material-ui/core";
+import { User } from "react-feather";
 
-const Account = () => {
-	const styleForButton = {
-		cursor: "pointer",
-		width: "40px",
-		height: "40px",
-		display: "block",
-		"margin-left": "auto",
-		"margin-right": "auto",
-	};
-
+const Account = (): JSX.Element => {
 	return (
-		<div className={"profile-container"}>
-			<AccountCircleIcon style={styleForButton}>Logout</AccountCircleIcon>
-			<div className={"username"}>
-				<label>{localStorage.getItem("username")}</label>
-			</div>
-		</div>
+		<IconButton style={{ marginRight: 20 }} color="inherit">
+			<User />
+		</IconButton>
 	);
 };
 

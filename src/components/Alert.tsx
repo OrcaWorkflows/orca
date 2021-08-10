@@ -18,7 +18,7 @@ const Alert = ({
 			onClose={handleClose}
 			open={openAlert}
 		>
-			<MUIAlert severity={severity} variant="outlined">
+			<MUIAlert severity={severity} variant="filled">
 				{message}
 			</MUIAlert>
 		</Snackbar>
