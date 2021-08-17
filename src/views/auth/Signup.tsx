@@ -7,7 +7,7 @@ import {
 	makeStyles,
 	SvgIcon,
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, FieldProps, Form, Formik } from "formik";
 import { LogIn } from "react-feather";
 import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
@@ -82,7 +82,13 @@ const Signup = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="email">
-									{({ field, meta }: { field: any; meta: any }) => (
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => (
 										<TextField
 											{...field}
 											error={!!(meta.touched && meta.error)}
@@ -94,7 +100,13 @@ const Signup = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="username">
-									{({ field, meta }: { field: any; meta: any }) => (
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => (
 										<TextField
 											{...field}
 											error={!!(meta.touched && meta.error)}
@@ -106,7 +118,13 @@ const Signup = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="password">
-									{({ field, meta }: { field: any; meta: any }) => (
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => (
 										<TextField
 											{...field}
 											error={!!(meta.touched && meta.error)}
@@ -125,7 +143,13 @@ const Signup = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="phoneNumber">
-									{({ field, meta }: { field: any; meta: any }) => (
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => (
 										<TextField
 											{...field}
 											onChange={(event) => {

@@ -16,10 +16,14 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+export type HomeParams = {
+	canvasID: string;
+};
+
 const Home = (): JSX.Element => {
 	const classes = useStyles();
 	return (
-		<Paper className={classes.root} onContextMenu={(e) => e.preventDefault()}>
+		<Paper className={classes.root}>
 			<Grid
 				container
 				className={classes.fullHeight}
@@ -44,6 +48,7 @@ const Home = (): JSX.Element => {
 						<DnDFlow />
 					</Paper>
 				</Grid>
+
 				{/* <Grid item className={classes.fullHeight} xs="auto">
 					Monitoring
 				</Grid> */}

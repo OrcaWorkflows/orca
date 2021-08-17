@@ -3,7 +3,7 @@ import { DragEvent } from "react";
 import { List } from "@material-ui/core";
 
 import CollapsibleStack from "components/CollapsibleStack";
-import * as nodeImages from "views/main/home/nodes/nodeImages";
+import * as nodeImages from "views/main/home/node/nodeImages";
 
 const techStackData = [
 	{

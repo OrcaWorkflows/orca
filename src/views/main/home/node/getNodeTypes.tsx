@@ -1,16 +1,16 @@
 import { FunctionComponent } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { Tooltip, Zoom, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import {
-	Connection,
-	Edge,
+	// Connection,
+	// Edge,
 	Handle,
 	NodeProps,
 	Position,
 } from "react-flow-renderer";
 
-import * as nodeImages from "views/main/home/nodes/nodeImages";
+import * as nodeImages from "views/main/home/node/nodeImages";
 
 type nodeTypes = {
 	[key in keyof typeof nodeImages]?: FunctionComponent<NodeProps>;
@@ -31,18 +31,26 @@ const useStyles = makeStyles((theme) => ({
 		borderColor: theme.palette.secondary.light,
 		bottom: -10,
 	},
+	nodeImg: (props: { selected: boolean }) => ({
+		border: props.selected
+			? `2px solid ${theme.palette.secondary.dark}`
+			: "unset",
+		borderRadius: theme.shape.borderRadius,
+		cursor: "pointer",
+		height: props.selected ? 48 : 36,
+		margin: 5,
+		padding: props.selected ? 4 : "unset",
+	}),
 }));
 
 const getNodeTypes = (): nodeTypes => {
 	const nodeTypes: nodeTypes = {};
 	let node: keyof typeof nodeImages;
 	for (node in nodeImages) {
-		const src = nodeImages[node]; // capture the value as we are creating closures to run "later" below
+		const src = nodeImages[node];
 
-		nodeTypes[node] = function Node() {
-			const classes = useStyles();
-			const onConnect = (params: Connection | Edge) =>
-				console.log("handle onConnect", params);
+		nodeTypes[node] = function Node(props) {
+			const classes = useStyles({ selected: props.selected });
 			return (
 				<>
 					<Handle
@@ -50,17 +58,15 @@ const getNodeTypes = (): nodeTypes => {
 						type="target"
 						id="operator_target"
 						position={Position.Top}
-						onConnect={onConnect}
 					/>
-					<img
-						src={src}
-						style={{
-							cursor: "pointer",
-							height: 36,
-							margin: 5,
-						}}
-						draggable={false}
-					/>
+					<Tooltip
+						arrow
+						TransitionComponent={Zoom}
+						title={props.id}
+						placement="right"
+					>
+						<img className={classes.nodeImg} src={src} draggable={false} />
+					</Tooltip>
 					<Handle
 						className={clsx(classes.handle, classes.sourceHandle)}
 						type="source"

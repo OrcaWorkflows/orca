@@ -6,7 +6,7 @@ const Logout = (): JSX.Element => {
 	const history = useHistory();
 
 	const logout = () => {
-		localStorage.clear();
+		localStorage.removeItem("token");
 		history.push("/");
 	};
 

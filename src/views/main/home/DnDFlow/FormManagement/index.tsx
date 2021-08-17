@@ -30,13 +30,11 @@ const FormManagement = ({
 	configuredNode,
 	setConfiguredNode,
 	nodes,
-	setNodes,
 	edges,
 }: {
 	configuredNode: Node | null;
 	setConfiguredNode: Dispatch<SetStateAction<Node | null>>;
 	nodes: Elements;
-	setNodes: Dispatch<SetStateAction<Elements>>;
 	edges: Elements;
 }): JSX.Element | null => {
 	const handleClose = () => {
@@ -45,14 +43,23 @@ const FormManagement = ({
 
 	return configuredNode ? ( // to prevent flickering the dialog with undefined values
 		<Dialog onClose={handleClose} open={Boolean(configuredNode)}>
-			<DialogTitle>{`${configuredNode.id} Config`}</DialogTitle>
+			<DialogTitle>
+				{`${configuredNode.id} Config`}
+				<Typography
+					display="block"
+					gutterBottom
+					color="textSecondary"
+					variant="caption"
+				>
+					(Backspace to remove the node)
+				</Typography>
+			</DialogTitle>
 			<DialogContent>
 				{configuredNode.type === "BigQuery" && (
 					<BigQuery
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}
@@ -61,7 +68,6 @@ const FormManagement = ({
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}
@@ -70,7 +76,6 @@ const FormManagement = ({
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}
@@ -79,7 +84,6 @@ const FormManagement = ({
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}
@@ -88,7 +92,6 @@ const FormManagement = ({
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}
@@ -97,7 +100,6 @@ const FormManagement = ({
 						configuredNode={configuredNode}
 						handleClose={handleClose}
 						nodes={nodes}
-						setNodes={setNodes}
 						edges={edges}
 					/>
 				)}

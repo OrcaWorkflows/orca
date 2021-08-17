@@ -1,53 +1,46 @@
 import { Button, Grid, TextField } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { useFormik } from "formik";
 import { Elements, FlowElement, Node } from "react-flow-renderer";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 
 import { useSetCanvas } from "actions/canvasActions";
 import { ServerError } from "components";
-import { HomeParams } from "views/main/home/DnDFlow";
+import { HomeParams } from "views/main/home";
 
-const EMRValidationSchema = yup.object({
-	script_uri: yup.string().required(),
-	input_uri: yup.string().required(),
-	master_instance_type: yup.string().required(),
-	slave_instance_type: yup.string().required(),
-	instance_count: yup.number().integer().required(),
+export const EMRValidationSchema = yup.object({
+	script_uri: yup.string().required("Script uri is a required field"),
+	input_uri: yup.string().required("Input uri is a required field"),
+	master_instance_type: yup
+		.string()
+		.required("Master instance type is a required field"),
+	slave_instance_type: yup
+		.string()
+		.required("Slave instance type is a required field"),
+	instance_count: yup
+		.number()
+		.integer()
+		.required("Instance count is a required field"),
 });
-export type Values = {
-	script_uri: string;
-	input_uri: string;
-	master_instance_type: string;
-	slave_instance_type: string;
-	instance_count: number;
-};
 
 const EMR = ({
 	configuredNode,
 	handleClose,
 	nodes,
-	setNodes,
 	edges,
 }: {
 	configuredNode: Node;
 	handleClose: () => void;
 	nodes: Elements;
-	setNodes: (value: Elements | ((prevVar: Elements) => Elements)) => void;
 	edges: Elements;
 }): JSX.Element => {
-	const { canvasId } = useParams<HomeParams>();
-	const initialValues = {
-		script_uri: configuredNode.data.script_uri ?? "",
-		input_uri: configuredNode.data.input_uri ?? "",
-		master_instance_type:
-			configuredNode.data.master_instance_type ?? "m5.xlarge",
-		slave_instance_type: configuredNode.data.slave_instance_type ?? "m5.xlarge",
-		instance_count: configuredNode.data.instance_count ?? 3,
-	};
+	const { canvasID } = useParams<HomeParams>();
 
+	const initialValues = {
+		...configuredNode.data,
+	};
 	const { isError, mutateAsync } = useSetCanvas();
-	const handleSubmit = async (values: Values) => {
+	const handleSubmit = async (values: typeof initialValues) => {
 		const indexToUpdate = nodes.findIndex(
 			(node: FlowElement) => (node as Node).id === configuredNode.id
 		);
@@ -59,104 +52,99 @@ const EMR = ({
 		const newNodes = [...nodes];
 		newNodes[indexToUpdate] = newNode;
 		return mutateAsync({
-			id: Number(canvasId),
+			id: Number(canvasID),
 			property: { nodes: newNodes, edges },
 		}).then(() => {
-			setNodes(newNodes);
 			handleClose();
 		});
 	};
 
+	const formik = useFormik({
+		initialValues,
+		onSubmit: handleSubmit,
+		validateOnMount: true,
+		validationSchema: EMRValidationSchema,
+	});
+
 	return (
 		<>
-			<Formik
-				initialValues={initialValues}
-				onSubmit={handleSubmit}
-				validateOnMount
-				validationSchema={EMRValidationSchema}
-			>
-				{({ isSubmitting, isValid }) => (
-					<Form>
-						<Grid container direction="column" alignItems="center" spacing={2}>
-							<Grid item>
-								<Field name="script_uri">
-									{({ field, meta }: { field: any; meta: any }) => {
-										return (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Script URI"
-												required
-											/>
-										);
-									}}
-								</Field>
-							</Grid>
-							<Grid item>
-								<Field name="input_uri">
-									{({ field, meta }: { field: any; meta: any }) => {
-										return (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Input URI"
-												required
-											/>
-										);
-									}}
-								</Field>
-							</Grid>
-							<Grid item>
-								<Field name="master_instance_type">
-									{({ field, meta }: { field: any; meta: any }) => {
-										return (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Master Instance Type"
-												required
-											/>
-										);
-									}}
-								</Field>
-							</Grid>
-							<Grid item>
-								<Field name="slave_instance_type">
-									{({ field, meta }: { field: any; meta: any }) => {
-										return (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Slave Instance Type"
-												required
-											/>
-										);
-									}}
-								</Field>
-							</Grid>
-							<Grid item>
-								<Field name="instance_count">
-									{({ field, meta }: { field: any; meta: any }) => {
-										return (
-											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
-												label="Instance Count"
-												required
-											/>
-										);
-									}}
-								</Field>
-							</Grid>
-							<Grid item>
-								<Button disabled={isSubmitting || !isValid} type="submit">
-									Save
-								</Button>
-							</Grid>
-						</Grid>
-					</Form>
-				)}
-			</Formik>
+			<form onSubmit={formik.handleSubmit}>
+				<Grid container direction="column" alignItems="center" spacing={2}>
+					<Grid item>
+						<TextField
+							{...formik.getFieldProps("script_uri")}
+							error={
+								!!(
+									formik.getFieldMeta("script_uri").touched &&
+									formik.getFieldMeta("script_uri").error
+								)
+							}
+							label="Script URI"
+							required
+						/>
+					</Grid>
+					<Grid item>
+						<TextField
+							{...formik.getFieldProps("input_uri")}
+							error={
+								!!(
+									formik.getFieldMeta("input_uri").touched &&
+									formik.getFieldMeta("input_uri").error
+								)
+							}
+							label="Input URI"
+							required
+						/>
+					</Grid>
+					<Grid item>
+						<TextField
+							{...formik.getFieldProps("master_instance_type")}
+							error={
+								!!(
+									formik.getFieldMeta("master_instance_type").touched &&
+									formik.getFieldMeta("master_instance_type").error
+								)
+							}
+							label="Master Instance Type"
+							required
+						/>
+					</Grid>
+					<Grid item>
+						<TextField
+							{...formik.getFieldProps("slave_instance_type")}
+							error={
+								!!(
+									formik.getFieldMeta("slave_instance_type").touched &&
+									formik.getFieldMeta("slave_instance_type").error
+								)
+							}
+							label="Slave Instance Type"
+							required
+						/>
+					</Grid>
+					<Grid item>
+						<TextField
+							{...formik.getFieldProps("instance_count")}
+							error={
+								!!(
+									formik.getFieldMeta("instance_count").touched &&
+									formik.getFieldMeta("instance_count").error
+								)
+							}
+							label="Instance Count"
+							required
+						/>
+					</Grid>
+					<Grid item>
+						<Button
+							disabled={formik.isSubmitting || !formik.isValid}
+							type="submit"
+						>
+							Save
+						</Button>
+					</Grid>
+				</Grid>
+			</form>
 			{isError && <ServerError />}
 		</>
 	);

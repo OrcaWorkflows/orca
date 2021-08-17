@@ -1,21 +1,21 @@
+import { useState, useMemo } from "react";
+
 import { Button, Divider, Grid, makeStyles } from "@material-ui/core";
-import { AxiosResponse } from "axios";
-import { Edge, Elements } from "react-flow-renderer";
-import { NotificationManager } from "react-notifications";
+import { Elements } from "react-flow-renderer";
+import { useParams } from "react-router";
 
 import {
-	deleteWorkflow,
-	resubmitWorkflow,
-	resumeWorkflow,
-	stopWorkflow,
-	submitWorkflow,
-	suspendWorkflow,
-	terminateWorkflow,
-} from "../../../../actions/workflow_actions";
-import { notificationTimeoutMillis } from "../../../../config";
-import { createTaskForEdge } from "../../../../utils/utils";
-import { Workflow } from "../../../data/interface";
-import State from "../../../data/state";
+	useDeleteWorkflow,
+	useResumeWorkflow,
+	useStopWorkflow,
+	useSubmitWorkflow,
+	useSuspendWorkflow,
+	useTerminateWorkflow,
+} from "actions/workflowActions";
+import { Alert, ServerError } from "components";
+import { HomeParams } from "views/main/home";
+import createWorkFlow from "views/main/home/workflow/createWorkflow";
+import useValidateNodes from "views/main/home/workflow/useValidateNodes";
 
 const useStyles = makeStyles((theme) => ({
 	button: {
@@ -25,112 +25,163 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const TopBar = (props: { nodes: Elements; edges: Elements }): JSX.Element => {
+const TopBar = ({
+	nodes,
+	edges,
+	workflowName,
+}: {
+	nodes: Elements;
+	edges: Elements;
+	workflowName: string;
+}): JSX.Element => {
 	const classes = useStyles();
-	const submit = () => {
-		try {
-			for (const key in props.edges) {
-				if (Object.prototype.hasOwnProperty.call(props.edges, key)) {
-					const edge: Edge = props.edges[key] as Edge;
-					createTaskForEdge(props.nodes, props.edges, edge);
-				}
-			}
-			submitWorkflow(
-				new (class implements Workflow {
-					name = "test-";
-					tasks = State.tasks;
-					canvasID = localStorage.getItem("canvasID");
-				})(),
-				(response: AxiosResponse) => {
-					localStorage.setItem("workflowName", response.data.metadata.name);
-					State.tasks = [];
-					// NotificationManager.success(
-					// "Successfully Submitted Workflow",
-					// "Success",
-					// notificationTimeoutMillis
-					// );
-				},
-				(error: any) => {
-					console.log("Submit failed, " + error.toString());
-					// NotificationManager.error(
-					// 	"Submit Failed. Check the server.",
-					// 	"Error",
-					// 	notificationTimeoutMillis
-					// );
-					State.tasks = [];
-				}
-			);
-		} catch (e) {
-			NotificationManager.error(
-				"Submit Failed",
-				"Error",
-				notificationTimeoutMillis
-			);
-		}
-	};
+	const { canvasID } = useParams<HomeParams>();
+
+	const [nodeValidationErrors, setNodeValidationErrors] = useState<string[]>(
+		[]
+	);
+	useValidateNodes(nodes, setNodeValidationErrors);
+
+	const workflow = useMemo(() => {
+		return createWorkFlow(Number(canvasID), nodes, edges, workflowName);
+	}, [canvasID, nodes, edges, workflowName]);
+
+	const {
+		mutate: submitWorkflow,
+		isError: isErrorSubmit,
+		isSuccess: isSuccessSubmit,
+	} = useSubmitWorkflow();
+	const {
+		mutate: suspendWorkflow,
+		isError: isErrorSuspend,
+		isSuccess: isSuccessSuspend,
+	} = useSuspendWorkflow();
+	const {
+		mutate: resumeWorkflow,
+		isError: isErrorResume,
+		isSuccess: isSuccessResume,
+	} = useResumeWorkflow();
+	const {
+		mutate: stopWorkflow,
+		isError: isErrorStop,
+		isSuccess: isSuccessStop,
+	} = useStopWorkflow();
+	const {
+		mutate: terminateWorkflow,
+		isError: isErrorTerminate,
+		isSuccess: isSuccessTerminate,
+	} = useTerminateWorkflow();
+	const {
+		mutate: deleteWorkflow,
+		isError: isErrorDelete,
+		isSuccess: isSuccessDelete,
+	} = useDeleteWorkflow();
 
 	return (
 		<>
 			<Grid container justifyContent="space-evenly">
-				<Button className={classes.button} onClick={submit} variant="contained">
+				<Button
+					className={classes.button}
+					disabled={!!nodeValidationErrors.length || edges.length === 0} // Validation errors or no edges set
+					onClick={() => {
+						submitWorkflow({ workflow });
+					}}
+					variant="contained"
+				>
 					Submit
 				</Button>
 				<Button
 					className={classes.button}
-					onClick={() =>
-						resubmitWorkflow(localStorage.getItem("workflowName") as string)
-					}
-					variant="contained"
-				>
-					Resubmit
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() =>
-						suspendWorkflow(localStorage.getItem("workflowName") as string)
-					}
+					onClick={() => suspendWorkflow({ workflowName: workflow.name })}
 					variant="contained"
 				>
 					Suspend
 				</Button>
 				<Button
 					className={classes.button}
-					onClick={() =>
-						resumeWorkflow(localStorage.getItem("workflowName") as string)
-					}
+					onClick={() => resumeWorkflow({ workflowName: workflow.name })}
 					variant="contained"
 				>
 					Resume
 				</Button>
 				<Button
 					className={classes.button}
-					onClick={() =>
-						stopWorkflow(localStorage.getItem("workflowName") as string)
-					}
+					onClick={() => stopWorkflow({ workflowName: workflow.name })}
 					variant="contained"
 				>
 					Stop
 				</Button>
 				<Button
 					className={classes.button}
-					onClick={() =>
-						terminateWorkflow(localStorage.getItem("workflowName") as string)
-					}
+					onClick={() => terminateWorkflow({ workflowName: workflow.name })}
 					variant="contained"
 				>
 					Terminate
 				</Button>
 				<Button
 					className={classes.button}
-					onClick={() =>
-						deleteWorkflow(localStorage.getItem("workflowName") as string)
-					}
+					onClick={() => deleteWorkflow({ workflowName: workflow.name })}
 					variant="contained"
 				>
 					Delete
 				</Button>
 			</Grid>
 			<Divider />
+			{Boolean(nodeValidationErrors.length) && (
+				<Alert
+					autoHideDuration={null}
+					message={nodeValidationErrors}
+					severity="warning"
+				/>
+			)}
+			{isErrorSubmit && <ServerError />}
+			{isErrorSuspend && <ServerError />}
+			{isErrorResume && <ServerError />}
+			{isErrorStop && <ServerError />}
+			{isErrorTerminate && <ServerError />}
+			{isErrorDelete && <ServerError />}
+			{isSuccessSubmit && (
+				<Alert
+					autoHideDuration={3000}
+					message="Submitted successfuly!"
+					severity="success"
+				/>
+			)}
+			{isSuccessSuspend && (
+				<Alert
+					autoHideDuration={3000}
+					message="Suspended successfully!"
+					severity="success"
+				/>
+			)}
+			{isSuccessResume && (
+				<Alert
+					autoHideDuration={3000}
+					message="Resumed successfully!"
+					severity="success"
+				/>
+			)}
+			{isSuccessStop && (
+				<Alert
+					autoHideDuration={3000}
+					message="Stopped successfully!"
+					severity="success"
+				/>
+			)}
+			{isSuccessTerminate && (
+				<Alert
+					autoHideDuration={3000}
+					message="Terminated successfully!"
+					severity="success"
+				/>
+			)}
+			{isSuccessDelete && (
+				<Alert
+					autoHideDuration={3000}
+					message="Deleted successfully!"
+					severity="success"
+				/>
+			)}
 		</>
 	);
 };

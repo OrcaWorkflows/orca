@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import { getUnixTime } from "date-fns";
 import jwtDecoder from "jwt-decode";
-import moment from "moment";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -15,7 +15,6 @@ import { AuthRoute, MainRoute } from "routes";
 import theme from "theme";
 import Signin from "views/auth/Signin";
 import Signup from "views/auth/Signup";
-import "./index.css";
 import Home from "views/main/home";
 import Schedule from "views/main/schedule";
 import Settings from "views/main/settings";
@@ -32,7 +31,7 @@ const token = localStorage.getItem("token");
 if (token) {
 	try {
 		const expireTime = jwtDecoder<MyToken>(token).exp;
-		if (moment.unix(expireTime) < moment()) {
+		if (expireTime < getUnixTime(new Date())) {
 			localStorage.removeItem("token");
 		}
 	} catch (e) {
@@ -44,14 +43,14 @@ const NotFoundRedirect = () => <Redirect to="/" />;
 const queryClient = new QueryClient();
 ReactDOM.render(
 	<QueryClientProvider client={queryClient}>
-		<ReactQueryDevtools initialIsOpen={false} />{" "}
+		<ReactQueryDevtools initialIsOpen={false} />
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Router>
 				<Switch>
 					<AuthRoute component={Signin} path="/" exact />
 					<AuthRoute component={Signup} path="/signup" exact />
-					<MainRoute component={Home} path="/home/:canvasId?" protect exact />
+					<MainRoute component={Home} path="/home/:canvasID?" exact />
 					<MainRoute component={Workflows} path="/workflows" protect exact />
 					<MainRoute component={Templates} path="/templates" protect exact />
 					<MainRoute component={Schedule} path="/schedule" protect exact />

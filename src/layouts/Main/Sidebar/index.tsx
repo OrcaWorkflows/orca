@@ -19,7 +19,9 @@ import {
 	List,
 	Settings,
 } from "react-feather";
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory, useParams } from "react-router-dom";
+
+import { HomeParams } from "views/main/home";
 
 const useStyles = makeStyles((theme) => ({
 	drawerOpen: {
@@ -58,6 +60,7 @@ type Props = {
 
 const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 	const classes = useStyles();
+	const { canvasID } = useParams<HomeParams>();
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -93,7 +96,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("home")}
-				to="/home"
+				to={canvasID ? `/home/${canvasID}` : "/home"}
 			>
 				<ListItemIcon>
 					<Home />

@@ -7,7 +7,7 @@ import {
 	Typography,
 	makeStyles,
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, FieldProps, Form, Formik } from "formik";
 import { Key } from "react-feather";
 import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
@@ -68,7 +68,13 @@ const Signin = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="username">
-									{({ field, meta }: { field: any; meta: any }) => {
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => {
 										return (
 											<TextField
 												{...field}
@@ -82,7 +88,13 @@ const Signin = (): JSX.Element => {
 							</Grid>
 							<Grid item>
 								<Field name="password">
-									{({ field, meta }: { field: any; meta: any }) => {
+									{({
+										field,
+										meta,
+									}: {
+										field: FieldProps["field"];
+										meta: FieldProps["meta"];
+									}) => {
 										return (
 											<TextField
 												{...field}

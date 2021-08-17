@@ -1,13 +1,5 @@
-import "./templates.css";
-
-export const Templates = () => {
-	return (
-		<div className={"templates-root"}>
-			<div className={"templates"}>
-				<h2>Templates !</h2>
-			</div>
-		</div>
-	);
+export const Templates = (): JSX.Element => {
+	return <h2>Templates !</h2>;
 };
 
 export default Templates;
