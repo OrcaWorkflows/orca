@@ -70,7 +70,7 @@ const createWorkFlow = (
 	canvasID: number,
 	nodes: Elements,
 	edges: Elements,
-	workflowName: string
+	workflowName: string | null
 ): Workflow => {
 	const workflow: Workflow = {
 		canvasID,

@@ -16,7 +16,7 @@ export function useGetCanvas(
 	isError: boolean;
 	nodes: Elements;
 	edges: Elements;
-	workflowName: string;
+	workflowName: string | null;
 } {
 	const canvas = useQuery(
 		["canvas", canvasID],
@@ -56,13 +56,13 @@ export const useSetCanvas = (): UseMutationResult<
 						id: number;
 						property: { nodes: Elements; edges: Elements };
 						updatedAt: number;
-						workflowName: string;
+						workflowName: string | null;
 				  }
 				| undefined = queryClient.getQueryData(["canvas", id]);
 			const { data } = await axios("post", "/api/canvas", {
 				id,
 				property,
-				workflowName: mutatedCanvas?.workflowName ?? "workflow-",
+				workflowName: mutatedCanvas?.workflowName ?? null,
 			});
 			return data;
 		},

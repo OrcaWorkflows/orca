@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
 	reactFlowWrapper: { height: "calc(100% - 40px)", position: "relative" }, // Subtract topbar's height
 	controls: {
 		"& > *": { backgroundColor: theme.palette.secondary.main },
+		"& > *:hover": {
+			backgroundColor: theme.palette.action.hover,
+		},
 		border: `2px solid ${theme.palette.secondary.dark}`,
 		borderRadius: theme.shape.borderRadius,
 	},

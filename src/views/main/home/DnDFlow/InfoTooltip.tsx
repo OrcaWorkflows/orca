@@ -21,6 +21,12 @@ const infoTooltipTitle = (
 	<List dense>
 		<ListItem divider>
 			<Typography variant="subtitle2">
+				Nodes which need configuration or derived from unsupported platforms are
+				darkened.
+			</Typography>
+		</ListItem>
+		<ListItem divider>
+			<Typography variant="subtitle2">
 				Add a node by dragging it from the specified service categories.
 			</Typography>
 		</ListItem>
@@ -34,7 +40,7 @@ const infoTooltipTitle = (
 				Remove a selected node by pressing backspace.
 			</Typography>
 		</ListItem>
-		<ListItem divider>
+		<ListItem>
 			<Typography variant="subtitle2">
 				Hold shift to select and remove multiple nodes.
 			</Typography>

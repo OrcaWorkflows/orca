@@ -4,6 +4,7 @@ import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
+	makeStyles,
 	Typography,
 } from "@material-ui/core";
 import { Elements, Node } from "react-flow-renderer";
@@ -17,7 +18,7 @@ import {
 	S3,
 } from "views/main/home/nodeForms";
 
-const supportedPlatforms = [
+export const supportedPlatforms = [
 	"BigQuery",
 	"ElasticSearch",
 	"EMR",
@@ -25,6 +26,15 @@ const supportedPlatforms = [
 	"PubSub",
 	"S3",
 ];
+
+const useStyles = makeStyles((theme) => ({
+	notSupported: {
+		border: `1px solid ${theme.palette.error.main}`,
+		borderRadius: theme.shape.borderRadius,
+		fontWeight: "bold",
+		padding: 4,
+	},
+}));
 
 const FormManagement = ({
 	configuredNode,
@@ -37,23 +47,14 @@ const FormManagement = ({
 	nodes: Elements;
 	edges: Elements;
 }): JSX.Element | null => {
+	const classes = useStyles();
 	const handleClose = () => {
 		setConfiguredNode(null);
 	};
 
 	return configuredNode ? ( // to prevent flickering the dialog with undefined values
 		<Dialog onClose={handleClose} open={Boolean(configuredNode)}>
-			<DialogTitle>
-				{`${configuredNode.id} Config`}
-				<Typography
-					display="block"
-					gutterBottom
-					color="textSecondary"
-					variant="caption"
-				>
-					(Backspace to remove the node)
-				</Typography>
-			</DialogTitle>
+			<DialogTitle>{`${configuredNode.id} Config`}</DialogTitle>
 			<DialogContent>
 				{configuredNode.type === "BigQuery" && (
 					<BigQuery
@@ -104,7 +105,11 @@ const FormManagement = ({
 					/>
 				)}
 				{!supportedPlatforms.includes(configuredNode.type as string) && (
-					<Typography color="error">
+					<Typography
+						className={classes.notSupported}
+						color="error"
+						variant="subtitle1"
+					>
 						This platform is not supported yet.
 					</Typography>
 				)}

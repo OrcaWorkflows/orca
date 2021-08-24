@@ -25,10 +25,11 @@ import { ServerError } from "components";
 import Loading from "views/main/workflows/Loading";
 
 const useStyles = makeStyles(() => ({
+	bold: { fontWeight: "bold" },
 	container: { height: "calc(100vh - 48px)", padding: 24 },
+	link: { cursor: "pointer", textDecoration: "underline" },
 	tableContainer: { height: "calc(100% - 52px)" },
 	table: { height: "100%" },
-	head: { fontWeight: "bold" },
 }));
 
 interface Column {
@@ -91,7 +92,10 @@ export const Workflows = (): JSX.Element | null => {
 		isError: getCanvasByWorkflowIDError,
 		mutateAsync: getCanvasByWorkflowID,
 	} = useGetCanvasByWorkflowID();
-	const handleWorkflowOnClick = (_event: MouseEvent, workflowName: string) => {
+	const handleWorkflowOnClick = (
+		_event: MouseEvent,
+		workflowName: string | null
+	) => {
 		getCanvasByWorkflowID({ workflowName }).then((data) => {
 			console.log("Canvas by workflow id: ", data);
 		});
@@ -113,7 +117,10 @@ export const Workflows = (): JSX.Element | null => {
 									<TableRow>
 										{columns.map((column) => (
 											<TableCell key={column.id} align={column.align}>
-												<Typography className={classes.head}>
+												<Typography
+													className={classes.bold}
+													color="textSecondary"
+												>
 													{column.label}
 												</Typography>
 											</TableCell>
@@ -137,6 +144,7 @@ export const Workflows = (): JSX.Element | null => {
 														<TableCell align={column.align} key={column.id}>
 															{column.id === "name" ? (
 																<Link
+																	className={classes.link}
 																	onClick={(_event) =>
 																		handleWorkflowOnClick(_event, value)
 																	}
@@ -145,6 +153,7 @@ export const Workflows = (): JSX.Element | null => {
 																</Link>
 															) : (
 																<Typography
+																	className={classes.bold}
 																	color={
 																		value === "Failed" ? "error" : "secondary"
 																	}

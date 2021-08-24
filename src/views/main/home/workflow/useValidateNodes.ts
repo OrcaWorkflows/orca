@@ -1,4 +1,4 @@
-import { useEffect, Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 
 import { Elements } from "react-flow-renderer";
 
@@ -12,11 +12,18 @@ import { S3ValidationSchema } from "views/main/home/nodeForms/S3";
 const validateOptions = { abortEarly: false }; // Override abortEarly which defaults to true
 
 const useValidateNodes = (
-	nodes: Elements,
-	setNodeValidationErrors: Dispatch<SetStateAction<string[]>>
-): void => {
+	nodes: Elements
+): [
+	{
+		[k: string]: string[];
+	}
+] => {
+	const [nodeValidationErrors, setNodeValidationErrors] = useState<{
+		[k: string]: string[];
+	}>({});
+
 	useEffect(() => {
-		setNodeValidationErrors([]);
+		setNodeValidationErrors({});
 		if (nodes.length) {
 			for (const node of nodes) {
 				if (node.type) {
@@ -39,18 +46,19 @@ const useValidateNodes = (
 					schema?.validate(node.data, validateOptions).catch((err) =>
 						setNodeValidationErrors((prevNodeValidationErrors) => {
 							if (typeof prevNodeValidationErrors === "object")
-								return [
+								return {
 									...prevNodeValidationErrors,
-									node.id + ":",
-									...err.errors,
-								];
-							else return [node.id + ":", ...err.errors];
+									[node.id]: [...err.errors],
+								};
+							else return { [node.id]: [...err.errors] };
 						})
 					);
 				}
 			}
 		}
 	}, [nodes, setNodeValidationErrors]);
+
+	return [nodeValidationErrors];
 };
 
 export default useValidateNodes;

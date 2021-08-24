@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 
 import { Button, Divider, Grid, makeStyles } from "@material-ui/core";
+import clsx from "clsx";
 import { Elements } from "react-flow-renderer";
 import { useParams } from "react-router";
 
@@ -22,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
 		border: `2px solid ${theme.palette.secondary.dark}`,
 		fontWeight: "bold",
 		textTransform: "none",
+		"&:disabled": {
+			border: "none",
+		},
+	},
+	buttonWrapper: {
+		cursor: "not-allowed",
 	},
 }));
 
@@ -32,16 +39,12 @@ const TopBar = ({
 }: {
 	nodes: Elements;
 	edges: Elements;
-	workflowName: string;
+	workflowName: string | null;
 }): JSX.Element => {
 	const classes = useStyles();
 	const { canvasID } = useParams<HomeParams>();
 
-	const [nodeValidationErrors, setNodeValidationErrors] = useState<string[]>(
-		[]
-	);
-	useValidateNodes(nodes, setNodeValidationErrors);
-
+	const [nodeValidationErrors] = useValidateNodes(nodes);
 	const workflow = useMemo(() => {
 		return createWorkFlow(Number(canvasID), nodes, edges, workflowName);
 	}, [canvasID, nodes, edges, workflowName]);
@@ -77,57 +80,76 @@ const TopBar = ({
 		isSuccess: isSuccessDelete,
 	} = useDeleteWorkflow();
 
+	const disabled =
+		!!Object.keys(nodeValidationErrors).length || edges.length === 0; //Validation errors or no edges set
 	return (
 		<>
-			<Grid container justifyContent="space-evenly">
-				<Button
-					className={classes.button}
-					disabled={!!nodeValidationErrors.length || edges.length === 0} // Validation errors or no edges set
-					onClick={() => {
-						submitWorkflow({ workflow });
-					}}
-					variant="contained"
-				>
-					Submit
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() => suspendWorkflow({ workflowName: workflow.name })}
-					variant="contained"
-				>
-					Suspend
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() => resumeWorkflow({ workflowName: workflow.name })}
-					variant="contained"
-				>
-					Resume
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() => stopWorkflow({ workflowName: workflow.name })}
-					variant="contained"
-				>
-					Stop
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() => terminateWorkflow({ workflowName: workflow.name })}
-					variant="contained"
-				>
-					Terminate
-				</Button>
-				<Button
-					className={classes.button}
-					onClick={() => deleteWorkflow({ workflowName: workflow.name })}
-					variant="contained"
-				>
-					Delete
-				</Button>
+			<Grid container justifyContent="space-evenly" alignItems="center">
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={classes.button}
+						disabled={disabled}
+						onClick={() => {
+							submitWorkflow({ workflow });
+						}}
+						variant="contained"
+					>
+						Submit
+					</Button>
+				</Grid>
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={clsx(classes.button)}
+						disabled={disabled}
+						onClick={() => suspendWorkflow({ workflowName: workflow.name })}
+						variant="contained"
+					>
+						Suspend
+					</Button>
+				</Grid>
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={classes.button}
+						disabled={disabled}
+						onClick={() => resumeWorkflow({ workflowName: workflow.name })}
+						variant="contained"
+					>
+						Resume
+					</Button>
+				</Grid>
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={classes.button}
+						disabled={disabled}
+						onClick={() => stopWorkflow({ workflowName: workflow.name })}
+						variant="contained"
+					>
+						Stop
+					</Button>
+				</Grid>
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={classes.button}
+						disabled={disabled}
+						onClick={() => terminateWorkflow({ workflowName: workflow.name })}
+						variant="contained"
+					>
+						Terminate
+					</Button>
+				</Grid>
+				<Grid item className={classes.buttonWrapper}>
+					<Button
+						className={classes.button}
+						disabled={disabled}
+						onClick={() => deleteWorkflow({ workflowName: workflow.name })}
+						variant="contained"
+					>
+						Delete
+					</Button>
+				</Grid>
 			</Grid>
 			<Divider />
-			{Boolean(nodeValidationErrors.length) && (
+			{Object.keys(nodeValidationErrors).length !== 0 && (
 				<Alert
 					autoHideDuration={null}
 					message={nodeValidationErrors}

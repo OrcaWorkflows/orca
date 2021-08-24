@@ -14,7 +14,6 @@ export const useSubmitWorkflow = (): UseMutationResult<
 	{ workflow: Workflow },
 	unknown
 > => {
-	// Submit causes new workflows to generate each time from the same canvas (contradicts with 1 to 1 rel.)
 	const submitWorkflow = useMutation(
 		async ({ workflow }: { workflow: Workflow }) => {
 			const { data } = await axios("post", "/api/workflow/submit", {
@@ -29,11 +28,11 @@ export const useSubmitWorkflow = (): UseMutationResult<
 export const useSuspendWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null | null },
 	unknown
 > => {
 	const suspendWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null | null }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${workflowName}/suspend`,
@@ -50,11 +49,11 @@ export const useSuspendWorkflow = (): UseMutationResult<
 export const useResumeWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null },
 	unknown
 > => {
 	const resumeWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${workflowName}/resume`,
@@ -71,11 +70,11 @@ export const useResumeWorkflow = (): UseMutationResult<
 export const useStopWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null },
 	unknown
 > => {
 	const stopWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${workflowName}/stop`,
@@ -92,11 +91,11 @@ export const useStopWorkflow = (): UseMutationResult<
 export const useTerminateWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null },
 	unknown
 > => {
 	const terminateWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${workflowName}/terminate`,
@@ -113,11 +112,11 @@ export const useTerminateWorkflow = (): UseMutationResult<
 export const useDeleteWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null },
 	unknown
 > => {
 	const deleteWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null }) => {
 			const { data } = await axios(
 				"delete",
 				`/api/workflow/argo/${workflowName}`,
@@ -156,11 +155,11 @@ export function useGetWorkflows(): {
 export function useGetCanvasByWorkflowID(): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string },
+	{ workflowName: string | null },
 	unknown
 > {
 	const getCanvasByWorkflowID = useMutation(
-		async ({ workflowName }: { workflowName: string }) => {
+		async ({ workflowName }: { workflowName: string | null }) => {
 			const { data } = await axios(
 				"get",
 				`/api/canvas/workflow/${workflowName}`,
@@ -174,7 +173,7 @@ export function useGetCanvasByWorkflowID(): UseMutationResult<
 	return getCanvasByWorkflowID;
 }
 
-// export function getWorkflowStatus(workflowName: string) {
+// export function getWorkflowStatus(workflowName: string | null) {
 // 	axios
 // 		.get(
 // 			API +

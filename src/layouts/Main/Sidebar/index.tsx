@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: "center",
 		...theme.mixins.toolbar, // necessary for content to be below app bar
 	},
+	selected: {
+		borderRadius: theme.shape.borderRadius,
+	},
 }));
 
 type Routes = "home" | "workflows" | "templates" | "schedule" | "settings";
@@ -93,6 +96,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 			</div>
 			<Divider />
 			<ListItem
+				className={clsx({ [classes.selected]: useSelectedRoute("home") })}
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("home")}
@@ -105,6 +109,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 			</ListItem>
 			<Divider />
 			<ListItem
+				className={clsx({ [classes.selected]: useSelectedRoute("workflows") })}
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("workflows")}
@@ -117,6 +122,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 			</ListItem>
 			<Divider />
 			<ListItem
+				className={clsx({ [classes.selected]: useSelectedRoute("templates") })}
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("templates")}
@@ -129,6 +135,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 			</ListItem>
 			<Divider />
 			<ListItem
+				className={clsx({ [classes.selected]: useSelectedRoute("schedule") })}
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("schedule")}
@@ -141,6 +148,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 			</ListItem>
 			<Divider />
 			<ListItem
+				className={clsx({ [classes.selected]: useSelectedRoute("settings") })}
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("settings")}

@@ -20,8 +20,9 @@ export interface Task extends Name {
 	dependencies: Array<string>;
 }
 
-export interface Workflow extends Name {
+export interface Workflow {
 	canvasID: number;
+	name: string | null;
 	tasks: Array<Task>;
 }
 
