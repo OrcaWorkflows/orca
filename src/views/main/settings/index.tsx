@@ -1,15 +1,5 @@
-import SideHeader from "../navigation/sideheader";
-import "./settings.css";
-
-export const Settings = () => {
-	return (
-		<div className={"settings-root"}>
-			<SideHeader />
-			<div className={"settings"}>
-				<h2>Settings !</h2>
-			</div>
-		</div>
-	);
+export const Settings = (): JSX.Element => {
+	return <h2>Settings !</h2>;
 };
 
 export default Settings;

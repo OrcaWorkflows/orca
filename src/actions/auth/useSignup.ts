@@ -20,12 +20,18 @@ export const useSignup = (): UseMutationResult<
 	const history = useHistory();
 	const signup = useMutation(
 		async ({ email, username, password, phoneNumber }: Values) =>
-			axios("post", "/users/signup", {
-				email,
-				username,
-				password,
-				phoneNumber,
-			}),
+			axios(
+				"post",
+				"/users/signup",
+				{
+					email,
+					username,
+					password,
+					phoneNumber,
+				},
+				undefined,
+				false
+			),
 		{
 			onSuccess: () => {
 				history.push("/");

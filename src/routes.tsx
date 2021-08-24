@@ -1,8 +1,40 @@
-import { Route, RouteProps } from "react-router-dom";
+import { FunctionComponent } from "react";
 
-import ProtectedRoute from "components/ProtectedRoute";
+import { Redirect, Route, RouteProps } from "react-router-dom";
+
 import Auth from "layouts/Auth";
 import Main from "layouts/Main";
+import Signin from "views/auth/Signin";
+
+const ProtectedRoute = ({
+	component: Component,
+	layout: Layout,
+	...rest
+}: { layout: FunctionComponent } & RouteProps): JSX.Element | null => {
+	if (!Component) return null; // Because component is defined as optional in RouteProps
+	return (
+		<Route
+			{...rest}
+			render={(props) =>
+				localStorage.getItem("token") ? (
+					Layout ? (
+						<Layout>
+							<Component {...props} />
+						</Layout>
+					) : (
+						<Component {...props} />
+					)
+				) : (
+					<Redirect
+						to={{
+							pathname: "/",
+						}}
+					/>
+				)
+			}
+		/>
+	);
+};
 
 export const AuthRoute = ({
 	component: Component,
@@ -12,11 +44,15 @@ export const AuthRoute = ({
 	return (
 		<Route
 			{...rest}
-			render={(props) => (
-				<Auth>
-					<Component {...props} />
-				</Auth>
-			)}
+			render={(props) =>
+				Component === Signin && localStorage.getItem("token") ? (
+					<Redirect to="/home" />
+				) : (
+					<Auth>
+						<Component {...props} />
+					</Auth>
+				)
+			}
 		/>
 	);
 };

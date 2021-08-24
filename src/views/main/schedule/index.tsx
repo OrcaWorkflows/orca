@@ -1,15 +1,5 @@
-import SideHeader from "../navigation/sideheader";
-import "./schedule.css";
-
-export const Schedule = () => {
-	return (
-		<div className={"schedule-root"}>
-			<SideHeader />
-			<div className={"schedule"}>
-				<h2>Schedule !</h2>
-			</div>
-		</div>
-	);
+export const Schedule = (): JSX.Element => {
+	return <h2>Schedule !</h2>;
 };
 
 export default Schedule;

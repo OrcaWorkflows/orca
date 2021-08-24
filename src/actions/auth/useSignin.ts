@@ -15,7 +15,7 @@ export const useSignin = (): UseMutationResult<
 	const history = useHistory();
 	const signin = useMutation(
 		async ({ username, password }: Values) =>
-			axios("post", "/users/signin", { username, password }),
+			axios("post", "/users/signin", { username, password }, undefined, false),
 		{
 			onSuccess: (response) => {
 				localStorage.setItem("token", response.data.key);
