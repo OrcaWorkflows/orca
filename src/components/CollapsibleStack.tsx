@@ -14,7 +14,7 @@ import DraggableListItem from "./DraggableListItem";
 
 type StackData = {
 	text: string;
-	options: { text: string; icon: string }[];
+	options: { text: string; icon: string; supported: boolean }[];
 };
 
 const useStyles = makeStyles(() => ({

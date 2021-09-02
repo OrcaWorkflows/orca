@@ -1,21 +1,184 @@
 import { AxiosResponse } from "axios";
-import { useMutation, useQuery, UseMutationResult } from "react-query";
-
-import { axios } from "utils";
+import { Elements } from "react-flow-renderer";
 import {
-	Workflow,
-	WorkflowMetadataRes,
-	WorkflowRes,
-} from "views/main/home/workflow/interfaces";
+	useMutation,
+	useQuery,
+	useQueryClient,
+	UseMutationResult,
+	useInfiniteQuery,
+	UseInfiniteQueryResult,
+	UseQueryResult,
+} from "react-query";
+import { useParams } from "react-router";
+
+import { IArgoWorkflow, IWorkflow } from "interfaces";
+import { axios } from "utils";
+import { HomeParams } from "views/main/Home";
+
+export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
+	const { workflowID } = useParams<HomeParams>();
+
+	const workflow = useQuery(
+		["workflow", workflowID],
+		async () => {
+			const { data } = await axios("get", `/api/workflow/${workflowID}`);
+			return data;
+		},
+		{
+			onSuccess: (data) => {
+				localStorage.setItem("lastWorkflowID", JSON.stringify(data.id));
+			},
+			enabled,
+		}
+	);
+	return workflow;
+}
+
+type Values = {
+	id?: number;
+	name?: string | null;
+	property?: { nodes: Elements; edges: Elements };
+};
+export const useSetWorkflow = (): UseMutationResult<
+	AxiosResponse,
+	unknown,
+	Values,
+	unknown
+> => {
+	const { workflowID } = useParams<HomeParams>();
+	const queryClient = useQueryClient();
+
+	const currentWorkflowName = queryClient.getQueryData<IWorkflow>([
+		"workflow",
+		workflowID,
+	])?.name;
+	const currentProperty = queryClient.getQueryData<IWorkflow>([
+		"workflow",
+		workflowID,
+	])?.property;
+
+	const setWorkflow = useMutation(
+		async ({
+			id = Number(workflowID),
+			name = currentWorkflowName,
+			property = currentProperty,
+		}: Values) => {
+			const { data } = await axios("post", "/api/workflow", {
+				id,
+				name,
+				property,
+			});
+			return data;
+		},
+		{
+			onSuccess: (data) => {
+				localStorage.setItem("lastWorkflowID", JSON.stringify(data.id));
+				queryClient.invalidateQueries(["workflow", `${data.id}`]);
+			},
+		}
+	);
+	return setWorkflow;
+};
+
+export const useDeleteWorkflow = (): UseMutationResult<
+	AxiosResponse,
+	unknown,
+	{ id: number },
+	unknown
+> => {
+	const queryClient = useQueryClient();
+
+	const deleteWorkflow = useMutation(
+		async ({ id }: { id: number }) => {
+			const { data } = await axios("delete", `/api/workflow/${id}`);
+			return data;
+		},
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(["workflows"]);
+			},
+		}
+	);
+	return deleteWorkflow;
+};
+
+export function useInfiniteGetWorkFlows({
+	rowsPerPage,
+}: {
+	rowsPerPage: number;
+}): UseInfiniteQueryResult<{ totalCount: number; workflows: IWorkflow[] }> {
+	const workflows = useInfiniteQuery(
+		"workflows",
+		async ({ pageParam = 0 }) => {
+			const { data } = await axios("get", "/api/workflow", undefined, {
+				pageNumber: pageParam,
+				pageSize: rowsPerPage,
+			});
+			return { totalCount: data.totalCount, workflows: data.workflows };
+		},
+		{
+			getNextPageParam: (lastPage, pages) => {
+				let fetchedWorkflowsCount = 0;
+				for (const page of pages) {
+					fetchedWorkflowsCount += page.workflows.length;
+				}
+				return fetchedWorkflowsCount < lastPage.totalCount
+					? pages.length
+					: undefined;
+			},
+		}
+	);
+	return workflows;
+}
+
+export function usePaginatedGetWorkflows({
+	page,
+	rowsPerPage,
+}: {
+	page: number;
+	rowsPerPage: number;
+}): UseQueryResult<{ totalCount: number; workflows: IWorkflow[] }> {
+	const queryClient = useQueryClient();
+
+	const workflows = useQuery(
+		["workflows", page, rowsPerPage],
+		async () => {
+			const { data } = await axios("get", "/api/workflow", undefined, {
+				pageNumber: page,
+				pageSize: rowsPerPage,
+			});
+			return data;
+		},
+		{
+			keepPreviousData: true,
+			staleTime: 5000,
+			onSuccess: (data) => {
+				if (rowsPerPage * (page + 1) < data.totalCount) {
+					queryClient.prefetchQuery(
+						["workflows", page + 1, rowsPerPage],
+						async () => {
+							const { data } = await axios("get", "/api/workflow", undefined, {
+								pageNumber: page + 1,
+								pageSize: rowsPerPage,
+							});
+							return data;
+						}
+					);
+				}
+			},
+		}
+	);
+	return workflows;
+}
 
 export const useSubmitWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflow: Workflow },
+	{ workflow: IArgoWorkflow },
 	unknown
 > => {
 	const submitWorkflow = useMutation(
-		async ({ workflow }: { workflow: Workflow }) => {
+		async ({ workflow }: { workflow: IArgoWorkflow }) => {
 			const { data } = await axios("post", "/api/workflow/submit", {
 				...workflow,
 			});
@@ -28,17 +191,14 @@ export const useSubmitWorkflow = (): UseMutationResult<
 export const useSuspendWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string | null | null },
+	{ argoWorkflowName: string | null },
 	unknown
 > => {
 	const suspendWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string | null | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
-				`/api/workflow/argo/${workflowName}/suspend`,
-				{
-					workflowName,
-				}
+				`/api/workflow/argo/${argoWorkflowName}/suspend`
 			);
 			return data;
 		}
@@ -49,17 +209,14 @@ export const useSuspendWorkflow = (): UseMutationResult<
 export const useResumeWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string | null },
+	{ argoWorkflowName: string | null },
 	unknown
 > => {
 	const resumeWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
-				`/api/workflow/argo/${workflowName}/resume`,
-				{
-					workflowName,
-				}
+				`/api/workflow/argo/${argoWorkflowName}/resume`
 			);
 			return data;
 		}
@@ -70,17 +227,14 @@ export const useResumeWorkflow = (): UseMutationResult<
 export const useStopWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string | null },
+	{ argoWorkflowName: string | null },
 	unknown
 > => {
 	const stopWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
-				`/api/workflow/argo/${workflowName}/stop`,
-				{
-					workflowName,
-				}
+				`/api/workflow/argo/${argoWorkflowName}/stop`
 			);
 			return data;
 		}
@@ -91,105 +245,17 @@ export const useStopWorkflow = (): UseMutationResult<
 export const useTerminateWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ workflowName: string | null },
+	{ argoWorkflowName: string | null },
 	unknown
 > => {
 	const terminateWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
 			const { data } = await axios(
 				"put",
-				`/api/workflow/argo/${workflowName}/terminate`,
-				{
-					workflowName,
-				}
+				`/api/workflow/argo/${argoWorkflowName}/terminate`
 			);
 			return data;
 		}
 	);
 	return terminateWorkflow;
 };
-
-export const useDeleteWorkflow = (): UseMutationResult<
-	AxiosResponse,
-	unknown,
-	{ workflowName: string | null },
-	unknown
-> => {
-	const deleteWorkflow = useMutation(
-		async ({ workflowName }: { workflowName: string | null }) => {
-			const { data } = await axios(
-				"delete",
-				`/api/workflow/argo/${workflowName}`,
-				{
-					workflowName,
-				}
-			);
-			return data;
-		}
-	);
-	return deleteWorkflow;
-};
-
-export function useGetWorkflows(): {
-	isError: boolean;
-	isFetching: boolean;
-	isLoading: boolean;
-	metadata: WorkflowMetadataRes;
-	items: WorkflowRes[];
-} {
-	const workflows = useQuery(["workflows"], async () => {
-		const { data } = await axios("get", "/api/workflow");
-		return data;
-	});
-
-	return {
-		isError: workflows.isError,
-		isFetching: workflows.isFetching,
-		isLoading: workflows.isLoading,
-		metadata: workflows.data?.metadata,
-		items: workflows.data?.items,
-	};
-}
-
-// This may come with getWorkflows
-export function useGetCanvasByWorkflowID(): UseMutationResult<
-	AxiosResponse,
-	unknown,
-	{ workflowName: string | null },
-	unknown
-> {
-	const getCanvasByWorkflowID = useMutation(
-		async ({ workflowName }: { workflowName: string | null }) => {
-			const { data } = await axios(
-				"get",
-				`/api/canvas/workflow/${workflowName}`,
-				{
-					workflowName,
-				}
-			);
-			return data;
-		}
-	);
-	return getCanvasByWorkflowID;
-}
-
-// export function getWorkflowStatus(workflowName: string | null) {
-// 	axios
-// 		.get(
-// 			API +
-// 				API_PATH +
-// 				WORKFLOW +
-// 				DIVIDER +
-// 				SERVICE_ACCOUNT_NAME +
-// 				DIVIDER +
-// 				workflowName,
-// 			{}
-// 		)
-// 		.then((response) => {
-// 			State.workflowStatus =
-// 				response.data.metadata.labels["workflows.argoproj.io/phase"];
-// 		})
-// 		.catch((error) => {
-// 			console.log(error);
-// 		});
-// }

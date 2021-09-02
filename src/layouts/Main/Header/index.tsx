@@ -4,7 +4,9 @@ import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrom
 import Account from "layouts/Main/Header/Account";
 import Logout from "layouts/Main/Header/Logout";
 
-const useStyles = makeStyles({ margin: { margin: "auto" } });
+const useStyles = makeStyles((theme) => ({
+	logo: { color: theme.palette.text.primary, margin: "auto" },
+}));
 
 const Header = (): JSX.Element => {
 	const classes = useStyles();
@@ -12,7 +14,7 @@ const Header = (): JSX.Element => {
 	return (
 		<AppBar>
 			<Toolbar variant="dense">
-				<OrcaLogo className={classes.margin} title="ORCA" />
+				<OrcaLogo className={classes.logo} title="ORCA" />
 				<Account />
 				<Logout />
 			</Toolbar>

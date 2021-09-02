@@ -5,26 +5,34 @@ import {
 	ListItemIcon,
 	ListItemText,
 	makeStyles,
+	Theme,
 } from "@material-ui/core";
+import clsx from "clsx";
 
-const useStyles = makeStyles((theme) => ({
+type StyleProps = {
+	supported: boolean;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+	unusable: {
+		WebkitFilter: "blur(1px) grayscale(100%)" /* Safari 6.0 - 9.0 */,
+		filter: "blur(1px) grayscale(100%)",
+	},
 	draggable: {
-		borderLeft: `4px solid ${theme.palette.secondary.dark}`,
+		borderLeft: `4px solid ${theme.palette.secondary.main}`,
 		cursor: "grabbing",
 		"&:hover": {
 			backgroundColor: theme.palette.action.hover,
 		},
 	},
 	dragging: {
-		color: theme.palette.primary.main,
-		borderBottom: `2px solid ${theme.palette.secondary.dark}`,
-		borderTop: `2px solid ${theme.palette.secondary.dark}`,
+		color: theme.palette.primary.light,
 		padding: 20,
 		transition: theme.transitions.create(["padding"], {
 			easing: theme.transitions.easing.sharp,
 		}),
 		"&:active": {
-			backgroundColor: theme.palette.secondary.main,
+			backgroundColor: theme.palette.secondary.light,
 		},
 	},
 	draggingText: {
@@ -35,13 +43,17 @@ const DraggableListItem = ({
 	data,
 	onDragStart,
 }: {
-	data: { text: string; icon: string };
+	data: { text: string; icon: string; supported: boolean };
 	onDragStart: (event: DragEvent, data: string) => void;
 }): JSX.Element => {
-	const classes = useStyles();
+	const classes = useStyles({ supported: data.supported });
+
 	return (
 		<ListItem
-			className={classes.draggable}
+			className={clsx({
+				[classes.draggable]: data.supported,
+				[classes.unusable]: !data.supported,
+			})}
 			key={data.text}
 			onDragStart={(event: DragEvent) => {
 				onDragStart(event, data.text);
@@ -60,7 +72,7 @@ const DraggableListItem = ({
 					classes.draggingText
 				);
 			}}
-			draggable
+			draggable={data.supported}
 		>
 			<ListItemIcon>
 				<img src={data.icon} style={{ height: 36 }} draggable={false} />

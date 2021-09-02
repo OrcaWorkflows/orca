@@ -1,9 +1,10 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, useTheme } from "@material-ui/core";
 import { LogOut } from "react-feather";
 import { useHistory } from "react-router-dom";
 
 const Logout = (): JSX.Element => {
 	const history = useHistory();
+	const theme = useTheme();
 
 	const logout = () => {
 		localStorage.removeItem("token");
@@ -12,7 +13,7 @@ const Logout = (): JSX.Element => {
 
 	return (
 		<IconButton onClick={logout}>
-			<LogOut />
+			<LogOut color={theme.palette.text.primary} />
 		</IconButton>
 	);
 };

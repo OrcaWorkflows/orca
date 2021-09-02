@@ -19,6 +19,7 @@
 	},
 	"plugins": ["react", "@typescript-eslint"],
 	"rules": {
+		"@typescript-eslint/no-non-null-assertion": "off",
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 		"react/jsx-uses-react": "off",
 		"react/react-in-jsx-scope": "off",
