@@ -13,7 +13,7 @@ import clsx from "clsx";
 import {
 	ArrowUpRight,
 	ArrowDownLeft,
-	BookOpen,
+	Book,
 	Clock,
 	Home,
 	List,
@@ -21,7 +21,7 @@ import {
 } from "react-feather";
 import { Link as RouterLink, useHistory, useParams } from "react-router-dom";
 
-import { HomeParams } from "views/main/home";
+import { HomeParams } from "views/main/Home";
 
 const useStyles = makeStyles((theme) => ({
 	drawerOpen: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-type Routes = "home" | "workflows" | "templates" | "schedule" | "settings";
+type Routes = "home" | "workflows" | "monitor" | "schedule" | "settings";
 const useSelectedRoute = (route: Routes) => {
 	const history = useHistory();
 	return history.location.pathname.includes(route) ? true : false;
@@ -63,7 +63,7 @@ type Props = {
 
 const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 	const classes = useStyles();
-	const { canvasID } = useParams<HomeParams>();
+	const { workflowID } = useParams<HomeParams>();
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -100,7 +100,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				button
 				component={RouterLink}
 				selected={useSelectedRoute("home")}
-				to={canvasID ? `/home/${canvasID}` : "/home"}
+				to={workflowID ? `/home/${workflowID}` : "/home"}
 			>
 				<ListItemIcon>
 					<Home />
@@ -116,28 +116,29 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/workflows"
 			>
 				<ListItemIcon>
-					<List />
+					<Book />
 				</ListItemIcon>
 				<ListItemText primary="Workflows" />
 			</ListItem>
 			<Divider />
 			<ListItem
-				className={clsx({ [classes.selected]: useSelectedRoute("templates") })}
+				className={clsx({ [classes.selected]: useSelectedRoute("monitor") })}
 				button
 				component={RouterLink}
-				selected={useSelectedRoute("templates")}
-				to="/templates"
+				selected={useSelectedRoute("monitor")}
+				to="/monitor"
 			>
 				<ListItemIcon>
-					<BookOpen />
+					<List />
 				</ListItemIcon>
-				<ListItemText primary="Templates" />
+				<ListItemText primary="Monitor" />
 			</ListItem>
 			<Divider />
 			<ListItem
 				className={clsx({ [classes.selected]: useSelectedRoute("schedule") })}
 				button
 				component={RouterLink}
+				disabled
 				selected={useSelectedRoute("schedule")}
 				to="/schedule"
 			>
