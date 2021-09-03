@@ -36,7 +36,7 @@ export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
 
 type Values = {
 	id?: number;
-	name?: string | null;
+	name?: string;
 	property?: { nodes: Elements; edges: Elements };
 };
 export const useSetWorkflow = (): UseMutationResult<
@@ -47,6 +47,11 @@ export const useSetWorkflow = (): UseMutationResult<
 > => {
 	const { workflowID } = useParams<HomeParams>();
 	const queryClient = useQueryClient();
+
+	const argoWorkflowName = queryClient.getQueryData<IWorkflow>([
+		"workflow",
+		workflowID,
+	])?.argoWorkflowName;
 
 	const currentWorkflowName = queryClient.getQueryData<IWorkflow>([
 		"workflow",
@@ -64,6 +69,7 @@ export const useSetWorkflow = (): UseMutationResult<
 			property = currentProperty,
 		}: Values) => {
 			const { data } = await axios("post", "/api/workflow", {
+				argoWorkflowName,
 				id,
 				name,
 				property,
@@ -177,12 +183,20 @@ export const useSubmitWorkflow = (): UseMutationResult<
 	{ workflow: IArgoWorkflow },
 	unknown
 > => {
+	const { workflowID } = useParams<HomeParams>();
+	const queryClient = useQueryClient();
+
 	const submitWorkflow = useMutation(
 		async ({ workflow }: { workflow: IArgoWorkflow }) => {
 			const { data } = await axios("post", "/api/workflow/submit", {
 				...workflow,
 			});
 			return data;
+		},
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(["workflow", workflowID]);
+			},
 		}
 	);
 	return submitWorkflow;
@@ -191,11 +205,11 @@ export const useSubmitWorkflow = (): UseMutationResult<
 export const useSuspendWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ argoWorkflowName: string | null },
+	{ argoWorkflowName: string },
 	unknown
 > => {
 	const suspendWorkflow = useMutation(
-		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${argoWorkflowName}/suspend`
@@ -209,11 +223,11 @@ export const useSuspendWorkflow = (): UseMutationResult<
 export const useResumeWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ argoWorkflowName: string | null },
+	{ argoWorkflowName: string },
 	unknown
 > => {
 	const resumeWorkflow = useMutation(
-		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${argoWorkflowName}/resume`
@@ -227,11 +241,11 @@ export const useResumeWorkflow = (): UseMutationResult<
 export const useStopWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ argoWorkflowName: string | null },
+	{ argoWorkflowName: string },
 	unknown
 > => {
 	const stopWorkflow = useMutation(
-		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${argoWorkflowName}/stop`
@@ -245,11 +259,11 @@ export const useStopWorkflow = (): UseMutationResult<
 export const useTerminateWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
-	{ argoWorkflowName: string | null },
+	{ argoWorkflowName: string },
 	unknown
 > => {
 	const terminateWorkflow = useMutation(
-		async ({ argoWorkflowName }: { argoWorkflowName: string | null }) => {
+		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
 			const { data } = await axios(
 				"put",
 				`/api/workflow/argo/${argoWorkflowName}/terminate`

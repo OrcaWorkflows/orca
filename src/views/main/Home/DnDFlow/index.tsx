@@ -70,7 +70,6 @@ const DnDFlow = (): JSX.Element => {
 
 	const nodes = data?.property.nodes ?? [];
 	const edges = data?.property.edges ?? [];
-	const argoWorkflowName = data?.argoWorkflowName ?? null;
 
 	const property = { nodes, edges };
 	const { isError: setWorkflowError, mutate: setWorkflow } = useSetWorkflow();
@@ -142,7 +141,7 @@ const DnDFlow = (): JSX.Element => {
 	};
 	return (
 		<>
-			<TopBar nodes={nodes} edges={edges} argoWorkflowName={argoWorkflowName} />
+			<TopBar nodes={nodes} edges={edges} />
 			<div className={classes.reactFlowWrapper} ref={reactFlowWrapper}>
 				<ReactFlow
 					elements={nodes.concat(edges)}

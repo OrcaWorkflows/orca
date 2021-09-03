@@ -70,7 +70,7 @@ const createWorkFlow = (
 	workflowID: number,
 	nodes: Elements,
 	edges: Elements,
-	name: string | null
+	name: string
 ): IArgoWorkflow => {
 	const workflow: IArgoWorkflow = {
 		workflowID,

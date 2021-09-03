@@ -1,12 +1,10 @@
 import { Button, Grid, TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import { Elements, FlowElement, Node } from "react-flow-renderer";
-import { useParams } from "react-router-dom";
 import * as yup from "yup";
 
 import { useSetWorkflow } from "actions/workflowActions";
 import { ServerError } from "components";
-import { HomeParams } from "views/main/Home";
 
 export const DynamoDBValidationSchema = yup.object({
 	table_name: yup.string().required("Table name is a required field"),
@@ -24,8 +22,6 @@ const DynamoDB = ({
 	nodes: Elements;
 	edges: Elements;
 }): JSX.Element => {
-	const { workflowID } = useParams<HomeParams>();
-
 	const initialValues = {
 		...configuredNode.data,
 	};
@@ -43,7 +39,6 @@ const DynamoDB = ({
 		const newNodes = [...nodes];
 		newNodes[indexToUpdate] = newNode;
 		return mutateAsync({
-			id: Number(workflowID),
 			property: { nodes: newNodes, edges },
 		}).then(() => {
 			handleClose();
