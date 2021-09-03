@@ -28,7 +28,7 @@ const Kinesis = {
 };
 const MongoDB = {
 	host: "",
-	port: "",
+	port: 27017,
 	database_name: "",
 	collection_name: "",
 };
@@ -39,9 +39,9 @@ const PubSub = {
 };
 const Redis = {
 	host: "",
-	port: 27017,
+	port: 6379,
 	database: "",
-	password: "",
+	//password: "",  Might add later on
 };
 const S3 = {
 	bucket_name: "",

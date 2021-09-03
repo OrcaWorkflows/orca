@@ -10,7 +10,7 @@ export const RedisValidationSchema = yup.object({
 	host: yup.string().required("Host is a required field"),
 	port: yup.number().integer().required("Port is a required field"),
 	database: yup.string().required("Database is a required field"),
-	password: yup.string().required("Password is a required field"),
+	// password: yup.string().required("Password is a required field"), Might add later on
 });
 
 const Redis = ({
@@ -96,7 +96,7 @@ const Redis = ({
 							required
 						/>
 					</Grid>
-					<Grid item>
+					{/* <Grid item> Might add later on 
 						<TextField
 							{...formik.getFieldProps("password")}
 							error={
@@ -108,7 +108,7 @@ const Redis = ({
 							label="Password"
 							required
 						/>
-					</Grid>
+					</Grid> */}
 					<Grid item>
 						<Button
 							disabled={formik.isSubmitting || !formik.isValid}

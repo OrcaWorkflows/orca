@@ -1,7 +1,12 @@
+import { useEffect } from "react";
+
 import { Grid, Divider, Paper, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { useQueryClient } from "react-query";
+import { useHistory, useParams } from "react-router-dom";
 
+import { useGetFirstWorkflow } from "actions/workflowActions";
 import DnDFlow from "views/main/Home/DnDFlow";
 import Sidebar from "views/main/Home/Sidebar";
 
@@ -22,6 +27,22 @@ export type HomeParams = {
 
 const Home = (): JSX.Element => {
 	const classes = useStyles();
+	const history = useHistory();
+	const { workflowID } = useParams<HomeParams>();
+
+	const workflows = useGetFirstWorkflow().data?.workflows;
+	const lastCreatedWorkflowID = workflows ? workflows[0].id : undefined;
+
+	const queryClient = useQueryClient();
+	useEffect(() => {
+		if (lastCreatedWorkflowID) {
+			if (!workflowID) history.replace(`/home/${lastCreatedWorkflowID}`);
+			return () => {
+				queryClient.resetQueries(["workflows", 0, 1]);
+			};
+		}
+	}, [lastCreatedWorkflowID]);
+
 	return (
 		<Paper className={classes.root}>
 			<Grid

@@ -35,9 +35,9 @@ const WorkflowName = (): JSX.Element => {
 		}
 	};
 
-	const { isError, mutateAsync } = useSetWorkflow();
+	const { isError, mutateAsync: setWorkflow } = useSetWorkflow();
 	const handleSubmit = async (values: typeof initialValues) => {
-		return mutateAsync({
+		return setWorkflow({
 			name: values.name,
 		});
 	};

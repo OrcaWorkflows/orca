@@ -12,7 +12,7 @@ import ReactFlow, {
 	Node,
 	OnLoadParams,
 } from "react-flow-renderer";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { useGetWorkflow, useSetWorkflow } from "actions/workflowActions";
 import { Alert } from "components";
@@ -51,13 +51,9 @@ const onDragOver = (event: DragEvent) => {
 	event.dataTransfer.dropEffect = "move";
 };
 
-function getworkflowID() {
-	return JSON.parse(localStorage.getItem("lastWorkflowID") as string);
-}
-
 const DnDFlow = (): JSX.Element => {
 	const classes = useStyles();
-	const history = useHistory();
+
 	const { workflowID } = useParams<HomeParams>();
 	const reactFlowWrapper = useRef<HTMLDivElement>(null);
 	const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
@@ -70,17 +66,8 @@ const DnDFlow = (): JSX.Element => {
 
 	const nodes = data?.property.nodes ?? [];
 	const edges = data?.property.edges ?? [];
-
 	const property = { nodes, edges };
 	const { isError: setWorkflowError, mutate: setWorkflow } = useSetWorkflow();
-
-	const lastWorkflowID = getworkflowID();
-	useEffect(() => {
-		if (!workflowID) {
-			if (lastWorkflowID) history.replace(`/home/${lastWorkflowID}`);
-			else setWorkflow({ property });
-		}
-	}, [lastWorkflowID]); // lastWorkflowID can be used it as dep directly as it gets updated just before rerender
 
 	useEffect(() => {
 		let max = -1;
