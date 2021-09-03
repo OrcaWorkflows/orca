@@ -1,13 +1,16 @@
 import { IconButton, useTheme } from "@material-ui/core";
 import { LogOut } from "react-feather";
+import { useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
 
 const Logout = (): JSX.Element => {
 	const history = useHistory();
 	const theme = useTheme();
 
+	const queryClient = useQueryClient();
 	const logout = () => {
 		localStorage.removeItem("token");
+		queryClient.clear();
 		history.push("/");
 	};
 

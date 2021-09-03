@@ -1,4 +1,4 @@
-import { useRef, KeyboardEventHandler } from "react";
+import { useEffect, useRef, KeyboardEventHandler } from "react";
 
 import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
@@ -49,6 +49,15 @@ const WorkflowName = (): JSX.Element => {
 		validateOnMount: true,
 		validationSchema: workflowNameValidationSchema,
 	});
+
+	useEffect(() => {
+		let timer: ReturnType<typeof setTimeout>;
+		if (formik.values.name !== initialValues.name)
+			timer = setTimeout(() => {
+				handleSubmit(formik.values);
+			}, 500);
+		return () => clearTimeout(timer);
+	}, [formik.values.name]);
 
 	return (
 		<>

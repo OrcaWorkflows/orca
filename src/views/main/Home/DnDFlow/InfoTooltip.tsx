@@ -20,28 +20,27 @@ const useStyles = makeStyles((theme) => ({
 const infoTooltipTitle = (
 	<List dense>
 		<ListItem divider>
-			<Typography variant="subtitle2">
-				Nodes which need configuration or derived from unsupported platforms are
-				darkened.
-			</Typography>
-		</ListItem>
-		<ListItem divider>
-			<Typography variant="subtitle2">
+			<Typography variant="caption">
 				Add a node by dragging it from the specified service categories.
 			</Typography>
 		</ListItem>
 		<ListItem divider>
-			<Typography variant="subtitle2">
+			<Typography variant="caption">
+				Nodes that are darkened require configuration.
+			</Typography>
+		</ListItem>
+		<ListItem divider>
+			<Typography variant="caption">
 				Click on a node to select and configure.
 			</Typography>
 		</ListItem>
 		<ListItem divider>
-			<Typography variant="subtitle2">
+			<Typography variant="caption">
 				Remove a selected node by pressing backspace.
 			</Typography>
 		</ListItem>
 		<ListItem>
-			<Typography variant="subtitle2">
+			<Typography variant="caption">
 				Hold shift to select and remove multiple nodes.
 			</Typography>
 		</ListItem>

@@ -83,6 +83,10 @@ const getNodeTypes = (): nodeTypes => {
 							})}
 							src={src}
 							draggable={false}
+							onDragStart={(event) => {
+								// Firefox
+								event.preventDefault();
+							}}
 						/>
 					</Tooltip>
 					<Handle

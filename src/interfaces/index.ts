@@ -23,15 +23,15 @@ export interface ITask extends IName {
 
 export interface IArgoWorkflow {
 	workflowID: number;
-	name: string | null;
+	name: string;
 	tasks: Array<ITask>;
 }
 
 export interface IWorkflow {
-	argoWorkflowName: string | null;
+	argoWorkflowName: string;
 	createdAt: string;
 	id: number;
-	name: string | null;
+	name: string;
 	property: { nodes: Elements; edges: Elements };
 	updatedAt: string;
 }
