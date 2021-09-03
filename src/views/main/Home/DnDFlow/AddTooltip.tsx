@@ -21,7 +21,6 @@ const AddTooltip = (): JSX.Element => {
 				size="medium"
 				color="secondary"
 				onClick={() => {
-					localStorage.removeItem("lastWorkflowID");
 					history.replace("/home");
 				}}
 			>

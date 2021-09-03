@@ -10,6 +10,7 @@ import {
 	UseQueryResult,
 } from "react-query";
 import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { IArgoWorkflow, IWorkflow } from "interfaces";
 import { axios } from "utils";
@@ -25,9 +26,6 @@ export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
 			return data;
 		},
 		{
-			onSuccess: (data) => {
-				localStorage.setItem("lastWorkflowID", JSON.stringify(data.id));
-			},
 			enabled,
 		}
 	);
@@ -45,14 +43,14 @@ export const useSetWorkflow = (): UseMutationResult<
 	Values,
 	unknown
 > => {
+	const history = useHistory();
 	const { workflowID } = useParams<HomeParams>();
 	const queryClient = useQueryClient();
 
 	const argoWorkflowName = queryClient.getQueryData<IWorkflow>([
 		"workflow",
 		workflowID,
-	])?.argoWorkflowName;
-
+	])?.argoWorkflowName; // Required by endpoint to keep the same argoWorkflowName for a given workflow
 	const currentWorkflowName = queryClient.getQueryData<IWorkflow>([
 		"workflow",
 		workflowID,
@@ -60,7 +58,7 @@ export const useSetWorkflow = (): UseMutationResult<
 	const currentProperty = queryClient.getQueryData<IWorkflow>([
 		"workflow",
 		workflowID,
-	])?.property;
+	])?.property ?? { nodes: [], edges: [] }; // Required by endpoint
 
 	const setWorkflow = useMutation(
 		async ({
@@ -78,8 +76,8 @@ export const useSetWorkflow = (): UseMutationResult<
 		},
 		{
 			onSuccess: (data) => {
-				localStorage.setItem("lastWorkflowID", JSON.stringify(data.id));
 				queryClient.invalidateQueries(["workflow", `${data.id}`]);
+				if (!workflowID) history.replace(`/home/${data.id}`); // This setWorkflow just created a new workflow so redirect to it
 			},
 		}
 	);
@@ -174,6 +172,22 @@ export function usePaginatedGetWorkflows({
 			},
 		}
 	);
+	return workflows;
+}
+
+// Used to get first workflow, implemented it separately from usePaginatedGetWorkflows for simplicity
+export function useGetFirstWorkflow(): UseQueryResult<{
+	totalCount: number;
+	workflows: IWorkflow[];
+}> {
+	// 0th page with size of 1
+	const workflows = useQuery(["workflows", 0, 1], async () => {
+		const { data } = await axios("get", "/api/workflow", undefined, {
+			pageNumber: 0,
+			pageSize: 1,
+		});
+		return data;
+	});
 	return workflows;
 }
 
