@@ -58,13 +58,6 @@ const TopBar = ({
 	}, [workflowID, nodes, edges, name]);
 
 	const [openSubmitTooltip, setOpenSubmitTooltip] = useState(false);
-	const handleSubmitOnMouseOver = () => {
-		if (name === "" || nodes.length === 0) setOpenSubmitTooltip(true);
-	};
-	const handleSubmitOnMouseOut = () => {
-		setOpenSubmitTooltip(false);
-	};
-
 	const [openSuspendTooltip, setOpenSuspend] = useState(false);
 	const [openResumeTooltip, setOpenResumeTooltip] = useState(false);
 	const [openStopTooltip, setOpenStopTooltip] = useState(false);
@@ -96,8 +89,6 @@ const TopBar = ({
 		isSuccess: isSuccessTerminate,
 	} = useTerminateWorkflow();
 
-	const disabled = edges.length === 0; // No edges set which means there is not a valid workflow to handle
-
 	return (
 		<>
 			<Grid container justifyContent="space-evenly" alignItems="center">
@@ -113,12 +104,17 @@ const TopBar = ({
 						}
 					>
 						<span
-							onMouseOver={handleSubmitOnMouseOver}
-							onMouseOut={handleSubmitOnMouseOut}
+							onMouseOver={() => {
+								if (name === "" || edges.length === 0)
+									setOpenSubmitTooltip(true);
+							}}
+							onMouseOut={() => {
+								setOpenSubmitTooltip(false);
+							}}
 						>
 							<Button
 								className={classes.button}
-								disabled={name === "" || disabled}
+								disabled={name === "" || edges.length === 0}
 								onClick={() => {
 									submitWorkflow({ workflow });
 								}}
@@ -149,7 +145,7 @@ const TopBar = ({
 						>
 							<Button
 								className={clsx(classes.button)}
-								disabled={argoWorkflowName === "" || disabled}
+								disabled={argoWorkflowName === ""}
 								onClick={() =>
 									suspendWorkflow({ argoWorkflowName } as {
 										argoWorkflowName: string;
@@ -182,7 +178,7 @@ const TopBar = ({
 						>
 							<Button
 								className={classes.button}
-								disabled={argoWorkflowName === "" || disabled}
+								disabled={argoWorkflowName === ""}
 								onClick={() =>
 									resumeWorkflow({ argoWorkflowName } as {
 										argoWorkflowName: string;
@@ -215,7 +211,7 @@ const TopBar = ({
 						>
 							<Button
 								className={classes.button}
-								disabled={argoWorkflowName === "" || disabled}
+								disabled={argoWorkflowName === ""}
 								onClick={() =>
 									stopWorkflow({ argoWorkflowName } as {
 										argoWorkflowName: string;
@@ -248,7 +244,7 @@ const TopBar = ({
 						>
 							<Button
 								className={classes.button}
-								disabled={argoWorkflowName === "" || disabled}
+								disabled={argoWorkflowName === ""}
 								onClick={() =>
 									terminateWorkflow({ argoWorkflowName } as {
 										argoWorkflowName: string;
