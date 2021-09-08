@@ -21,15 +21,16 @@ export const useSignup = (): UseMutationResult<
 	const signup = useMutation(
 		async ({ email, username, password, phoneNumber }: Values) =>
 			axios(
-				"post",
-				"/users/signup",
 				{
-					email,
-					username,
-					password,
-					phoneNumber,
+					method: "post",
+					url: process.env.REACT_APP_API + "/users/signup",
+					data: {
+						email,
+						username,
+						password,
+						phoneNumber,
+					},
 				},
-				undefined,
 				false
 			),
 		{

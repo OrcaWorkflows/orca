@@ -31,7 +31,7 @@ const Home = (): JSX.Element => {
 	const { workflowID } = useParams<HomeParams>();
 
 	const workflows = useGetFirstWorkflow().data?.workflows;
-	const lastCreatedWorkflowID = workflows ? workflows[0].id : undefined;
+	const lastCreatedWorkflowID = workflows?.length ? workflows[0].id : undefined;
 
 	const queryClient = useQueryClient();
 	useEffect(() => {
