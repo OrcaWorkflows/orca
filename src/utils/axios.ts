@@ -25,24 +25,15 @@ axios.interceptors.response.use((response) => {
 });
 
 const instance = (
-	method: AxiosRequestConfig["method"],
-	url: AxiosRequestConfig["url"],
-	data?: AxiosRequestConfig["data"],
-	params?: AxiosRequestConfig["params"],
+	{ ...config }: AxiosRequestConfig,
 	authorized = true
 ): Promise<AxiosResponse> =>
 	authorized
 		? authorizedInstance({
-				method,
-				url: `${process.env.REACT_APP_API}${url}`,
-				data,
-				params,
+				...config,
 		  })
 		: axios({
-				method,
-				url: `${process.env.REACT_APP_API}${url}`,
-				data,
-				params,
+				...config,
 		  });
 
 export default instance;

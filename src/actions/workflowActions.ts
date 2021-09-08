@@ -22,7 +22,10 @@ export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
 	const workflow = useQuery(
 		["workflow", workflowID],
 		async () => {
-			const { data } = await axios("get", `/api/workflow/${workflowID}`);
+			const { data } = await axios({
+				method: "get",
+				url: process.env.REACT_APP_API + `/api/workflow/${workflowID}`,
+			});
 			return data;
 		},
 		{
@@ -66,11 +69,15 @@ export const useSetWorkflow = (): UseMutationResult<
 			name = currentWorkflowName,
 			property = currentProperty,
 		}: Values) => {
-			const { data } = await axios("post", "/api/workflow", {
-				argoWorkflowName,
-				id,
-				name,
-				property,
+			const { data } = await axios({
+				method: "post",
+				url: process.env.REACT_APP_API + "/api/workflow",
+				data: {
+					argoWorkflowName,
+					id,
+					name,
+					property,
+				},
 			});
 			return data;
 		},
@@ -94,7 +101,10 @@ export const useDeleteWorkflow = (): UseMutationResult<
 
 	const deleteWorkflow = useMutation(
 		async ({ id }: { id: number }) => {
-			const { data } = await axios("delete", `/api/workflow/${id}`);
+			const { data } = await axios({
+				method: "delete",
+				url: process.env.REACT_APP_API + `/api/workflow/${id}`,
+			});
 			return data;
 		},
 		{
@@ -114,9 +124,13 @@ export function useInfiniteGetWorkFlows({
 	const workflows = useInfiniteQuery(
 		"workflows",
 		async ({ pageParam = 0 }) => {
-			const { data } = await axios("get", "/api/workflow", undefined, {
-				pageNumber: pageParam,
-				pageSize: rowsPerPage,
+			const { data } = await axios({
+				method: "get",
+				url: process.env.REACT_APP_API + "/api/workflow",
+				params: {
+					pageNumber: pageParam,
+					pageSize: rowsPerPage,
+				},
 			});
 			return { totalCount: data.totalCount, workflows: data.workflows };
 		},
@@ -147,9 +161,13 @@ export function usePaginatedGetWorkflows({
 	const workflows = useQuery(
 		["workflows", page, rowsPerPage],
 		async () => {
-			const { data } = await axios("get", "/api/workflow", undefined, {
-				pageNumber: page,
-				pageSize: rowsPerPage,
+			const { data } = await axios({
+				method: "get",
+				url: process.env.REACT_APP_API + "/api/workflow",
+				params: {
+					pageNumber: page,
+					pageSize: rowsPerPage,
+				},
 			});
 			return data;
 		},
@@ -161,9 +179,13 @@ export function usePaginatedGetWorkflows({
 					queryClient.prefetchQuery(
 						["workflows", page + 1, rowsPerPage],
 						async () => {
-							const { data } = await axios("get", "/api/workflow", undefined, {
-								pageNumber: page + 1,
-								pageSize: rowsPerPage,
+							const { data } = await axios({
+								method: "get",
+								url: process.env.REACT_APP_API + "/api/workflow",
+								params: {
+									pageNumber: page + 1,
+									pageSize: rowsPerPage,
+								},
 							});
 							return data;
 						}
@@ -182,9 +204,13 @@ export function useGetFirstWorkflow(): UseQueryResult<{
 }> {
 	// 0th page with size of 1
 	const workflows = useQuery(["workflows", 0, 1], async () => {
-		const { data } = await axios("get", "/api/workflow", undefined, {
-			pageNumber: 0,
-			pageSize: 1,
+		const { data } = await axios({
+			method: "get",
+			url: process.env.REACT_APP_API + "/api/workflow",
+			params: {
+				pageNumber: 0,
+				pageSize: 1,
+			},
 		});
 		return data;
 	});
@@ -202,8 +228,12 @@ export const useSubmitWorkflow = (): UseMutationResult<
 
 	const submitWorkflow = useMutation(
 		async ({ workflow }: { workflow: IArgoWorkflow }) => {
-			const { data } = await axios("post", "/api/workflow/submit", {
-				...workflow,
+			const { data } = await axios({
+				method: "post",
+				url: process.env.REACT_APP_API + "/api/workflow/submit",
+				data: {
+					...workflow,
+				},
 			});
 			return data;
 		},
@@ -224,10 +254,12 @@ export const useSuspendWorkflow = (): UseMutationResult<
 > => {
 	const suspendWorkflow = useMutation(
 		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
-			const { data } = await axios(
-				"put",
-				`/api/workflow/argo/${argoWorkflowName}/suspend`
-			);
+			const { data } = await axios({
+				method: "put",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/argo/${argoWorkflowName}/suspend`,
+			});
 			return data;
 		}
 	);
@@ -242,10 +274,12 @@ export const useResumeWorkflow = (): UseMutationResult<
 > => {
 	const resumeWorkflow = useMutation(
 		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
-			const { data } = await axios(
-				"put",
-				`/api/workflow/argo/${argoWorkflowName}/resume`
-			);
+			const { data } = await axios({
+				method: "put",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/argo/${argoWorkflowName}/resume`,
+			});
 			return data;
 		}
 	);
@@ -260,10 +294,12 @@ export const useStopWorkflow = (): UseMutationResult<
 > => {
 	const stopWorkflow = useMutation(
 		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
-			const { data } = await axios(
-				"put",
-				`/api/workflow/argo/${argoWorkflowName}/stop`
-			);
+			const { data } = await axios({
+				method: "put",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/argo/${argoWorkflowName}/stop`,
+			});
 			return data;
 		}
 	);
@@ -278,12 +314,34 @@ export const useTerminateWorkflow = (): UseMutationResult<
 > => {
 	const terminateWorkflow = useMutation(
 		async ({ argoWorkflowName }: { argoWorkflowName: string }) => {
-			const { data } = await axios(
-				"put",
-				`/api/workflow/argo/${argoWorkflowName}/terminate`
-			);
+			const { data } = await axios({
+				method: "put",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/argo/${argoWorkflowName}/terminate`,
+			});
 			return data;
 		}
 	);
 	return terminateWorkflow;
+};
+
+export const useStatusOfWorkflow = ({
+	argoWorkflowName,
+}: {
+	argoWorkflowName: string;
+}): UseQueryResult => {
+	const statusOfWorkflow = useQuery(
+		["workflow/status", argoWorkflowName],
+		async () => {
+			const { data } = await axios(
+				{
+					url: `http://192.168.1.199:32711/api/v1/workflows/argo/${argoWorkflowName}`,
+				},
+				false
+			);
+			return data;
+		}
+	);
+	return statusOfWorkflow;
 };

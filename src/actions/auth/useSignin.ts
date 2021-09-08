@@ -15,7 +15,14 @@ export const useSignin = (): UseMutationResult<
 	const history = useHistory();
 	const signin = useMutation(
 		async ({ username, password }: Values) =>
-			axios("post", "/users/signin", { username, password }, undefined, false),
+			axios(
+				{
+					method: "post",
+					url: process.env.REACT_APP_API + "/users/signin",
+					data: { username, password },
+				},
+				false
+			),
 		{
 			onSuccess: (response) => {
 				localStorage.setItem("token", response.data.key);
