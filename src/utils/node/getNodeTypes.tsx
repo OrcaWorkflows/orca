@@ -67,7 +67,7 @@ const getNodeTypes = (): nodeTypes => {
 							[classes.unusable]: unusable,
 						})}
 						type="target"
-						id="operator_target"
+						id=":operator_target"
 						isConnectable={!unusable}
 						position={Position.Top}
 					/>
@@ -94,7 +94,7 @@ const getNodeTypes = (): nodeTypes => {
 							[classes.unusable]: unusable,
 						})}
 						type="source"
-						id="operator_source"
+						id=":operator_source"
 						isConnectable={!unusable}
 						position={Position.Bottom}
 					/>
