@@ -12,10 +12,17 @@ import ReactFlow, {
 	Node,
 	OnLoadParams,
 } from "react-flow-renderer";
+import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 
-import { useGetWorkflow, useSetWorkflow } from "actions/workflowActions";
+import {
+	useGetWorkflow,
+	useInfoOfWorkflow,
+	useSetWorkflow,
+} from "actions/workflowActions";
 import { Alert } from "components";
+import { IWorkflow } from "interfaces";
+import getEdgeTypes from "utils/edge/getEdgeTypes";
 import getNodeTypes from "utils/node/getNodeTypes";
 import * as nodeInitialData from "utils/node/nodeInitialData";
 import { HomeParams } from "views/main/Home";
@@ -24,6 +31,7 @@ import FormManager from "views/main/Home/DnDFlow/FormManager";
 import InfoTooltip from "views/main/Home/DnDFlow/InfoTooltip";
 import TopBar from "views/main/Home/DnDFlow/Topbar";
 import WorkflowName from "views/main/Home/DnDFlow/WorkflowName";
+
 // import useLastworkflowID from "views/main/home/useLastworkflowID"; Not used right now
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const nodeTypes = getNodeTypes();
+const edgeTypes = getEdgeTypes();
 
 const onDragOver = (event: DragEvent) => {
 	const isReactFlowElement = event.dataTransfer.types.includes(
@@ -78,11 +87,22 @@ const DnDFlow = (): JSX.Element => {
 		setCounter(max + 1);
 	}, [nodes]);
 
+	const queryClient = useQueryClient();
+	const currentWorkflow = queryClient.getQueryData<IWorkflow>([
+		"workflow",
+		workflowID,
+	]);
+	const argoWorkflowName = currentWorkflow?.argoWorkflowName ?? "";
+	useInfoOfWorkflow(
+		{ argoWorkflowName, infoType: "status" },
+		Boolean(argoWorkflowName)
+	);
+
 	const onConnect = (params: Edge | Connection) => {
-		(params as Edge).animated = true;
+		(params as Edge).animated = false;
 		(params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
 
-		const newEdges = addEdge(params, edges);
+		const newEdges = addEdge({ ...params }, edges);
 		setWorkflow({ property: { ...property, edges: newEdges } });
 	};
 	const onDrop = (event: DragEvent) => {
@@ -124,7 +144,7 @@ const DnDFlow = (): JSX.Element => {
 	};
 	const onElementClick = (_event: MouseEvent, element: Node | Edge) => {
 		//Element is a node
-		if (element.data) setConfiguredNode(element as Node);
+		if ((element as Node).position) setConfiguredNode(element as Node);
 	};
 	return (
 		<>
@@ -140,6 +160,7 @@ const DnDFlow = (): JSX.Element => {
 					onLoad={onLoad}
 					onNodeDragStop={onNodeDragStop}
 					nodeTypes={nodeTypes}
+					edgeTypes={edgeTypes}
 					selectNodesOnDrag={false}
 				>
 					<Controls className={classes.controls} />

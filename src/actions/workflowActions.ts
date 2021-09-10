@@ -326,22 +326,33 @@ export const useTerminateWorkflow = (): UseMutationResult<
 	return terminateWorkflow;
 };
 
-export const useStatusOfWorkflow = ({
-	argoWorkflowName,
-}: {
-	argoWorkflowName: string;
-}): UseQueryResult => {
-	const statusOfWorkflow = useQuery(
-		["workflow/status", argoWorkflowName],
+type infoType = "metadata" | "spec" | "status";
+
+export const useInfoOfWorkflow = (
+	{
+		argoWorkflowName,
+		infoType,
+	}: {
+		argoWorkflowName: string;
+		infoType: infoType;
+	},
+	enabled: boolean
+): UseQueryResult => {
+	const infoOfWorkflow = useQuery(
+		[`workflow/info/${infoType}`, argoWorkflowName],
 		async () => {
-			const { data } = await axios(
-				{
-					url: `http://192.168.1.199:32711/api/v1/workflows/argo/${argoWorkflowName}`,
-				},
-				false
-			);
+			const { data } = await axios({
+				method: "get",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/${argoWorkflowName}/${infoType}`,
+			});
 			return data;
+		},
+		{
+			refetchInterval: 4000,
+			enabled,
 		}
 	);
-	return statusOfWorkflow;
+	return infoOfWorkflow;
 };
