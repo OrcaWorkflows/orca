@@ -258,7 +258,7 @@ export const useSuspendWorkflow = (): UseMutationResult<
 				method: "put",
 				url:
 					process.env.REACT_APP_API +
-					`/api/workflow/argo/${argoWorkflowName}/suspend`,
+					`/api/workflow/${argoWorkflowName}/suspend`,
 			});
 			return data;
 		}
@@ -278,7 +278,7 @@ export const useResumeWorkflow = (): UseMutationResult<
 				method: "put",
 				url:
 					process.env.REACT_APP_API +
-					`/api/workflow/argo/${argoWorkflowName}/resume`,
+					`/api/workflow/${argoWorkflowName}/resume`,
 			});
 			return data;
 		}
@@ -297,8 +297,7 @@ export const useStopWorkflow = (): UseMutationResult<
 			const { data } = await axios({
 				method: "put",
 				url:
-					process.env.REACT_APP_API +
-					`/api/workflow/argo/${argoWorkflowName}/stop`,
+					process.env.REACT_APP_API + `/api/workflow/${argoWorkflowName}/stop`,
 			});
 			return data;
 		}
@@ -318,7 +317,7 @@ export const useTerminateWorkflow = (): UseMutationResult<
 				method: "put",
 				url:
 					process.env.REACT_APP_API +
-					`/api/workflow/argo/${argoWorkflowName}/terminate`,
+					`/api/workflow/${argoWorkflowName}/terminate`,
 			});
 			return data;
 		}
