@@ -16,7 +16,7 @@ import { IArgoWorkflow, IWorkflow } from "interfaces";
 import { axios } from "utils";
 import { HomeParams } from "views/main/Home";
 
-export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
+export function useGetWorkflow(): UseQueryResult<IWorkflow> {
 	const { workflowID } = useParams<HomeParams>();
 
 	const workflow = useQuery(
@@ -29,7 +29,7 @@ export function useGetWorkflow(enabled: boolean): UseQueryResult<IWorkflow> {
 			return data;
 		},
 		{
-			enabled,
+			enabled: Boolean(workflowID),
 		}
 	);
 	return workflow;
@@ -336,7 +336,7 @@ export const useInfoOfWorkflow = (
 		infoType: infoType;
 	},
 	enabled: boolean
-): UseQueryResult => {
+): UseQueryResult<any> => {
 	const infoOfWorkflow = useQuery(
 		[`workflow/info/${infoType}`, argoWorkflowName],
 		async () => {
@@ -354,4 +354,30 @@ export const useInfoOfWorkflow = (
 		}
 	);
 	return infoOfWorkflow;
+};
+
+export const useLogOfPod = (
+	{
+		argoWorkflowName,
+		podName,
+	}: {
+		argoWorkflowName: string;
+		podName: string;
+	},
+	enabled: boolean
+): UseQueryResult<any> => {
+	const logOfPod = useQuery(
+		[`workflow/logs/${podName}`, argoWorkflowName],
+		async () => {
+			const { data } = await axios({
+				method: "get",
+				url:
+					process.env.REACT_APP_API +
+					`/api/workflow/${argoWorkflowName}/${podName}/log`,
+			});
+			return data;
+		},
+		{ enabled }
+	);
+	return logOfPod;
 };
