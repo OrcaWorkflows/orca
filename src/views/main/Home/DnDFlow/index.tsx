@@ -98,6 +98,10 @@ const DnDFlow = (): JSX.Element => {
 		Boolean(argoWorkflowName)
 	);
 
+	useEffect(() => {
+		reactFlowInstance?.fitView({ minZoom: -Infinity, maxZoom: 1 });
+	}, [nodes]);
+
 	const onConnect = (params: Edge | Connection) => {
 		(params as Edge).animated = false;
 		(params as Edge).arrowHeadType = ArrowHeadType.ArrowClosed;
@@ -132,8 +136,8 @@ const DnDFlow = (): JSX.Element => {
 			setConfiguredNode(null);
 		setWorkflow({ property: { nodes: newNodes, edges: newEdges } });
 	};
-	const onLoad = (_reactFlowInstance: OnLoadParams) =>
-		setReactFlowInstance(_reactFlowInstance);
+	const onLoad = (reactFlowInstance: OnLoadParams) =>
+		setReactFlowInstance(reactFlowInstance);
 	const onNodeDragStop = (_event: MouseEvent, node: Node) => {
 		const indexToUpdate = nodes.findIndex((option) => option.id === node.id);
 		const newNodes = [...nodes];
