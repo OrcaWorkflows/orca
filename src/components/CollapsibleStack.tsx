@@ -14,7 +14,7 @@ import DraggableListItem from "./DraggableListItem";
 
 type StackData = {
 	text: string;
-	options: { text: string; icon: string; supported: boolean }[];
+	options: { type: string; icon: string; supported: boolean }[];
 };
 
 const useStyles = makeStyles(() => ({
@@ -53,7 +53,7 @@ const CollapsibleStack = ({
 							draggable && (
 								<DraggableListItem
 									data={option}
-									key={option.text}
+									key={option.type}
 									onDragStart={onDragStart}
 								/>
 							)

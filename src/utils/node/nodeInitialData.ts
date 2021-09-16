@@ -49,6 +49,19 @@ const S3 = {
 	file_type: "",
 };
 
+const SQLInitialData = {
+	host: "",
+	port: "",
+	username: "",
+	password: "",
+	databasename: "",
+	query: "",
+	tablename: "",
+};
+const [MariaDB, MSSQLServer, MySQL, Oracle, PostgreSQL] = [...Array(5)].map(
+	() => SQLInitialData
+);
+
 export {
 	BigQuery,
 	DynamoDB,
@@ -60,4 +73,9 @@ export {
 	PubSub,
 	Redis,
 	S3,
+	MariaDB,
+	MSSQLServer,
+	MySQL,
+	Oracle,
+	PostgreSQL,
 };
