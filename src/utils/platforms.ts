@@ -4,44 +4,74 @@ export const platforms = [
 	{
 		text: "Amazon Web Services",
 		options: [
-			{ text: "S3", icon: nodeImages.S3, supported: true },
-			{ text: "DynamoDB", icon: nodeImages.DynamoDB, supported: true },
-			{ text: "Kinesis", icon: nodeImages.Kinesis, supported: true },
-			{ text: "EMR", icon: nodeImages.EMR, supported: true },
-			{ text: "Lambda", icon: nodeImages.Lambda, supported: false },
-			{ text: "RedShift", icon: nodeImages.RedShift, supported: false },
+			{ type: "S3", icon: nodeImages.S3, supported: true },
+			{ type: "DynamoDB", icon: nodeImages.DynamoDB, supported: true },
+			{ type: "Kinesis", icon: nodeImages.Kinesis, supported: true },
+			{ type: "EMR", icon: nodeImages.EMR, supported: true },
+			{ type: "Lambda", icon: nodeImages.Lambda, supported: false },
+			{ type: "RedShift", icon: nodeImages.RedShift, supported: false },
+		],
+	},
+	{
+		text: "SQL",
+		options: [
+			{
+				type: "PostgreSQL",
+				icon: nodeImages.PostgreSQL,
+				supported: true,
+			},
+			{
+				type: "MySQL",
+				icon: nodeImages.MySQL,
+				supported: true,
+			},
+			{
+				type: "MariaDB",
+				icon: nodeImages.MariaDB,
+				supported: true,
+			},
+			{
+				type: "Oracle",
+				icon: nodeImages.Oracle,
+				supported: true,
+			},
+			{
+				type: "MSSQLServer",
+				icon: nodeImages.MSSQLServer,
+				supported: true,
+			},
 		],
 	},
 	{
 		text: "Google Cloud Platform",
 		options: [
-			{ text: "PubSub", icon: nodeImages.PubSub, supported: true },
-			{ text: "BigQuery", icon: nodeImages.BigQuery, supported: true },
-			{ text: "DataProc", icon: nodeImages.DataProc, supported: false },
+			{ type: "PubSub", icon: nodeImages.PubSub, supported: true },
+			{ type: "BigQuery", icon: nodeImages.BigQuery, supported: true },
+			{ type: "DataProc", icon: nodeImages.DataProc, supported: false },
 			{
-				text: "CloudFunctions",
+				type: "CloudFunctions",
 				icon: nodeImages.CloudFunctions,
 				supported: false,
 			},
-			{ text: "FileStore", icon: nodeImages.FileStore, supported: false },
-			{ text: "MemoryStore", icon: nodeImages.MemoryStore, supported: false },
+			{ type: "FileStore", icon: nodeImages.FileStore, supported: false },
+			{ type: "MemoryStore", icon: nodeImages.MemoryStore, supported: false },
 		],
 	},
 	{
 		text: "Apache Stack",
 		options: [
-			{ text: "Kafka", icon: nodeImages.Kafka, supported: true },
-			{ text: "Spark", icon: nodeImages.Spark, supported: false },
-			{ text: "Flink", icon: nodeImages.Flink, supported: false },
-			{ text: "Pig", icon: nodeImages.Pig, supported: false },
-			{ text: "Hive", icon: nodeImages.Hive, supported: false },
+			{ type: "Kafka", icon: nodeImages.Kafka, supported: true },
+			{ type: "Spark", icon: nodeImages.Spark, supported: false },
+			{ type: "Flink", icon: nodeImages.Flink, supported: false },
+			{ type: "Pig", icon: nodeImages.Pig, supported: false },
+			{ type: "Hive", icon: nodeImages.Hive, supported: false },
 		],
 	},
 	{
 		text: "Elastic Stack",
 		options: [
 			{
-				text: "ElasticSearch",
+				type: "ElasticSearch",
 				icon: nodeImages.ElasticSearch,
 				supported: true,
 			},
@@ -51,7 +81,7 @@ export const platforms = [
 		text: "MongoDB",
 		options: [
 			{
-				text: "MongoDB",
+				type: "MongoDB",
 				icon: nodeImages.MongoDB,
 				supported: true,
 			},
@@ -61,7 +91,7 @@ export const platforms = [
 		text: "Redis",
 		options: [
 			{
-				text: "Redis",
+				type: "Redis",
 				icon: nodeImages.Redis,
 				supported: true,
 			},

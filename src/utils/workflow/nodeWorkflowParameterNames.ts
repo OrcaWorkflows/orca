@@ -48,6 +48,18 @@ const S3 = {
 	file_path: "AWS_S3_FILE_PATH",
 	file_type: "AWS_S3_FILE_TYPE",
 };
+const SQL = {
+	host: "SQL_HOST",
+	port: "SQL_PORT",
+	username: "SQL_USERNAME",
+	password: "SQL_PASSWORD",
+	databasename: "SQL_DATABASE",
+	query: "SQL_TEXT",
+	tablename: "SQL_TABLENAME",
+};
+const [MariaDB, MSSQLServer, MySQL, Oracle, PostgreSQL] = [...Array(5)].map(
+	() => SQL
+);
 
 export {
 	BigQuery,
@@ -60,4 +72,9 @@ export {
 	PubSub,
 	Redis,
 	S3,
+	MariaDB,
+	MSSQLServer,
+	MySQL,
+	Oracle,
+	PostgreSQL,
 };

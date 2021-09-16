@@ -14,6 +14,7 @@ import {
 	PubSub,
 	Redis,
 	S3,
+	SQL,
 } from "views/main/Home/nodeForms";
 
 const FormManager = ({
@@ -111,6 +112,18 @@ const FormManager = ({
 						)}
 						{configuredNode.type === "S3" && (
 							<S3
+								configuredNode={configuredNode}
+								handleClose={handleClose}
+								nodes={nodes}
+								edges={edges}
+							/>
+						)}
+						{(configuredNode.type === "PostgreSQL" ||
+							configuredNode.type === "MySQL" ||
+							configuredNode.type === "MariaDB" ||
+							configuredNode.type === "Oracle" ||
+							configuredNode.type === "MSSQLServer") && (
+							<SQL
 								configuredNode={configuredNode}
 								handleClose={handleClose}
 								nodes={nodes}

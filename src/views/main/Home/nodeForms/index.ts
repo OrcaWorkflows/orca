@@ -8,3 +8,4 @@ export { default as MongoDB } from "views/main/Home/nodeForms/MongoDB";
 export { default as PubSub } from "views/main/Home/nodeForms/PubSub";
 export { default as Redis } from "views/main/Home/nodeForms/Redis";
 export { default as S3 } from "views/main/Home/nodeForms/S3";
+export { default as SQL } from "views/main/Home/nodeForms/SQL";

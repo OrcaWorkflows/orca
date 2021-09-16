@@ -43,7 +43,7 @@ const DraggableListItem = ({
 	data,
 	onDragStart,
 }: {
-	data: { text: string; icon: string; supported: boolean };
+	data: { type: string; icon: string; supported: boolean };
 	onDragStart: (event: DragEvent, data: string) => void;
 }): JSX.Element => {
 	const classes = useStyles({ supported: data.supported });
@@ -54,9 +54,9 @@ const DraggableListItem = ({
 				[classes.draggable]: data.supported,
 				[classes.unusable]: !data.supported,
 			})}
-			key={data.text}
+			key={data.type}
 			onDragStart={(event: DragEvent) => {
-				onDragStart(event, data.text);
+				onDragStart(event, data.type);
 				(event.target as Element).classList.add(classes.dragging);
 				(
 					event.target as Element
@@ -77,7 +77,7 @@ const DraggableListItem = ({
 			<ListItemIcon>
 				<img src={data.icon} style={{ height: 36 }} draggable={false} />
 			</ListItemIcon>
-			<ListItemText primary={data.text} />
+			<ListItemText primary={data.type} />
 		</ListItem>
 	);
 };
