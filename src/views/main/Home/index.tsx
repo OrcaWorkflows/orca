@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Grid, Divider, Paper, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useGetFirstWorkflow } from "actions/workflowActions";
 import DnDFlow from "views/main/Home/DnDFlow";
 import Sidebar from "views/main/Home/Sidebar";
+import WorkflowLog from "views/main/Home/WorkflowLog";
 
 const useStyles = makeStyles((theme) => ({
 	fullHeight: { height: "100%" },
@@ -29,6 +30,7 @@ const Home = (): JSX.Element => {
 	const classes = useStyles();
 	const history = useHistory();
 	const { workflowID } = useParams<HomeParams>();
+	const [loggedPodName, setLoggedPodName] = useState("");
 
 	const workflows = useGetFirstWorkflow().data?.workflows;
 	const lastCreatedWorkflowID = workflows?.length ? workflows[0].id : undefined;
@@ -44,37 +46,39 @@ const Home = (): JSX.Element => {
 	}, [lastCreatedWorkflowID]);
 
 	return (
-		<Paper className={classes.root}>
-			<Grid
-				container
-				className={classes.fullHeight}
-				justifyContent="space-between"
-			>
-				<OverlayScrollbarsComponent
-					options={{
-						scrollbars: { autoHide: "leave" },
-					}}
+		<>
+			<Paper className={classes.root}>
+				<Grid
+					container
+					className={classes.fullHeight}
+					justifyContent="space-between"
 				>
-					<Grid
-						item
-						className={clsx(classes.fullHeight, classes.sidebar)}
-						xs="auto"
+					<OverlayScrollbarsComponent
+						options={{
+							scrollbars: { autoHide: "leave" },
+						}}
 					>
-						<Sidebar />
+						<Grid
+							item
+							className={clsx(classes.fullHeight, classes.sidebar)}
+							xs="auto"
+						>
+							<Sidebar />
+						</Grid>
+					</OverlayScrollbarsComponent>
+					<Divider flexItem orientation="vertical" />
+					<Grid item className={(classes.fullHeight, classes.DnDFlow)} xs>
+						<Paper className={classes.fullHeight} variant="outlined">
+							<DnDFlow setLoggedPodName={setLoggedPodName} />
+						</Paper>
 					</Grid>
-				</OverlayScrollbarsComponent>
-				<Divider flexItem orientation="vertical" />
-				<Grid item className={(classes.fullHeight, classes.DnDFlow)} xs>
-					<Paper className={classes.fullHeight} variant="outlined">
-						<DnDFlow />
-					</Paper>
 				</Grid>
-
-				{/* <Grid item className={classes.fullHeight} xs="auto">
-					Monitoring
-				</Grid> */}
-			</Grid>
-		</Paper>
+			</Paper>
+			<WorkflowLog
+				podName={loggedPodName}
+				setLoggedPodName={setLoggedPodName}
+			/>
+		</>
 	);
 };
 

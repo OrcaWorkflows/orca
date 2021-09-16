@@ -1,4 +1,12 @@
-import { useRef, useState, useEffect, DragEvent, MouseEvent } from "react";
+import {
+	useRef,
+	useState,
+	useEffect,
+	Dispatch,
+	DragEvent,
+	MouseEvent,
+	SetStateAction,
+} from "react";
 
 import { makeStyles } from "@material-ui/core";
 import ReactFlow, {
@@ -60,7 +68,11 @@ const onDragOver = (event: DragEvent) => {
 	event.dataTransfer.dropEffect = "move";
 };
 
-const DnDFlow = (): JSX.Element => {
+const DnDFlow = ({
+	setLoggedPodName,
+}: {
+	setLoggedPodName: Dispatch<SetStateAction<string>>;
+}): JSX.Element => {
 	const classes = useStyles();
 
 	const { workflowID } = useParams<HomeParams>();
@@ -69,12 +81,10 @@ const DnDFlow = (): JSX.Element => {
 	const [counter, setCounter] = useState(0);
 	const [configuredNode, setConfiguredNode] = useState<Node | null>(null);
 
-	const { data, isError: getWorkflowError } = useGetWorkflow(
-		Boolean(workflowID)
-	);
+	const { data: workflowData, isError: getWorkflowError } = useGetWorkflow();
 
-	const nodes = data?.property.nodes ?? [];
-	const edges = data?.property.edges ?? [];
+	const nodes = workflowData?.property.nodes ?? [];
+	const edges = workflowData?.property.edges ?? [];
 	const property = { nodes, edges };
 	const { isError: setWorkflowError, mutate: setWorkflow } = useSetWorkflow();
 
@@ -93,7 +103,7 @@ const DnDFlow = (): JSX.Element => {
 		workflowID,
 	]);
 	const argoWorkflowName = currentWorkflow?.argoWorkflowName ?? "";
-	useInfoOfWorkflow(
+	const { data: statusData } = useInfoOfWorkflow(
 		{ argoWorkflowName, infoType: "status" },
 		Boolean(argoWorkflowName)
 	);
@@ -147,9 +157,21 @@ const DnDFlow = (): JSX.Element => {
 		setWorkflow({ property: { ...property, nodes: newNodes } });
 	};
 	const onElementClick = (_event: MouseEvent, element: Node | Edge) => {
-		//Element is a node
+		// Element is a node
 		if ((element as Node).position) setConfiguredNode(element as Node);
+		// Element is an edge
+		else {
+			const currentEdgeStatus: any = Object.values(
+				statusData?.nodes ?? {}
+			).find(
+				(node: any) =>
+					node.displayName ===
+					(element as Edge).source + "-" + (element as Edge).target
+			);
+			setLoggedPodName(currentEdgeStatus.id ?? "");
+		}
 	};
+
 	return (
 		<>
 			<TopBar nodes={nodes} edges={edges} />
