@@ -34,4 +34,5 @@ export interface IWorkflow {
 	name: string;
 	property: { nodes: Elements; edges: Elements };
 	updatedAt: string;
+	submitted: boolean;
 }

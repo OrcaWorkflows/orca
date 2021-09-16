@@ -120,6 +120,7 @@ const TopBar = ({
 								}}
 								variant="contained"
 							>
+								{currentWorkflow && (currentWorkflow.submitted ? null : "*")}
 								Submit
 							</Button>
 						</span>
