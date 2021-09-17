@@ -8,6 +8,7 @@ import { useQueryClient } from "react-query";
 import { useInfiniteGetWorkFlows } from "actions/workflowActions";
 import { ServerError } from "components";
 import { IWorkflow } from "interfaces";
+import AddTooltip from "views/main/Home/DnDFlow/AddTooltip";
 import Loading from "views/main/Workflows/Loading";
 import Workflow from "views/main/Workflows/Workflow";
 
@@ -57,37 +58,36 @@ const Workflows = (): JSX.Element => {
 				{isLoading ? (
 					<Loading rowsPerPage={rowsPerPage} />
 				) : (
-					<InfiniteScroll
-						className={classes.infiniteScroll}
-						dataLength={data!.pages.length}
-						endMessage={
-							window.scrollY > 0 && (
-								<Grid
-									className={classes.scrollToTop}
-									container
-									justifyContent="flex-end"
-								>
-									<IconButton onClick={handleScrollToTop}>
-										<ArrowUpCircle size={36} />
-									</IconButton>
-								</Grid>
-							)
-						}
-						hasMore={!!hasNextPage}
-						loader={<Loading rowsPerPage={rowsPerPage / 2} />}
-						next={fetchNextPage}
-						scrollThreshold={0.75}
-					>
-						<Grid container justifyContent="center" spacing={3}>
-							{data!.pages.map((group) =>
-								group.workflows.map((workflow: IWorkflow) => (
-									<Grid item xs="auto" key={workflow.id}>
-										<Workflow workflow={workflow} />
+					<>
+						<InfiniteScroll
+							className={classes.infiniteScroll}
+							dataLength={data!.pages.length}
+							endMessage={
+								window.scrollY > 0 && (
+									<Grid className={classes.scrollToTop} container>
+										<IconButton onClick={handleScrollToTop}>
+											<ArrowUpCircle size={36} />
+										</IconButton>
 									</Grid>
-								))
-							)}
-						</Grid>
-					</InfiniteScroll>
+								)
+							}
+							hasMore={!!hasNextPage}
+							loader={<Loading rowsPerPage={rowsPerPage / 2} />}
+							next={fetchNextPage}
+							scrollThreshold={0.75}
+						>
+							<Grid container justifyContent="center" spacing={3}>
+								{data!.pages.map((group) =>
+									group.workflows.map((workflow: IWorkflow) => (
+										<Grid item xs="auto" key={workflow.id}>
+											<Workflow workflow={workflow} />
+										</Grid>
+									))
+								)}
+							</Grid>
+						</InfiniteScroll>
+						<AddTooltip />
+					</>
 				)}
 			</Container>
 			{getWorkflowsError && <ServerError />}

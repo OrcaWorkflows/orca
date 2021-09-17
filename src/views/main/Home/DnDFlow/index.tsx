@@ -69,9 +69,11 @@ const onDragOver = (event: DragEvent) => {
 };
 
 const DnDFlow = ({
+	setOpenLog,
 	setLoggedPodName,
 }: {
-	setLoggedPodName: Dispatch<SetStateAction<string>>;
+	setOpenLog: Dispatch<SetStateAction<boolean>>;
+	setLoggedPodName: Dispatch<SetStateAction<string | undefined>>;
 }): JSX.Element => {
 	const classes = useStyles();
 
@@ -107,10 +109,21 @@ const DnDFlow = ({
 		{ argoWorkflowName, infoType: "status" },
 		Boolean(argoWorkflowName)
 	);
+	const [selectedEdgeCustomID, setSelectedEdgeCustomID] = useState("");
+	useEffect(() => {
+		if (selectedEdgeCustomID) {
+			const currentEdgeStatus: any = Object.values(
+				statusData?.nodes ?? {}
+			).find((node: any) => node.displayName === selectedEdgeCustomID);
+			setLoggedPodName(currentEdgeStatus?.id);
+		}
+	}, [selectedEdgeCustomID, statusData]);
 
 	useEffect(() => {
-		reactFlowInstance?.fitView({ minZoom: -Infinity, maxZoom: 1 });
-	}, [nodes]);
+		if (reactFlowInstance) {
+			reactFlowInstance.fitView({ minZoom: -Infinity, maxZoom: 1 });
+		}
+	}, [nodes, reactFlowInstance]);
 
 	const onConnect = (params: Edge | Connection) => {
 		(params as Edge).animated = false;
@@ -161,20 +174,15 @@ const DnDFlow = ({
 		if ((element as Node).position) setConfiguredNode(element as Node);
 		// Element is an edge
 		else {
-			const currentEdgeStatus: any = Object.values(
-				statusData?.nodes ?? {}
-			).find(
-				(node: any) =>
-					node.displayName ===
-					(element as Edge).source + "-" + (element as Edge).target
+			setSelectedEdgeCustomID(
+				(element as Edge).source + "-" + (element as Edge).target
 			);
-			setLoggedPodName(currentEdgeStatus.id ?? "");
+			setOpenLog(true);
 		}
 	};
-
 	return (
 		<>
-			<TopBar nodes={nodes} edges={edges} />
+			<TopBar nodes={nodes} edges={edges} />{" "}
 			<div className={classes.reactFlowWrapper} ref={reactFlowWrapper}>
 				<ReactFlow
 					elements={nodes.concat(edges)}
