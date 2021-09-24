@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { BigQueryValidationSchema } from "views/main/Home/nodeForms/BigQuery";
-import { DynamoDBValidationSchema } from "views/main/Home/nodeForms/DynamoDB";
-import { ElasticSearchValidationSchema } from "views/main/Home/nodeForms/ElasticSearch";
-import { EMRValidationSchema } from "views/main/Home/nodeForms/EMR";
-import { KafkaValidationSchema } from "views/main/Home/nodeForms/Kafka";
-import { KinesisValidationSchema } from "views/main/Home/nodeForms/Kinesis";
-import { MongoDBValidationSchema } from "views/main/Home/nodeForms/MongoDB";
-import { PubSubValidationSchema } from "views/main/Home/nodeForms/PubSub";
-import { RedisValidationSchema } from "views/main/Home/nodeForms/Redis";
-import { S3ValidationSchema } from "views/main/Home/nodeForms/S3";
+import { BigQueryValidationSchema } from "components/FormManager/BigQuery";
+import { DynamoDBValidationSchema } from "components/FormManager/DynamoDB";
+import { ElasticSearchValidationSchema } from "components/FormManager/ElasticSearch";
+import { EMRValidationSchema } from "components/FormManager/EMR";
+import { KafkaValidationSchema } from "components/FormManager/Kafka";
+import { KinesisValidationSchema } from "components/FormManager/Kinesis";
+import { MongoDBValidationSchema } from "components/FormManager/MongoDB";
+import { PubSubValidationSchema } from "components/FormManager/PubSub";
+import { RedisValidationSchema } from "components/FormManager/Redis";
+import { S3ValidationSchema } from "components/FormManager/S3";
 
 const useValidateNode = (
 	type: string,

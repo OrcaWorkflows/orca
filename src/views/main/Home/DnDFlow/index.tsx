@@ -30,12 +30,13 @@ import {
 } from "actions/workflowActions";
 import { Alert } from "components";
 import { IWorkflow } from "interfaces";
+import { platforms } from "utils";
 import getEdgeTypes from "utils/edge/getEdgeTypes";
 import getNodeTypes from "utils/node/getNodeTypes";
 import * as nodeInitialData from "utils/node/nodeInitialData";
 import { HomeParams } from "views/main/Home";
 import AddTooltip from "views/main/Home/DnDFlow/AddTooltip";
-import FormManager from "views/main/Home/DnDFlow/FormManager";
+import ConfigurationDialog from "views/main/Home/DnDFlow/ConfigurationDialog";
 import InfoTooltip from "views/main/Home/DnDFlow/InfoTooltip";
 import TopBar from "views/main/Home/DnDFlow/Topbar";
 import WorkflowName from "views/main/Home/DnDFlow/WorkflowName";
@@ -128,8 +129,14 @@ const DnDFlow = ({
 				x: event.clientX - reactFlowBounds.left,
 				y: event.clientY - reactFlowBounds.top,
 			});
+			let platformText;
+			for (const platform of platforms) {
+				for (const option of platform.options) {
+					if (option.type === type) platformText = option.text;
+				}
+			}
 			const newNode: Node = {
-				id: type + "-" + counter,
+				id: platformText + "-" + counter,
 				type,
 				position,
 				data: { ...nodeInitialData[type as keyof typeof nodeInitialData] },
@@ -191,12 +198,14 @@ const DnDFlow = ({
 				>
 					<Controls className={classes.controls} />
 				</ReactFlow>
-				<FormManager
-					configuredNode={configuredNode}
-					setConfiguredNode={setConfiguredNode}
-					nodes={nodes}
-					edges={edges}
-				/>
+				{configuredNode && (
+					<ConfigurationDialog
+						configuredNode={configuredNode}
+						setConfiguredNode={setConfiguredNode}
+						nodes={nodes}
+						edges={edges}
+					/>
+				)}
 				<WorkflowName />
 				<InfoTooltip />
 				<AddTooltip />

@@ -19,6 +19,7 @@ import Home from "views/main/Home";
 import Monitor from "views/main/Monitor";
 import Schedule from "views/main/Schedule";
 import Settings from "views/main/Settings";
+import OperatorConfigurations from "views/main/Settings/OperatorConfigurations";
 import Workflows from "views/main/Workflows";
 
 import "overlayscrollbars/css/OverlayScrollbars.css";
@@ -55,6 +56,12 @@ ReactDOM.render(
 					<MainRoute component={Monitor} path="/monitor" protect exact />
 					<MainRoute component={Schedule} path="/schedule" protect exact />
 					<MainRoute component={Settings} path="/settings" protect exact />
+					<MainRoute
+						component={OperatorConfigurations}
+						path="/settings/operator-configurations"
+						protect
+						exact
+					/>
 					<Route component={NotFoundRedirect} />
 				</Switch>
 			</Router>

@@ -15,10 +15,16 @@ export function addWorkflowParametersToTask(
 		) {
 			const platform =
 				parameterNames[sourceNode.type as keyof typeof parameterNames];
-			task.arguments.parameters.push({
-				name: platform[parameter as keyof typeof platform],
-				value: sourceNode.data[parameter],
-			});
+			if (parameter === "config")
+				task.arguments.parameters.push({
+					name: "SOURCE_SYSTEM_CONFIG_ID",
+					value: sourceNode.data[parameter].id,
+				});
+			else
+				task.arguments.parameters.push({
+					name: platform[parameter as keyof typeof platform],
+					value: sourceNode.data[parameter],
+				});
 		}
 	}
 	for (const parameter in targetNode.data) {
@@ -28,10 +34,16 @@ export function addWorkflowParametersToTask(
 		) {
 			const platform =
 				parameterNames[targetNode.type as keyof typeof parameterNames];
-			task.arguments.parameters.push({
-				name: platform[parameter as keyof typeof platform],
-				value: targetNode.data[parameter],
-			});
+			if (parameter === "config") {
+				task.arguments.parameters.push({
+					name: "TARGET_SYSTEM_CONFIG_ID",
+					value: targetNode.data[parameter].id,
+				});
+			} else
+				task.arguments.parameters.push({
+					name: platform[parameter as keyof typeof platform],
+					value: targetNode.data[parameter],
+				});
 		}
 	}
 }

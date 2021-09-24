@@ -24,8 +24,9 @@ export const useSignin = (): UseMutationResult<
 				false
 			),
 		{
-			onSuccess: (response) => {
+			onSuccess: (response, variables) => {
 				localStorage.setItem("token", response.data.key);
+				localStorage.setItem("username", variables.username);
 				history.push("/home");
 			},
 		}
