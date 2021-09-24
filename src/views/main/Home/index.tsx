@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { Grid, Divider, Paper, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { ReactFlowProvider } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
 import { useGetFirstWorkflow } from "actions/workflowActions";
 import DnDFlow from "views/main/Home/DnDFlow";
@@ -29,21 +30,31 @@ export type HomeParams = {
 const Home = (): JSX.Element => {
 	const classes = useStyles();
 	const history = useHistory();
+	const location = useLocation();
 	const { workflowID } = useParams<HomeParams>();
-	const [loggedPodName, setLoggedPodName] = useState("");
+	const [loggedPodName, setLoggedPodName] = useState<string | undefined>();
+	const [openLog, setOpenLog] = useState(false);
 
 	const workflows = useGetFirstWorkflow().data?.workflows;
 	const lastCreatedWorkflowID = workflows?.length ? workflows[0].id : undefined;
 
 	const queryClient = useQueryClient();
 	useEffect(() => {
-		if (lastCreatedWorkflowID) {
+		if (
+			lastCreatedWorkflowID &&
+			!(
+				location as {
+					pathname: string;
+					state: { addNew: boolean } | undefined;
+				}
+			).state?.addNew
+		) {
 			if (!workflowID) history.replace(`/home/${lastCreatedWorkflowID}`);
 			return () => {
 				queryClient.resetQueries(["workflows", 0, 1]);
 			};
 		}
-	}, [lastCreatedWorkflowID]);
+	}, [lastCreatedWorkflowID, location]);
 
 	return (
 		<>
@@ -69,14 +80,20 @@ const Home = (): JSX.Element => {
 					<Divider flexItem orientation="vertical" />
 					<Grid item className={(classes.fullHeight, classes.DnDFlow)} xs>
 						<Paper className={classes.fullHeight} variant="outlined">
-							<DnDFlow setLoggedPodName={setLoggedPodName} />
+							<ReactFlowProvider>
+								<DnDFlow
+									setOpenLog={setOpenLog}
+									setLoggedPodName={setLoggedPodName}
+								/>
+							</ReactFlowProvider>
 						</Paper>
 					</Grid>
 				</Grid>
 			</Paper>
 			<WorkflowLog
+				openLog={openLog}
+				setOpenLog={setOpenLog}
 				podName={loggedPodName}
-				setLoggedPodName={setLoggedPodName}
 			/>
 		</>
 	);

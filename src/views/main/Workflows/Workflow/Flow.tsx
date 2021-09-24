@@ -5,7 +5,7 @@ import { IWorkflow } from "interfaces";
 import getNodeTypes from "utils/node/getNodeTypes";
 
 const useStyles = makeStyles(() => ({
-	reactFlowWrapper: { width: 300, height: 200, position: "relative" },
+	reactFlowWrapper: { width: "100%", height: "100%", position: "relative" },
 }));
 
 const nodeTypes = getNodeTypes();

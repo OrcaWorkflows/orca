@@ -362,7 +362,7 @@ export const useLogOfPod = (
 		podName,
 	}: {
 		argoWorkflowName: string;
-		podName: string;
+		podName: string | undefined;
 	},
 	enabled: boolean
 ): UseQueryResult<any> => {
@@ -377,7 +377,7 @@ export const useLogOfPod = (
 			});
 			return data;
 		},
-		{ enabled }
+		{ refetchInterval: 2000, enabled }
 	);
 	return logOfPod;
 };

@@ -4,9 +4,9 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
 	addIcon: {
-		position: "absolute",
-		bottom: 10,
-		right: 10,
+		position: "fixed",
+		bottom: 30,
+		right: 30,
 		zIndex: 5,
 	},
 }));
@@ -21,7 +21,7 @@ const AddTooltip = (): JSX.Element => {
 				size="medium"
 				color="secondary"
 				onClick={() => {
-					history.replace("/home");
+					history.push({ pathname: "/home", state: { addNew: true } });
 				}}
 			>
 				<Plus />

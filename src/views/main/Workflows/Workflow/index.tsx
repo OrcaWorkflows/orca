@@ -1,9 +1,11 @@
 import { useState } from "react";
 
 import {
+	Box,
 	Card,
+	CardActionArea,
+	CircularProgress,
 	Paper,
-	CardContent,
 	IconButton,
 	makeStyles,
 	Typography,
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 	card: {
 		backfaceVisibility: "hidden",
 		WebkitBackfaceVisibility: "hidden",
+		display: "flex", // To center CircularProgress
 		position: "relative",
 		transition: theme.transitions.create(["transform"], {
 			easing: theme.transitions.easing.sharp,
@@ -32,7 +35,10 @@ const useStyles = makeStyles((theme) => ({
 			opacity: 1,
 			visibility: "visible",
 		},
+		height: 200,
+		width: 300,
 	},
+	cardActionArea: { height: "100%", width: "100%" },
 	actions: {
 		backgroundColor: theme.palette.action.hover,
 		color: theme.palette.secondary.main,
@@ -58,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
 		top: 5,
 		fontWeight: theme.typography.fontWeightBold,
 	},
+	id: {
+		position: "absolute",
+		right: 5,
+		top: 5,
+		fontWeight: theme.typography.fontWeightLight,
+	},
 }));
 
 const Workflow = ({ workflow }: { workflow: IWorkflow }): JSX.Element => {
@@ -65,21 +77,39 @@ const Workflow = ({ workflow }: { workflow: IWorkflow }): JSX.Element => {
 	const history = useHistory();
 
 	const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
-	const { isError: deleteWorkflowError, mutate } = useDeleteWorkflow();
+	const {
+		isError: isErrorDeleteWorkflow,
+		isLoading: isLoadingDeleteWorkflow,
+		mutate,
+	} = useDeleteWorkflow();
+
+	const handleDirectToWorkflowClick = () => history.push(`home/${workflow.id}`);
 
 	return (
 		<>
 			<Card className={classes.card} raised>
-				<CardContent>
-					<ReactFlowProvider>
-						<Flow workflow={workflow} />
-					</ReactFlowProvider>
-				</CardContent>
+				{isLoadingDeleteWorkflow ? (
+					<Box margin="auto">
+						<CircularProgress />
+					</Box>
+				) : (
+					<CardActionArea
+						className={classes.cardActionArea}
+						onClick={handleDirectToWorkflowClick}
+					>
+						{/* Provides is required for fitView to function on load */}
+						<ReactFlowProvider>
+							<Flow workflow={workflow} />
+						</ReactFlowProvider>
+					</CardActionArea>
+				)}
 				<Typography className={classes.name} variant="caption">
+					{workflow.name}
+				</Typography>
+				<Typography className={classes.id} variant="caption">
 					Workflow - {workflow.id}
 				</Typography>
 				<Paper className={classes.actions}>
-					<IconButton></IconButton>
 					<IconButton size="small" onClick={() => setOpenRemoveDialog(true)}>
 						<Trash2 size={20} />
 					</IconButton>
@@ -104,7 +134,7 @@ const Workflow = ({ workflow }: { workflow: IWorkflow }): JSX.Element => {
 				title="Remove workflow"
 				text={`Are you sure to remove Workflow - ${workflow.id}?`}
 			/>
-			{deleteWorkflowError && <ServerError />}
+			{isErrorDeleteWorkflow && <ServerError />}
 		</>
 	);
 };
