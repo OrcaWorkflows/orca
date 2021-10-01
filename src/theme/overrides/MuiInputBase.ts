@@ -5,9 +5,6 @@ const MuiInputBase = {
 			transitionProperty: "background-color, color",
 		},
 	},
-	inputMultiline: {
-		resize: "vertical",
-	},
 };
 
 export default MuiInputBase;
