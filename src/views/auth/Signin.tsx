@@ -3,7 +3,6 @@ import {
 	Grid,
 	Link,
 	SvgIcon,
-	TextField,
 	Typography,
 	makeStyles,
 } from "@material-ui/core";
@@ -14,9 +13,9 @@ import * as yup from "yup";
 
 import { useSignin, Values } from "actions/auth/useSignin";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
-import { Alert } from "components";
+import { Alert, TextField } from "components";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
 	fullHeight: { height: "100%" },
 	signupLink: {
 		"&:hover $signupIcon": {
@@ -27,11 +26,16 @@ const useStyles = makeStyles({
 	signupIcon: {
 		verticalAlign: "middle",
 	},
-});
+	paper: {
+		backgroundColor: theme.palette.primary.light,
+		color: theme.palette.error.main,
+		padding: theme.spacing(1),
+	},
+}));
 
 const signinValidationSchema = yup.object({
-	username: yup.string().required(),
-	password: yup.string().required(),
+	username: yup.string().required("User Name is a required field"),
+	password: yup.string().required("Password is a required field"),
 });
 
 const Signin = (): JSX.Element => {
@@ -61,7 +65,7 @@ const Signin = (): JSX.Element => {
 							direction="column"
 							alignItems="center"
 							justifyContent="center"
-							spacing={2}
+							spacing={1}
 						>
 							<Grid item>
 								<OrcaLogo title="ORCA" />
@@ -77,8 +81,8 @@ const Signin = (): JSX.Element => {
 									}) => {
 										return (
 											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
+												fieldInputProps={field}
+												fieldMetaProps={meta}
 												label="User Name"
 												required
 											/>
@@ -97,8 +101,8 @@ const Signin = (): JSX.Element => {
 									}) => {
 										return (
 											<TextField
-												{...field}
-												error={!!(meta.touched && meta.error)}
+												fieldInputProps={field}
+												fieldMetaProps={meta}
 												label="Password"
 												required
 												type="password"

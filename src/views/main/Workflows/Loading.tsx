@@ -17,7 +17,7 @@ const Loading = ({ rowsPerPage }: { rowsPerPage: number }): JSX.Element => {
 		>
 			{[...Array(rowsPerPage)].map((_value, index) => (
 				<Grid item xs="auto" key={index}>
-					<Skeleton variant="rect" height={180} width={330} />
+					<Skeleton variant="rect" height={180} width={300} />
 					<Skeleton className={classes.actions} variant="rect" height={50} />
 				</Grid>
 			))}

@@ -21,7 +21,7 @@ export const platforms = [
 			{
 				type: "lambda",
 				icon: nodeImages.lambda,
-				supported: false,
+				supported: true,
 				text: "Lambda",
 			},
 			// {

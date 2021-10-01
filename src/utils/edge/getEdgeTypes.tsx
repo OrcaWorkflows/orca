@@ -52,11 +52,15 @@ const useStyles = makeStyles((theme) => ({
 		stroke: theme.palette.success.main,
 		strokeWidth: 2,
 		strokeDasharray: "10 4",
-		animation: `$succeededFrames 0.2s ${theme.transitions.easing.sharp} infinite`,
 	},
 	failed: {
 		stroke: theme.palette.error.main,
 		strokeWidth: 2,
+	},
+	omitted: {
+		stroke: theme.palette.primary.light,
+		strokeWidth: 2,
+		strokeDasharray: "5%",
 	},
 	selected: {
 		stroke: theme.palette.warning.light,
@@ -110,7 +114,7 @@ const getEdgeTypes = (): EdgeTypesType => {
 						<animateMotion dur="2s" repeatCount="indefinite" path={edgePath} />
 					</circle>
 				)}
-				<filter id="shadow" x="0" y="0">
+				<filter id="errorShadow" x="0" y="0">
 					<feDropShadow
 						stdDeviation="8"
 						floodColor={theme.palette.error.light}
@@ -124,6 +128,7 @@ const getEdgeTypes = (): EdgeTypesType => {
 						/>
 					</feDropShadow>
 				</filter>
+
 				<path className={classes.pathSelector} d={edgePath} />
 				<path
 					id={props.id}
@@ -132,6 +137,7 @@ const getEdgeTypes = (): EdgeTypesType => {
 						[classes.running]: currentEdgeStatus?.phase === "Running",
 						[classes.succeeded]: currentEdgeStatus?.phase === "Succeeded",
 						[classes.failed]: currentEdgeStatus?.phase === "Failed",
+						[classes.omitted]: currentEdgeStatus?.phase === "Omitted",
 						[classes.selected]: props.selected,
 					})}
 					{...(currentEdgeStatus?.phase === "Running"
@@ -142,32 +148,15 @@ const getEdgeTypes = (): EdgeTypesType => {
 								},
 						  }
 						: {})}
-					{...(currentEdgeStatus?.phase === "Failed" && {
-						filter: "url(#shadow)",
-					})}
+					{...(currentEdgeStatus?.phase === "Failed"
+						? {
+								filter: "url(#errorShadow)",
+						  }
+						: {})}
 					d={edgePath}
 					markerEnd={markerEnd}
 				/>
-				<text
-					style={{
-						fontWeight: theme.typography.fontWeightBold,
-						fill: props.selected
-							? theme.palette.warning.light
-							: currentEdgeStatus?.phase === "Pending"
-							? theme.palette.primary.main
-							: currentEdgeStatus?.phase === "Running"
-							? theme.palette.info.main
-							: currentEdgeStatus?.phase === "Succeeded"
-							? theme.palette.success.main
-							: currentEdgeStatus?.phase === "Failed"
-							? theme.palette.error.main
-							: "unset",
-					}}
-				>
-					<textPath href={`#${props.id}`} startOffset="50%" textAnchor="middle">
-						{currentEdgeStatus?.phase}
-					</textPath>
-				</text>
+				<title>{currentEdgeStatus?.phase}</title>
 			</>
 		);
 	};

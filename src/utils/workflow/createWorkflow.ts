@@ -18,7 +18,7 @@ export function addWorkflowParametersToTask(
 			if (parameter === "config")
 				task.arguments.parameters.push({
 					name: "SOURCE_SYSTEM_CONFIG_ID",
-					value: sourceNode.data[parameter].id,
+					value: sourceNode.data[parameter]?.id,
 				});
 			else
 				task.arguments.parameters.push({
@@ -37,7 +37,7 @@ export function addWorkflowParametersToTask(
 			if (parameter === "config") {
 				task.arguments.parameters.push({
 					name: "TARGET_SYSTEM_CONFIG_ID",
-					value: targetNode.data[parameter].id,
+					value: targetNode.data[parameter]?.id,
 				});
 			} else
 				task.arguments.parameters.push({

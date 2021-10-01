@@ -1,9 +1,10 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const ElasticSearchValidationSchema = yup.object({
-	index_name: yup.string().required("Index name is a required field"),
+	index_name: yup.string().required("Index Name is a required field"),
 });
 
 const ElasticSearch = ({
@@ -11,21 +12,13 @@ const ElasticSearch = ({
 }: {
 	formik: ReturnType<typeof useFormik>;
 }): JSX.Element => (
-	<>
-		<TextField
-			{...formik.getFieldProps("index_name")}
-			error={
-				!!(
-					formik.getFieldMeta("index_name").touched &&
-					formik.getFieldMeta("index_name").error
-				)
-			}
-			fullWidth
-			label="Index Name"
-			margin="dense"
-			required
-		/>
-	</>
+	<TextField
+		fieldInputProps={{ ...formik.getFieldProps("index_name") }}
+		fieldMetaProps={{ ...formik.getFieldMeta("index_name") }}
+		fullWidth
+		label="Index Name"
+		required
+	/>
 );
 
 export default ElasticSearch;

@@ -1,22 +1,46 @@
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
+import { useFormik } from "formik";
 
-const ChangePassword = (): JSX.Element => {
+import { TextField } from "components";
+
+const ChangePassword = ({
+	formik,
+}: {
+	formik: ReturnType<typeof useFormik>;
+}): JSX.Element => {
 	return (
-		<Grid container direction="column" spacing={2}>
-			<Grid item>
+		<Grid container spacing={2}>
+			<Grid item xs={8}>
 				<Typography variant="subtitle2">Enter your password</Typography>
-				<TextField />
+				<TextField
+					fieldInputProps={{ ...formik.getFieldProps("password") }}
+					fieldMetaProps={{ ...formik.getFieldMeta("password") }}
+					fullWidth
+					label="Password"
+					type="password"
+				/>
 			</Grid>
-			<Grid item>
-				<Typography variant="subtitle2">Re-enter your password</Typography>
-				<TextField />
-			</Grid>
-			<Grid item>
+			<Grid item xs={8}>
 				<Typography variant="subtitle2">Enter your new password</Typography>
-				<TextField />
+				<TextField
+					fieldInputProps={{ ...formik.getFieldProps("new_password") }}
+					fieldMetaProps={{ ...formik.getFieldMeta("new_password") }}
+					fullWidth
+					label="New Password"
+					type="password"
+				/>
 			</Grid>
-			<Grid item>
-				<Button size="small">SAVE</Button>
+			<Grid item xs={8}>
+				<Typography variant="subtitle2">Re-enter your new password</Typography>
+				<TextField
+					fieldInputProps={{
+						...formik.getFieldProps("reentered_new_password"),
+					}}
+					fieldMetaProps={{ ...formik.getFieldMeta("reentered_new_password") }}
+					fullWidth
+					label="New Password"
+					type="password"
+				/>
 			</Grid>
 		</Grid>
 	);

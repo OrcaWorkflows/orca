@@ -1,10 +1,11 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const credentialsValidationSchema = yup.object({
-	username: yup.string().required(),
-	password: yup.string().required(),
+	username: yup.string().required("Username is a required field"),
+	password: yup.string().required("Password is a required field"),
 });
 
 const Credentials = ({
@@ -14,31 +15,27 @@ const Credentials = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("username")}
-			error={
-				!!(
-					formik.getFieldMeta("username").touched &&
-					formik.getFieldMeta("username").error
-				)
-			}
+			fieldInputProps={{
+				...formik.getFieldProps("username"),
+			}}
+			fieldMetaProps={{
+				...formik.getFieldMeta("username"),
+			}}
 			fullWidth
 			label="Username"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("password")}
-			error={
-				!!(
-					formik.getFieldMeta("password").touched &&
-					formik.getFieldMeta("password").error
-				)
-			}
+			fieldInputProps={{
+				...formik.getFieldProps("password"),
+			}}
+			fieldMetaProps={{
+				...formik.getFieldMeta("password"),
+			}}
 			fullWidth
 			label="Password"
-			margin="dense"
-			type="password"
 			required
+			type="password"
 		/>
 	</>
 );

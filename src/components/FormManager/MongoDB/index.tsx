@@ -1,10 +1,11 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const MongoDBValidationSchema = yup.object({
-	database_name: yup.string().required("Database name is a required field"),
-	collection_name: yup.string().required("Collection name is a required field"),
+	database_name: yup.string().required("Database Name is a required field"),
+	collection_name: yup.string().required("Collection Name is a required field"),
 });
 
 const MongoDB = ({
@@ -14,29 +15,17 @@ const MongoDB = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("database_name")}
-			error={
-				!!(
-					formik.getFieldMeta("database_name").touched &&
-					formik.getFieldMeta("database_name").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("database_name") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("database_name") }}
 			fullWidth
 			label="Database Name"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("collection_name")}
-			error={
-				!!(
-					formik.getFieldMeta("collection_name").touched &&
-					formik.getFieldMeta("collection_name").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("collection_name") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("collection_name") }}
 			fullWidth
 			label="Collection Name"
-			margin="dense"
 			required
 		/>
 	</>

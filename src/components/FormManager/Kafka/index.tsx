@@ -1,9 +1,10 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const KafkaValidationSchema = yup.object({
-	topic_name: yup.string().required("Topic name is a required field"),
+	topic_name: yup.string().required("Topic Name is a required field"),
 });
 
 const Kafka = ({
@@ -13,16 +14,10 @@ const Kafka = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("topic_name")}
-			error={
-				!!(
-					formik.getFieldMeta("topic_name").touched &&
-					formik.getFieldMeta("topic_name").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("topic_name") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("topic_name") }}
 			fullWidth
 			label="Topic Name"
-			margin="dense"
 			required
 		/>
 	</>

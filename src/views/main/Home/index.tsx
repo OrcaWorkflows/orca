@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 import { Grid, Divider, Paper, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { ReactFlowProvider } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -32,6 +31,8 @@ const Home = (): JSX.Element => {
 	const history = useHistory();
 	const location = useLocation();
 	const { workflowID } = useParams<HomeParams>();
+
+	const [selectedEdgeCustomID, setSelectedEdgeCustomID] = useState("");
 	const [loggedPodName, setLoggedPodName] = useState<string | undefined>();
 	const [openLog, setOpenLog] = useState(false);
 
@@ -64,24 +65,20 @@ const Home = (): JSX.Element => {
 					className={classes.fullHeight}
 					justifyContent="space-between"
 				>
-					<OverlayScrollbarsComponent
-						options={{
-							scrollbars: { autoHide: "leave" },
-						}}
+					<Grid
+						item
+						className={clsx(classes.fullHeight, classes.sidebar)}
+						xs="auto"
 					>
-						<Grid
-							item
-							className={clsx(classes.fullHeight, classes.sidebar)}
-							xs="auto"
-						>
-							<Sidebar />
-						</Grid>
-					</OverlayScrollbarsComponent>
+						<Sidebar />
+					</Grid>
 					<Divider flexItem orientation="vertical" />
 					<Grid item className={(classes.fullHeight, classes.DnDFlow)} xs>
 						<Paper className={classes.fullHeight} variant="outlined">
 							<ReactFlowProvider>
 								<DnDFlow
+									selectedEdgeCustomID={selectedEdgeCustomID}
+									setSelectedEdgeCustomID={setSelectedEdgeCustomID}
 									setOpenLog={setOpenLog}
 									setLoggedPodName={setLoggedPodName}
 								/>
@@ -91,6 +88,7 @@ const Home = (): JSX.Element => {
 				</Grid>
 			</Paper>
 			<WorkflowLog
+				selectedEdgeCustomID={selectedEdgeCustomID}
 				openLog={openLog}
 				setOpenLog={setOpenLog}
 				podName={loggedPodName}

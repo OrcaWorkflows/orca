@@ -1,9 +1,10 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const configurationNameValidationSchema = yup.object({
-	name: yup.string().required(),
+	name: yup.string().required("Configuration Name is a required field"),
 });
 
 const ConfigurationName = ({
@@ -12,16 +13,11 @@ const ConfigurationName = ({
 	formik: ReturnType<typeof useFormik>;
 }): JSX.Element => (
 	<TextField
-		{...formik.getFieldProps("name")}
-		error={
-			!!(
-				formik.getFieldMeta("name").touched && formik.getFieldMeta("name").error
-			)
-		}
-		label="Name of the configuration"
+		fieldInputProps={{ ...formik.getFieldProps("name") }}
+		fieldMetaProps={{ ...formik.getFieldMeta("name") }}
+		fullWidth
+		label="Configuration Name"
 		required
-		margin="dense"
-		variant="standard"
 	/>
 );
 

@@ -1,21 +1,21 @@
 const bigquery = {
-	config: { id: null, name: "" },
+	config: null,
 	project_id: "akis-295110",
 	dataset_id: "",
 	table_id: "",
 	query: "",
 };
 const dynamodb = {
-	config: { id: null, name: "" },
+	config: null,
 	table_name: "",
 	batch_size: 1000,
 };
 const elasticsearch = {
-	config: { id: null, name: "" },
+	config: null,
 	index_name: "",
 };
 const emr = {
-	config: { id: null, name: "" },
+	config: null,
 	script_uri: "",
 	input_uri: "",
 	master_instance_type: "m5.xlarge",
@@ -23,34 +23,43 @@ const emr = {
 	instance_count: 3,
 };
 const kafka = {
-	config: { id: null, name: "" },
+	config: null,
 	topic_name: "",
 };
-const kinesis = { config: { id: null, name: "" }, stream_name: "" };
+const kinesis = { config: null, stream_name: "" };
+const lambda = {
+	function_name: "",
+	runtime: "",
+	role: "",
+	handler: "",
+	code_s3_bucket: "",
+	code_s3_key: "",
+	payload: "",
+};
 const mongodb = {
-	config: { id: null, name: "" },
+	config: null,
 	database_name: "",
 	collection_name: "",
 };
 const pubsub = {
-	config: { id: null, name: "" },
+	config: null,
 	project_id: "akis-295110",
 	topic: "",
 	topic_action: "",
 };
 const redis = {
-	config: { id: null, name: "" },
+	config: null,
 	database: "",
 };
 const s3 = {
-	config: { id: null, name: "" },
+	config: null,
 	bucket_name: "",
 	file_path: "",
 	file_type: "",
 };
 
 const sqlInitialData = {
-	config: { id: null, name: "" },
+	config: null,
 	databasename: "",
 	query: "",
 	tablename: "",
@@ -66,6 +75,7 @@ export {
 	emr,
 	kafka,
 	kinesis,
+	lambda,
 	mongodb,
 	pubsub,
 	redis,

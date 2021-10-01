@@ -21,21 +21,20 @@ import ReactFlow, {
 	OnLoadParams,
 } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import {
 	useGetWorkflow,
 	useInfoOfWorkflow,
 	useSetWorkflow,
 } from "actions/workflowActions";
-import { Alert } from "components";
+import { AddTooltip, Alert } from "components";
 import { IWorkflow } from "interfaces";
 import { platforms } from "utils";
 import getEdgeTypes from "utils/edge/getEdgeTypes";
 import getNodeTypes from "utils/node/getNodeTypes";
 import * as nodeInitialData from "utils/node/nodeInitialData";
 import { HomeParams } from "views/main/Home";
-import AddTooltip from "views/main/Home/DnDFlow/AddTooltip";
 import ConfigurationDialog from "views/main/Home/DnDFlow/ConfigurationDialog";
 import InfoTooltip from "views/main/Home/DnDFlow/InfoTooltip";
 import TopBar from "views/main/Home/DnDFlow/Topbar";
@@ -70,13 +69,18 @@ const onDragOver = (event: DragEvent) => {
 };
 
 const DnDFlow = ({
+	selectedEdgeCustomID,
+	setSelectedEdgeCustomID,
 	setOpenLog,
 	setLoggedPodName,
 }: {
+	selectedEdgeCustomID: string;
+	setSelectedEdgeCustomID: Dispatch<SetStateAction<string>>;
 	setOpenLog: Dispatch<SetStateAction<boolean>>;
 	setLoggedPodName: Dispatch<SetStateAction<string | undefined>>;
 }): JSX.Element => {
 	const classes = useStyles();
+	const history = useHistory();
 
 	const { workflowID } = useParams<HomeParams>();
 	const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -106,11 +110,14 @@ const DnDFlow = ({
 		workflowID,
 	]);
 	const argoWorkflowName = currentWorkflow?.argoWorkflowName ?? "";
+	const [enqueuedNodes, setEnqueuedNodes] = useState<{ displayName: string }[]>(
+		[]
+	);
 	const { data: statusData } = useInfoOfWorkflow(
-		{ argoWorkflowName, infoType: "status" },
+		{ argoWorkflowName, infoType: "status", enqueuedNodes, setEnqueuedNodes },
 		Boolean(argoWorkflowName)
 	);
-	const [selectedEdgeCustomID, setSelectedEdgeCustomID] = useState("");
+
 	useEffect(() => {
 		if (selectedEdgeCustomID) {
 			const currentEdgeStatus: any = Object.values(
@@ -187,9 +194,10 @@ const DnDFlow = ({
 			setOpenLog(true);
 		}
 	};
+
 	return (
 		<>
-			<TopBar nodes={nodes} edges={edges} />{" "}
+			<TopBar nodes={nodes} edges={edges} setEnqueuedNodes={setEnqueuedNodes} />
 			<div className={classes.reactFlowWrapper} ref={reactFlowWrapper}>
 				<ReactFlow
 					elements={nodes.concat(edges)}
@@ -216,8 +224,14 @@ const DnDFlow = ({
 				)}
 				<WorkflowName />
 				<InfoTooltip />
-				<AddTooltip />
+				<AddTooltip
+					onClick={() => {
+						history.push({ pathname: "/home", state: { addNew: true } });
+					}}
+					title="New workflow"
+				/>
 			</div>
+
 			{getWorkflowError && (
 				<Alert
 					message="An error occured while fetching the workflow!"

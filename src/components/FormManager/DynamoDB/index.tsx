@@ -1,10 +1,11 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const DynamoDBValidationSchema = yup.object({
-	table_name: yup.string().required("Table name is a required field"),
-	batch_size: yup.number().integer().required("Batch size is a required field"),
+	table_name: yup.string().required("Table Name is a required field"),
+	batch_size: yup.number().integer().required("Batch Size is a required field"),
 });
 
 const DynamoDB = ({
@@ -15,29 +16,17 @@ const DynamoDB = ({
 	return (
 		<>
 			<TextField
-				{...formik.getFieldProps("table_name")}
-				error={
-					!!(
-						formik.getFieldMeta("table_name").touched &&
-						formik.getFieldMeta("table_name").error
-					)
-				}
+				fieldInputProps={{ ...formik.getFieldProps("table_name") }}
+				fieldMetaProps={{ ...formik.getFieldMeta("table_name") }}
 				fullWidth
 				label="Table Name"
-				margin="dense"
 				required
 			/>
 			<TextField
-				{...formik.getFieldProps("batch_size")}
-				error={
-					!!(
-						formik.getFieldMeta("batch_size").touched &&
-						formik.getFieldMeta("batch_size").error
-					)
-				}
+				fieldInputProps={{ ...formik.getFieldProps("batch_size") }}
+				fieldMetaProps={{ ...formik.getFieldMeta("batch_size") }}
 				fullWidth
 				label="Batch Size"
-				margin="dense"
 				required
 			/>
 		</>

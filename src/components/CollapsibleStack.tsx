@@ -18,8 +18,8 @@ type StackData = {
 	options: { type: string; icon: string; supported: boolean; text: string }[];
 };
 
-const useStyles = makeStyles(() => ({
-	collapsableText: { fontWeight: "bold" },
+const useStyles = makeStyles((theme) => ({
+	bold: { fontWeight: theme.typography.fontWeightBold },
 }));
 
 const CollapsibleStack = ({
@@ -48,7 +48,7 @@ const CollapsibleStack = ({
 		<Fragment key={data.text}>
 			<ListItem button onClick={handleClick}>
 				<ListItemText
-					primaryTypographyProps={{ className: classes.collapsableText }}
+					primaryTypographyProps={{ className: classes.bold }}
 					primary={data.text}
 				/>
 				{open ? <ArrowUp /> : <ArrowDown />}

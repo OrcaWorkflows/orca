@@ -27,7 +27,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 	},
 	dragging: {
 		color: theme.palette.primary.light,
-		padding: 20,
+		paddingLeft: theme.spacing(5),
 		transition: theme.transitions.create(["padding"], {
 			easing: theme.transitions.easing.sharp,
 		}),
@@ -36,7 +36,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 		},
 	},
 	draggingText: {
-		fontWeight: "bold",
+		fontWeight: theme.typography.fontWeightBold,
 	},
 }));
 const DraggableListItem = ({

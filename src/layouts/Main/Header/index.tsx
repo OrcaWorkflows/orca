@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, makeStyles } from "@material-ui/core";
 
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-white.svg";
-import Account from "layouts/Main/Header/Account";
+// import Account from "layouts/Main/Header/Account";
 import Logout from "layouts/Main/Header/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +15,7 @@ const Header = (): JSX.Element => {
 		<AppBar>
 			<Toolbar variant="dense">
 				<OrcaLogo className={classes.logo} title="ORCA" />
-				<Account />
+				{/* <Account /> */}
 				<Logout />
 			</Toolbar>
 		</AppBar>

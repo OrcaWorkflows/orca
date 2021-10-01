@@ -18,28 +18,16 @@ import Help from "views/main/Settings/Help";
 
 const useStyles = makeStyles((theme) => ({
 	bold: { fontWeight: theme.typography.fontWeightBold },
-	content: {
-		border: `1px solid ${theme.palette.secondary.main}`,
-		borderRadius: theme.shape.borderRadius,
-	},
-	container: { marginTop: 100, marginBottom: 50 },
+	container: { marginTop: 100, marginBottom: 100 },
 	link: {
 		"&:hover": {
 			fontWeight: theme.typography.fontWeightBold,
 			textDecoration: "underline",
 		},
 	},
-	list: {
-		backgroundColor: theme.palette.secondary.main,
-		borderRadius: theme.shape.borderRadius,
-	},
 	selected: {
 		backgroundColor: theme.palette.primary.dark,
 		borderRadius: theme.shape.borderRadius,
-
-		"&:hover": {
-			backgroundColor: theme.palette.secondary.light,
-		},
 	},
 }));
 
@@ -51,7 +39,7 @@ export const Settings = (): JSX.Element => {
 		<Container maxWidth="md" className={classes.container}>
 			<Grid container spacing={2}>
 				<Grid item xs="auto">
-					<List dense className={classes.list}>
+					<List dense>
 						<ListItem
 							className={clsx({
 								[classes.selected]: selectedSettings === "account",
@@ -87,7 +75,7 @@ export const Settings = (): JSX.Element => {
 								primaryTypographyProps={{
 									className: classes.link,
 								}}
-								primary="System-wide Operator Configurations"
+								primary="System Configurations"
 							/>
 						</ListItem>
 						<ListItem
@@ -114,7 +102,7 @@ export const Settings = (): JSX.Element => {
 						</ListItem>
 					</List>
 				</Grid>
-				<Grid item xs className={classes.content}>
+				<Grid item xs>
 					{selectedSettings === "account" && <Account />}
 					{selectedSettings === "help" && <Help />}
 				</Grid>

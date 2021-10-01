@@ -12,6 +12,7 @@ import Kafka, { KafkaValidationSchema } from "components/FormManager/Kafka";
 import Kinesis, {
 	KinesisValidationSchema,
 } from "components/FormManager/Kinesis";
+import Lambda, { LambdaValidationSchema } from "components/FormManager/Lambda";
 import MongoDB, {
 	MongoDBValidationSchema,
 } from "components/FormManager/MongoDB";
@@ -53,6 +54,10 @@ const FormManager = (
 		case "kinesis":
 			Form = Kinesis;
 			validationSchema = KinesisValidationSchema;
+			break;
+		case "lambda":
+			Form = Lambda;
+			validationSchema = LambdaValidationSchema;
 			break;
 		case "mongodb":
 			Form = MongoDB;

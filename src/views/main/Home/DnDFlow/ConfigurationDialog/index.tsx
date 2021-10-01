@@ -7,7 +7,6 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	TextField,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useFormik } from "formik";
@@ -16,14 +15,17 @@ import * as yup from "yup";
 
 import { useGetAllOperatorConfigs } from "actions/settingsActions";
 import { useSetWorkflow } from "actions/workflowActions";
-import { ServerError } from "components";
+import { ServerError, TextField } from "components";
 import FormManager from "components/FormManager";
 
 export const configIDValidationSchema = yup.object({
-	config: yup.object({
-		id: yup.number().integer().nullable(),
-		name: yup.string(),
-	}),
+	config: yup
+		.object({
+			id: yup.number().integer(),
+			name: yup.string(),
+		})
+		.nullable()
+		.required("Configuration Name is a required field"),
 });
 
 const ConfigurationDialog = ({
@@ -99,7 +101,9 @@ const ConfigurationDialog = ({
 											name: config.name,
 										})) ?? []
 								}
-								onBlur={formik.handleBlur}
+								onBlur={() => {
+									formik.setFieldTouched("config");
+								}}
 								onChange={(_event, value) =>
 									formik.setFieldValue("config", value)
 								}
@@ -108,15 +112,11 @@ const ConfigurationDialog = ({
 								renderInput={(params) => (
 									<TextField
 										{...params}
-										error={
-											!!(
-												formik.getFieldMeta("config").touched &&
-												formik.getFieldMeta("config").error
-											)
-										}
+										fieldMetaProps={{
+											...formik.getFieldMeta("config"),
+										}}
 										fullWidth
-										label="Config Name"
-										margin="dense"
+										label="Configuration Name"
 									/>
 								)}
 							/>

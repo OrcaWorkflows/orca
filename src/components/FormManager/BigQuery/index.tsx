@@ -1,11 +1,12 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { TextField } from "components";
+
 export const BigQueryValidationSchema = yup.object({
-	project_id: yup.string().required("Project id is a required field"),
-	dataset_id: yup.string().required("Dataset id is a required field"),
-	table_id: yup.string().required("Table id is a required field"),
+	project_id: yup.string().required("Project ID is a required field"),
+	dataset_id: yup.string().required("Dataset ID is a required field"),
+	table_id: yup.string().required("Table ID is a required field"),
 	query: yup.string().required("Query is a required field"),
 });
 
@@ -16,42 +17,24 @@ const BigQuery = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("project_id")}
-			error={
-				!!(
-					formik.getFieldMeta("project_id").touched &&
-					formik.getFieldMeta("project_id").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("project_id") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("project_id") }}
 			fullWidth
 			label="Project ID"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("dataset_id")}
-			error={
-				!!(
-					formik.getFieldMeta("dataset_id").touched &&
-					formik.getFieldMeta("dataset_id").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("dataset_id") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("dataset_id") }}
 			fullWidth
 			label="Dataset ID"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("table_id")}
-			error={
-				!!(
-					formik.getFieldMeta("table_id").touched &&
-					formik.getFieldMeta("table_id").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("table_id") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("table_id") }}
 			fullWidth
 			label="Table ID"
-			margin="dense"
 			required
 		/>
 	</>

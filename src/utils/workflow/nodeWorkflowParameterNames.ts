@@ -28,6 +28,15 @@ const kafka = {
 const kinesis = {
 	stream_name: "AWS_KINESIS_STREAM_NAME",
 };
+const lambda = {
+	function_name: "AWS_LAMBDA_FUNC_NAME",
+	runtime: "AWS_LAMBDA_RUNTIME",
+	role: "AWS_LAMBDA_ROLE",
+	handler: "AWS_LAMBDA_HANDLER",
+	code_s3_bucket: "AWS_LAMBDA_CODE_S3_BUCKET",
+	code_s3_key: "AWS_LAMBDA_CODE_S3_KEY",
+	payload: "AWS_LAMBDA_PAYLOAD",
+};
 const mongodb = {
 	// host: "MONGODB_HOST",
 	// port: "MONGODB_PORT",
@@ -70,6 +79,7 @@ export {
 	emr,
 	kafka,
 	kinesis,
+	lambda,
 	mongodb,
 	pubsub,
 	redis,

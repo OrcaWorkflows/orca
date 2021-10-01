@@ -3,26 +3,31 @@ import { useState, Dispatch, SetStateAction } from "react";
 import {
 	Button,
 	Box,
+	Container,
 	Grid,
+	Divider,
 	IconButton,
 	makeStyles,
+	Tooltip,
 	Typography,
 } from "@material-ui/core";
 import { useFormik } from "formik";
-import { Trash2 } from "react-feather";
+import { Info, Trash2 } from "react-feather";
 import { useQueryClient } from "react-query";
 
 import {
 	useDeleteOperatorConfig,
 	useUpsertOperatorConfig,
 } from "actions/settingsActions";
-import { ServerError, TextDialog } from "components";
+import { AddTooltip, ServerError, TextDialog } from "components";
 import { IOperatorConfig } from "interfaces";
 import * as serverConfigurationsInitialData from "utils/serverConfigurationsInitialData";
 import ConfigurationName, {
 	configurationNameValidationSchema,
 } from "views/main/Settings/OperatorConfigurations/ConfigurationName";
 import {
+	AWS,
+	AWSValidationSchema,
 	Credentials,
 	credentialsValidationSchema,
 	HostList,
@@ -30,14 +35,17 @@ import {
 } from "views/main/Settings/OperatorConfigurations/ServerConfigurations";
 
 const useStyles = makeStyles((theme) => ({
-	bold: { fontWeight: theme.typography.fontWeightBold },
-	border: { border: `1px solid ${theme.palette.secondary.main}` },
+	border: {
+		borderRight: `1px solid ${theme.palette.primary.dark}`,
+	},
+	divider: {
+		backgroundColor: theme.palette.primary.light,
+	},
 	flexChild: {
-		padding: theme.spacing(1),
 		margin: theme.spacing(1),
 	},
 	removeConfiguration: {
-		color: theme.palette.error.main,
+		display: "block",
 		marginLeft: "auto",
 	},
 }));
@@ -83,6 +91,11 @@ const Configuration = ({
 		operatorName === "oracle" ||
 		operatorName === "postgresql";
 
+	// Handle AWS
+	const isAWS = operatorName === "AWS";
+	const AWSOperators: { name: string; categoryName: string }[] | undefined =
+		queryClient.getQueryData("AWS");
+
 	const initialValues: any = {
 		hostList: isHostListRequired
 			? selectedConfigData?.hostList ?? [
@@ -99,24 +112,53 @@ const Configuration = ({
 			: [],
 		username: selectedConfigData?.username ?? "",
 		password: selectedConfigData?.password ?? "",
+		property: isAWS
+			? {
+					AWS_REGION_NAME: selectedConfigData?.property.AWS_REGION_NAME ?? "",
+					AWS_ACCESS_KEY_ID:
+						selectedConfigData?.property.AWS_ACCESS_KEY_ID ?? "",
+					AWS_ACCESS_SECRET_KEY:
+						selectedConfigData?.property.AWS_ACCESS_SECRET_KEY ?? "",
+			  }
+			: {},
 		name: selectedConfigData?.name ?? "",
 		operatorName: selectedConfigData?.operatorName ?? operatorName,
 	};
 
 	const handleSubmit = async (values: typeof initialValues) => {
-		upsertOperatorConfig({
-			hostList: values.hostList,
-			name: values.name,
-			operatorName,
-		}).then((data) => {
-			if (data?.id) setConfigID(data.id);
-		});
+		if (isAWS) {
+			if (AWSOperators)
+				for (const operator of AWSOperators) {
+					upsertOperatorConfig({
+						hostList: values.hostList,
+						name: values.name,
+						operatorName: operator.name,
+						password: values.password,
+						property: values.property,
+						username: values.username,
+					}).then((data) => {
+						if (data?.id) setConfigID(data.id);
+					});
+				}
+		} else
+			upsertOperatorConfig({
+				hostList: values.hostList,
+				name: values.name,
+				operatorName,
+				password: values.password,
+				property: values.property,
+				username: values.username,
+			}).then((data) => {
+				if (data?.id) setConfigID(data.id);
+			});
 	};
 
-	const validationSchema = configurationNameValidationSchema;
-	if (isHostListRequired) validationSchema.concat(hostListValidationSchema);
+	let validationSchema = configurationNameValidationSchema;
+	if (isAWS) validationSchema = validationSchema.concat(AWSValidationSchema);
+	if (isHostListRequired)
+		validationSchema = validationSchema.concat(hostListValidationSchema);
 	if (isCredentialsRequired)
-		validationSchema.concat(credentialsValidationSchema);
+		validationSchema = validationSchema.concat(credentialsValidationSchema);
 
 	const formik = useFormik<typeof initialValues>({
 		initialValues,
@@ -133,63 +175,87 @@ const Configuration = ({
 	return (
 		<>
 			<Box
+				className={classes.border}
 				display="flex"
 				flexDirection="column"
 				justifyContent="center"
 				height="100%"
 				p={1}
+				position="relative"
 			>
-				<IconButton
-					className={classes.removeConfiguration}
-					onClick={() => setOpenRemoveDialog(true)}
-					disabled={!configID}
-				>
-					<Trash2 />
-				</IconButton>
-				<div className={classes.flexChild}>
-					<Typography
-						className={classes.bold}
-						display="inline"
-						color="textSecondary"
-						variant="h4"
-					>
-						{platformText}
-					</Typography>
-				</div>
 				<form onSubmit={formik.handleSubmit}>
 					<div className={classes.flexChild}>
-						<Grid container direction="column" alignItems="center" spacing={1}>
-							<Grid item xs={12} md={9} lg={6} xl={3}>
-								<ConfigurationName formik={formik} />
-							</Grid>
-							{isCredentialsRequired && (
-								<Grid item xs={12} md={9} lg={6} xl={3}>
-									<Credentials formik={formik} />
+						<Container maxWidth="xs">
+							<Grid container alignItems="center" spacing={2}>
+								<Grid item xs>
+									<Grid container justifyContent="space-between">
+										<Grid item>
+											<Typography
+												color="textPrimary"
+												display="inline"
+												variant="h4"
+											>
+												{platformText}
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Tooltip
+												style={{ margin: 3 }}
+												title="You can create your own custom configurations here and use them to populate many instances while creating your workflow later on."
+											>
+												<Info />
+											</Tooltip>
+										</Grid>
+									</Grid>
 								</Grid>
-							)}
-							{isHostListRequired && (
-								<Grid item xs={12} md={9} lg={6} xl={3}>
-									<HostList formik={formik} operatorName={operatorName} />
+								<Grid item xs={12}>
+									<Divider className={classes.divider} />
 								</Grid>
-							)}
-
-							<Grid item>
-								<Button
-									disabled={formik.isSubmitting || !formik.isValid}
-									type="submit"
-								>
-									Save
-								</Button>
+								<Grid item xs={12}>
+									{configID && (
+										<IconButton
+											className={classes.removeConfiguration}
+											onClick={() => setOpenRemoveDialog(true)}
+											disabled={!configID}
+										>
+											<Trash2 />
+										</IconButton>
+									)}
+								</Grid>
+								<Grid item xs={12}>
+									<ConfigurationName formik={formik} />
+								</Grid>
+								{isAWS && (
+									<Grid item xs={12}>
+										<AWS formik={formik} />
+									</Grid>
+								)}
+								{isCredentialsRequired && (
+									<Grid item xs={12}>
+										<Credentials formik={formik} />
+									</Grid>
+								)}
+								{isHostListRequired && (
+									<Grid item xs={12}>
+										<HostList formik={formik} operatorName={operatorName} />
+									</Grid>
+								)}
+								<Grid item>
+									<Button
+										disabled={formik.isSubmitting || !formik.isValid}
+										type="submit"
+									>
+										Save
+									</Button>
+								</Grid>
 							</Grid>
-						</Grid>
+						</Container>
 					</div>
 				</form>
-				<div className={classes.flexChild}>
-					<Typography variant="caption">
-						You can create your own custom configurations here and use them to
-						populate many instances while creating your workflow later on.
-					</Typography>
-				</div>
+				<AddTooltip
+					onClick={() => setConfigID(undefined)}
+					title="New configuration"
+				/>
 			</Box>
 			<TextDialog
 				open={openRemoveDialog}

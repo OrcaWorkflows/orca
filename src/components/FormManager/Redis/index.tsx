@@ -1,6 +1,7 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+import { TextField } from "components";
 
 export const RedisValidationSchema = yup.object({
 	database: yup.string().required("Database is a required field"),
@@ -13,16 +14,10 @@ const Redis = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("database")}
-			error={
-				!!(
-					formik.getFieldMeta("database").touched &&
-					formik.getFieldMeta("database").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("database") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("database") }}
 			fullWidth
 			label="Database"
-			margin="dense"
 			required
 		/>
 	</>

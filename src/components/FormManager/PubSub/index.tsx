@@ -1,6 +1,7 @@
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+import { TextField } from "components";
 
 export const PubSubValidationSchema = yup.object({
 	project_id: yup.string().required("Project id is a required field"),
@@ -15,42 +16,24 @@ const PubSub = ({
 }): JSX.Element => (
 	<>
 		<TextField
-			{...formik.getFieldProps("project_id")}
-			error={
-				!!(
-					formik.getFieldMeta("project_id").touched &&
-					formik.getFieldMeta("project_id").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("project_id") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("project_id") }}
 			fullWidth
 			label="Project ID"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("topic")}
-			error={
-				!!(
-					formik.getFieldMeta("topic").touched &&
-					formik.getFieldMeta("topic").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("topic") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("topic") }}
 			fullWidth
 			label="Topic"
-			margin="dense"
 			required
 		/>
 		<TextField
-			{...formik.getFieldProps("topic_action")}
-			error={
-				!!(
-					formik.getFieldMeta("topic_action").touched &&
-					formik.getFieldMeta("topic_action").error
-				)
-			}
+			fieldInputProps={{ ...formik.getFieldProps("topic_action") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("topic_action") }}
 			fullWidth
 			label="Topic Action"
-			margin="dense"
 			required
 		/>
 	</>

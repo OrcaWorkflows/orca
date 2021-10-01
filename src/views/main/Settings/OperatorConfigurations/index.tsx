@@ -1,43 +1,53 @@
 import { useState, MouseEvent, useEffect } from "react";
 
 import {
+	Box,
+	Collapse,
+	Container,
 	Grid,
+	Divider,
 	List,
 	ListItem,
+	ListItemIcon,
 	ListItemText,
 	ListSubheader,
-	Typography,
 	makeStyles,
 	CircularProgress,
-	useTheme,
 } from "@material-ui/core";
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import clsx from "clsx";
+import { ArrowDown, ArrowUp } from "react-feather";
 
+import { useGetOperatorNamesByCategory } from "actions/operatorActions";
 import {
 	useGetAllOperatorConfigs,
 	useGetOperatorConfig,
 } from "actions/settingsActions";
-import { CollapsibleStack } from "components";
+import aws from "assets/AWS/aws.png";
+import { CollapsibleStack, ServerError } from "components";
 import { platforms } from "utils";
 import Configuration from "views/main/Settings/OperatorConfigurations/Configuration";
 
 const useStyles = makeStyles((theme) => ({
-	listSubheader: {
-		backgroundColor: theme.palette.background.default,
-		fontWeight: theme.typography.fontWeightBold,
+	root: { height: "calc(100vh - 48px)" },
+	bold: { fontWeight: theme.typography.fontWeightBold },
+	divider: {
+		backgroundColor: theme.palette.primary.light,
 	},
+	fullHeight: { height: "100%" },
+	configurationListItemText: { overflowWrap: "break-word" },
 	noconfiguration: {
 		fontWeight: theme.typography.fontWeightBold,
 		opacity: 0.5,
-		padding: 5,
 	},
-	content: {
-		border: `1px solid ${theme.palette.secondary.main}`,
-		borderRadius: theme.shape.borderRadius,
-		margin: theme.spacing(6),
+	list: {
+		overflowY: "auto",
 	},
-	fullHeight: { height: "100%" },
-	root: { height: "calc(100vh - 48px)" },
+	listSubheader: {
+		backgroundColor: theme.palette.primary.main,
+		fontWeight: theme.typography.fontWeightBold,
+		color: theme.palette.text.primary,
+		fontSize: theme.typography.h6.fontSize,
+	},
 }));
 
 const systemWideConfiguredPlatforms = platforms.filter(
@@ -46,8 +56,7 @@ const systemWideConfiguredPlatforms = platforms.filter(
 
 export const OperatorConfigurations = (): JSX.Element => {
 	const classes = useStyles();
-	const theme = useTheme();
-	const [operatorName, setOperatorName] = useState("postgresql");
+	const [operatorName, setOperatorName] = useState("AWS");
 	const [configID, setConfigID] = useState<number>();
 	const [platformText, setPlatformText] = useState("");
 
@@ -62,6 +71,16 @@ export const OperatorConfigurations = (): JSX.Element => {
 	};
 	useGetOperatorConfig({ configID });
 
+	// Handle AWS
+	const [open, setOpen] = useState(true);
+	const handleClick = () => {
+		setOpen((prevOpen) => !prevOpen);
+	};
+	const { isError: isErrorAWSOperators, data: AWSOperators } =
+		useGetOperatorNamesByCategory({
+			categoryName: "AWS",
+		});
+
 	useEffect(() => {
 		let platformText;
 		for (const platform of platforms) {
@@ -70,93 +89,125 @@ export const OperatorConfigurations = (): JSX.Element => {
 			}
 		}
 		if (platformText) setPlatformText(platformText);
+
+		/* Handle AWS */
+		if (operatorName === "AWS") setPlatformText("AWS");
+
+		setConfigID(undefined);
 	}, [operatorName]);
 
 	return (
-		<Grid container className={classes.root}>
-			<OverlayScrollbarsComponent
-				options={{
-					scrollbars: { autoHide: "leave" },
-				}}
-			>
-				<Grid item xs="auto" className={classes.fullHeight}>
-					<List dense>
-						{systemWideConfiguredPlatforms.map((stackData) => (
-							<CollapsibleStack
-								iconSize={24}
-								data={stackData}
-								key={stackData.text}
-								onClick={onOperatorClick}
-								selectedOptionType={operatorName}
-							/>
-						))}
-					</List>
-				</Grid>
-			</OverlayScrollbarsComponent>
-			<Grid item xs className={classes.content}>
-				<Configuration
-					configID={configID}
-					setConfigID={setConfigID}
-					operatorName={operatorName}
-					platformText={platformText}
-				/>
-			</Grid>
-			{allOperatorConfigs?.filter(
-				(config) => config.operatorName === operatorName
-			).length ? (
-				<OverlayScrollbarsComponent
-					options={{
-						scrollbars: { autoHide: "leave" },
-					}}
-				>
-					<Grid item xs="auto" className={classes.fullHeight}>
-						<List
-							subheader={
-								<ListSubheader className={classes.listSubheader}>
-									Configurations
-								</ListSubheader>
-							}
-						>
-							{allOperatorConfigs
-								.filter((config) => config.operatorName === operatorName)
-								.sort((config) => -Number(config.createdAt))
-								.map((config) => (
+		<>
+			<Container maxWidth="md">
+				<Grid container className={classes.root}>
+					<Grid item xs={3} className={classes.fullHeight}>
+						<List dense className={clsx(classes.fullHeight, classes.list)}>
+							{/* Handle AWS */}
+							<ListItem button onClick={handleClick}>
+								<ListItemText
+									primaryTypographyProps={{ className: classes.bold }}
+									primary="Amazon Web Services"
+								/>
+								{open ? <ArrowUp /> : <ArrowDown />}
+							</ListItem>
+							<Collapse in={open} timeout="auto">
+								<List disablePadding>
 									<ListItem
-										key={config.id}
 										button
-										divider
-										onClick={(_event) => onSettingClick(_event, config.id)}
-										selected={config.id === configID}
+										onClick={(_event) => onOperatorClick(_event, "AWS")}
+										selected={operatorName === "AWS"}
 									>
-										<ListItemText>{config.name}</ListItemText>
+										<ListItemIcon>
+											<img src={aws} style={{ height: 24 }} draggable={false} />
+										</ListItemIcon>
+										<ListItemText primary="AWS" />
 									</ListItem>
-								))}
+								</List>
+							</Collapse>
+							{systemWideConfiguredPlatforms.map((stackData) => (
+								<CollapsibleStack
+									iconSize={24}
+									data={stackData}
+									key={stackData.text}
+									onClick={onOperatorClick}
+									selectedOptionType={operatorName}
+								/>
+							))}
 						</List>
 					</Grid>
-				</OverlayScrollbarsComponent>
-			) : (
-				<Grid item xs={2} className={classes.fullHeight}>
-					<Grid
-						className={classes.fullHeight}
-						container
-						justifyContent="center"
-						alignItems="center"
-					>
-						<Grid item xs="auto">
-							{isLoadingAllOperatorConfigs ? (
-								<CircularProgress
-									style={{ color: theme.palette.secondary.main }}
-								/>
-							) : (
-								<Typography className={classes.noconfiguration} align="center">
-									No configuration created yet for the selected platform.
-								</Typography>
-							)}
-						</Grid>
+
+					<Grid item xs>
+						<Configuration
+							configID={configID}
+							setConfigID={setConfigID}
+							operatorName={operatorName}
+							platformText={platformText}
+						/>
+					</Grid>
+
+					<Grid item xs={3} className={classes.fullHeight}>
+						{allOperatorConfigs?.filter((config) => {
+							/* Handle AWS */
+							if (operatorName === "AWS") {
+								if (AWSOperators)
+									for (const operator of AWSOperators)
+										return config.operatorName === operator.name;
+							} else return config.operatorName === operatorName;
+						}).length ? (
+							<List
+								className={clsx(classes.fullHeight, classes.list)}
+								subheader={
+									<>
+										<ListSubheader className={classes.listSubheader}>
+											Configurations
+										</ListSubheader>
+										<Divider className={classes.divider} />
+									</>
+								}
+							>
+								{allOperatorConfigs
+									.filter((config) => {
+										/* Handle AWS */
+										if (operatorName === "AWS") {
+											if (AWSOperators)
+												for (const operator of AWSOperators)
+													return config.operatorName === operator.name;
+										} else return config.operatorName === operatorName;
+									})
+									.sort((config) => -Number(config.createdAt))
+									.map((config) => (
+										<ListItem
+											key={config.id}
+											button
+											divider
+											onClick={(_event) => onSettingClick(_event, config.id)}
+											selected={config.id === configID}
+										>
+											<ListItemText
+												className={classes.configurationListItemText}
+											>
+												{config.name}
+											</ListItemText>
+										</ListItem>
+									))}
+							</List>
+						) : (
+							<Box
+								display="flex"
+								height="100%"
+								justifyContent="center"
+								alignItems="center"
+							>
+								{isLoadingAllOperatorConfigs && <CircularProgress />}
+							</Box>
+						)}
 					</Grid>
 				</Grid>
+			</Container>
+			{isErrorAWSOperators && (
+				<ServerError message="We've met an *unexpected server error* while retrieving the operator configs for AWS!" />
 			)}
-		</Grid>
+		</>
 	);
 };
 

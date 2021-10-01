@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import { Grid, IconButton, TextField } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import {
 	useFormik,
 	FormikProvider,
@@ -10,18 +10,21 @@ import {
 import { Plus, Delete } from "react-feather";
 import * as yup from "yup";
 
+import { TextField } from "components";
 import * as serverConfigurationsInitialData from "utils/serverConfigurationsInitialData";
 
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const ipRegex = require("ip-regex");
+
 export const hostListValidationSchema = yup.object({
-	hostList: yup
-		.array()
-		.of(
-			yup.object({
-				host: yup.string().required(),
-			})
-		)
-		.min(1)
-		.required(),
+	hostList: yup.array().of(
+		yup.object({
+			host: yup
+				.string()
+				.matches(ipRegex(), "Please use {IPv4 | IPv6}:PORT format")
+				.required("Please use {IPv4 | IPv6}:PORT format"),
+		})
+	),
 });
 
 const HostList = ({
@@ -39,32 +42,27 @@ const HostList = ({
 						formik.values.hostList.map(
 							(_host: { host: string; port: string }, index: number) => (
 								<Fragment key={index}>
-									<Grid container alignItems="center" spacing={1}>
-										<Grid item>
-											<TextField
-												{...formik.getFieldProps(`hostList.${index}.host`)}
-												error={
-													!!(
-														formik.getFieldMeta(`hostList.${index}.host`)
-															.touched &&
-														formik.getFieldMeta(`hostList.${index}.host`).error
-													)
-												}
-												fullWidth
-												label="Host"
-												margin="dense"
-												required
-											/>
-										</Grid>
-										<Grid item>
-											<IconButton
-												disabled={formik.values.hostList.length === 1}
-												onClick={() => remove(index)}
-											>
-												<Delete />
-											</IconButton>
-										</Grid>
-									</Grid>
+									<TextField
+										fieldInputProps={{
+											...formik.getFieldProps(`hostList.${index}.host`),
+										}}
+										fieldMetaProps={{
+											...formik.getFieldMeta(`hostList.${index}.host`),
+										}}
+										InputProps={{
+											endAdornment: (
+												<IconButton
+													disabled={formik.values.hostList.length === 1}
+													onClick={() => remove(index)}
+												>
+													<Delete />
+												</IconButton>
+											),
+										}}
+										fullWidth
+										label="Host"
+										required
+									/>
 								</Fragment>
 							)
 						)}
