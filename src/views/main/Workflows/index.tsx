@@ -1,18 +1,23 @@
 import { useEffect } from "react";
 
-import { Container, Grid, IconButton, makeStyles } from "@material-ui/core";
-import { ArrowUpCircle } from "react-feather";
+import { Container, Grid, makeStyles } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useQueryClient } from "react-query";
+import { useHistory } from "react-router";
 
 import { useInfiniteGetWorkFlows } from "actions/workflowActions";
-import { ServerError } from "components";
+import { AddTooltip, ServerError } from "components";
 import { IWorkflow } from "interfaces";
-import AddTooltip from "views/main/Home/DnDFlow/AddTooltip";
 import Loading from "views/main/Workflows/Loading";
 import Workflow from "views/main/Workflows/Workflow";
 
 const useStyles = makeStyles((theme) => ({
+	addIcon: {
+		position: "fixed",
+		bottom: 30, // top: 48 + 30 pixels from top
+		right: 30,
+		zIndex: 5,
+	},
 	bold: { fontWeight: theme.typography.fontWeightBold },
 	infiniteScroll: { padding: 24 },
 	"@keyframes upAndDown": {
@@ -21,15 +26,16 @@ const useStyles = makeStyles((theme) => ({
 		"100%": { transform: "translateY(5px)" },
 	},
 	scrollToTop: {
-		marginTop: 10,
+		zIndex: 5,
 		animation: `$upAndDown 1000ms ${theme.transitions.easing.easeInOut} infinite`,
 	},
 }));
 
-const rowsPerPage = 16;
+const rowsPerPage = 20;
 
 const Workflows = (): JSX.Element => {
 	const classes = useStyles();
+	const history = useHistory();
 
 	const {
 		data,
@@ -46,12 +52,6 @@ const Workflows = (): JSX.Element => {
 		};
 	}, []);
 
-	const handleScrollToTop = () => {
-		window.scrollTo({
-			top: 0,
-		});
-	};
-
 	return (
 		<>
 			<Container maxWidth={false}>
@@ -62,15 +62,6 @@ const Workflows = (): JSX.Element => {
 						<InfiniteScroll
 							className={classes.infiniteScroll}
 							dataLength={data!.pages.length}
-							endMessage={
-								window.scrollY > 0 && (
-									<Grid className={classes.scrollToTop} container>
-										<IconButton onClick={handleScrollToTop}>
-											<ArrowUpCircle size={36} />
-										</IconButton>
-									</Grid>
-								)
-							}
 							hasMore={!!hasNextPage}
 							loader={<Loading rowsPerPage={rowsPerPage / 2} />}
 							next={fetchNextPage}
@@ -86,10 +77,16 @@ const Workflows = (): JSX.Element => {
 								)}
 							</Grid>
 						</InfiniteScroll>
-						<AddTooltip />
 					</>
 				)}
 			</Container>
+			<AddTooltip
+				className={classes.addIcon}
+				onClick={() => {
+					history.push({ pathname: "/home", state: { addNew: true } });
+				}}
+				title="New workflow"
+			/>
 			{getWorkflowsError && <ServerError />}
 		</>
 	);

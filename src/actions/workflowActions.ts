@@ -1,4 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { AxiosResponse } from "axios";
+import { useSnackbar } from "notistack";
 import { Elements } from "react-flow-renderer";
 import {
 	useMutation,
@@ -331,12 +334,17 @@ export const useInfoOfWorkflow = (
 	{
 		argoWorkflowName,
 		infoType,
+		enqueuedNodes,
+		setEnqueuedNodes,
 	}: {
 		argoWorkflowName: string;
 		infoType: infoType;
+		enqueuedNodes?: { displayName: string }[];
+		setEnqueuedNodes?: Dispatch<SetStateAction<{ displayName: string }[]>>;
 	},
 	enabled: boolean
 ): UseQueryResult<any> => {
+	const { enqueueSnackbar } = useSnackbar();
 	const infoOfWorkflow = useQuery(
 		[`workflow/info/${infoType}`, argoWorkflowName],
 		async () => {
@@ -350,6 +358,27 @@ export const useInfoOfWorkflow = (
 		},
 		{
 			refetchInterval: 4000,
+			onSuccess: (data): void => {
+				const nodes = Object.values<any>(data?.nodes ?? {});
+				nodes
+					.filter((node) => node.type === "Pod")
+					.map((node: any) => {
+						if (
+							!enqueuedNodes?.includes(node?.displayName) &&
+							(node?.phase === "Succeeded" || node?.phase === "Failed")
+						) {
+							if (setEnqueuedNodes)
+								setEnqueuedNodes((prevEnqueuedNodes) => [
+									...prevEnqueuedNodes,
+									node?.displayName,
+								]);
+							enqueueSnackbar(`${node?.displayName} ${node?.phase}`, {
+								anchorOrigin: { vertical: "bottom", horizontal: "center" },
+								variant: node?.phase === "Succeeded" ? "success" : "error",
+							});
+						}
+					});
+			},
 			enabled,
 		}
 	);
@@ -377,7 +406,7 @@ export const useLogOfPod = (
 			});
 			return data;
 		},
-		{ refetchInterval: 2000, enabled }
+		{ refetchInterval: 4000, enabled }
 	);
 	return logOfPod;
 };

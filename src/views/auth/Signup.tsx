@@ -2,7 +2,6 @@ import {
 	Button,
 	Grid,
 	Link,
-	TextField,
 	Typography,
 	makeStyles,
 	SvgIcon,
@@ -15,7 +14,7 @@ import "yup-phone";
 
 import { useSignup, Values } from "actions/auth/useSignup";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
-import { ServerError } from "components";
+import { ServerError, TextField } from "components";
 
 const useStyles = makeStyles({
 	fullHeight: { height: "100%" },
@@ -31,17 +30,24 @@ const useStyles = makeStyles({
 });
 
 const signupValidationSchema = yup.object({
-	email: yup.string().required().email(),
-	username: yup.string().required(),
+	email: yup.string().required("Email is a required field").email(),
+	username: yup.string().required("User Name is a required field"),
 	password: yup
 		.string()
-		.required()
-		.matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&* ])/)
+		.required("Password is a required field")
+		.matches(
+			/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&* ])/,
+			"Please put at least one char. of each category below: \n [a-z], [A-Z], [0,9], [[!@#$%^&*]]"
+		)
 		.min(8),
 	phoneNumber: yup
 		.string()
 		.when("emptyPhoneNumber", (empty) =>
-			empty ? yup.string() : yup.string().phone()
+			empty
+				? yup.string()
+				: yup
+						.string()
+						.phone("phone", true, "Please use the international format")
 		),
 });
 
@@ -90,8 +96,8 @@ const Signup = (): JSX.Element => {
 										meta: FieldProps["meta"];
 									}) => (
 										<TextField
-											{...field}
-											error={!!(meta.touched && meta.error)}
+											fieldInputProps={field}
+											fieldMetaProps={meta}
 											label="Email"
 											required
 										/>
@@ -108,8 +114,8 @@ const Signup = (): JSX.Element => {
 										meta: FieldProps["meta"];
 									}) => (
 										<TextField
-											{...field}
-											error={!!(meta.touched && meta.error)}
+											fieldInputProps={field}
+											fieldMetaProps={meta}
 											label="User Name"
 											required
 										/>
@@ -126,20 +132,14 @@ const Signup = (): JSX.Element => {
 										meta: FieldProps["meta"];
 									}) => (
 										<TextField
-											{...field}
-											error={!!(meta.touched && meta.error)}
+											fieldInputProps={field}
+											fieldMetaProps={meta}
 											label="Password"
 											required
 											type="password"
 										/>
 									)}
 								</Field>
-								<Typography display="block" variant="caption">
-									Min. 8 characters and at least one of:
-								</Typography>
-								<Typography display="block" variant="caption">
-									[a-z], [A-Z], [0,9], [[!@#$%^&*]]
-								</Typography>
 							</Grid>
 							<Grid item>
 								<Field name="phoneNumber">
@@ -151,7 +151,8 @@ const Signup = (): JSX.Element => {
 										meta: FieldProps["meta"];
 									}) => (
 										<TextField
-											{...field}
+											fieldInputProps={field}
+											fieldMetaProps={meta}
 											onChange={(event) => {
 												event.target.value.length
 													? setValues({
@@ -164,14 +165,10 @@ const Signup = (): JSX.Element => {
 													  });
 												field.onChange(event);
 											}}
-											error={!!(meta.touched && meta.error)}
-											label="Phone number"
+											label="Phone Number"
 										/>
 									)}
 								</Field>
-								<Typography display="block" variant="caption">
-									Please use the international format.
-								</Typography>
 							</Grid>
 							<Grid item>
 								<Button disabled={isSubmitting || !isValid} type="submit">

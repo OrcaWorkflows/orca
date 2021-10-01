@@ -1,18 +1,17 @@
 import { useEffect, useRef, KeyboardEventHandler } from "react";
 
-import { TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router";
 import * as yup from "yup";
 
 import { useSetWorkflow } from "actions/workflowActions";
-import { ServerError } from "components";
+import { ServerError, TextField } from "components";
 import { IWorkflow } from "interfaces";
 import { HomeParams } from "views/main/Home";
 
 const workflowNameValidationSchema = yup.object({
-	name: yup.string().nullable(),
+	name: yup.string().required("Workflow Name is a required field"),
 });
 
 const WorkflowName = (): JSX.Element => {
@@ -62,16 +61,12 @@ const WorkflowName = (): JSX.Element => {
 	return (
 		<>
 			<TextField
-				inputRef={inputRef}
-				{...formik.getFieldProps("name")}
-				error={
-					!!(
-						formik.getFieldMeta("name").touched &&
-						formik.getFieldMeta("name").error
-					)
-				}
+				ref={inputRef}
+				fieldInputProps={{ ...formik.getFieldProps("name") }}
+				fieldMetaProps={{ ...formik.getFieldMeta("name") }}
 				onKeyDown={handleKeyDown}
-				label="Name of the workflow"
+				label="Workflow Name"
+				required
 				size="small"
 				style={{
 					position: "absolute",
@@ -79,7 +74,6 @@ const WorkflowName = (): JSX.Element => {
 					left: 10,
 					zIndex: 5,
 				}}
-				variant="standard"
 			/>
 			{isError && <ServerError />}
 		</>

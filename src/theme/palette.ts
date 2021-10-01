@@ -2,19 +2,18 @@ const palette = {
 	action: {
 		selected: "#709472",
 	},
-	background: { default: "#696666", paper: "#494747" },
+	background: { default: "#696666", paper: "#575555" },
 	primary: {
-		ligher: "#cacaca",
 		light: "#bdbdbd",
 		main: "#696666",
-		dark: "#494747",
+		dark: "#575555",
 		contrastText: "#709472",
 	},
 	secondary: {
 		light: "#8ca98e",
 		main: "#709472",
 		dark: "#4e674f",
-		contrastText: "#212121",
+		contrastText: "#e0f2f1",
 	},
 	error: {
 		light: "#801313",

@@ -23,8 +23,8 @@ import { ServerError } from "components";
 import { IWorkflow } from "interfaces";
 import Loading from "views/main/Monitor/Loading";
 
-const useStyles = makeStyles(() => ({
-	bold: { fontWeight: "bold" },
+const useStyles = makeStyles((theme) => ({
+	bold: { fontWeight: theme.typography.fontWeightBold },
 	container: { height: "calc(100vh - 48px)", padding: 24 },
 	link: { cursor: "pointer", textDecoration: "underline" },
 	tableContainer: { height: "calc(100% - 52px)" },

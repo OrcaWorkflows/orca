@@ -1,8 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, Dispatch, SetStateAction } from "react";
 
 import {
 	Button,
-	Divider,
 	Grid,
 	makeStyles,
 	Tooltip,
@@ -25,9 +24,9 @@ import { IWorkflow } from "interfaces";
 import createWorkFlow from "utils/workflow/createWorkflow";
 import { HomeParams } from "views/main/Home";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
 	button: {
-		fontWeight: "bold",
+		fontWeight: theme.typography.fontWeightBold,
 		textTransform: "none",
 		"&:disabled": {
 			border: "none",
@@ -38,9 +37,11 @@ const useStyles = makeStyles(() => ({
 const TopBar = ({
 	nodes,
 	edges,
+	setEnqueuedNodes,
 }: {
 	nodes: Elements;
 	edges: Elements;
+	setEnqueuedNodes?: Dispatch<SetStateAction<{ displayName: string }[]>>;
 }): JSX.Element => {
 	const classes = useStyles();
 	const { workflowID } = useParams<HomeParams>();
@@ -91,15 +92,15 @@ const TopBar = ({
 
 	return (
 		<>
-			<Grid container justifyContent="space-evenly" alignItems="center">
+			<Grid container justifyContent="space-evenly">
 				<Grid item>
 					<Tooltip
 						open={openSubmitTooltip}
 						placement="right"
 						title={
 							<Typography align="center" variant="caption">
-								Please make sure to name your workflow and create edges to
-								submit
+								Please make sure to name your workflow and create at least one
+								edge
 							</Typography>
 						}
 					>
@@ -117,6 +118,7 @@ const TopBar = ({
 								disabled={name === "" || edges.length === 0}
 								onClick={() => {
 									submitWorkflow({ workflow });
+									if (setEnqueuedNodes) setEnqueuedNodes([]);
 								}}
 								variant="contained"
 							>
@@ -259,7 +261,7 @@ const TopBar = ({
 					</Tooltip>
 				</Grid>
 			</Grid>
-			<Divider />
+
 			{isErrorSubmit && <ServerError />}
 			{isErrorSuspend && <ServerError />}
 			{isErrorResume && <ServerError />}

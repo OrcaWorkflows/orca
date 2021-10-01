@@ -36,3 +36,18 @@ export interface IWorkflow {
 	updatedAt: string;
 	submitted: boolean;
 }
+
+export interface IOperatorConfig {
+	createdAt: string;
+	hostList: {
+		host: string;
+		id: number;
+	}[];
+	id: number;
+	name: string;
+	operatorName: string;
+	password: string;
+	property: Record<string, unknown>;
+	updatedAt: string;
+	username: string;
+}

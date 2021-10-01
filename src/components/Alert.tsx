@@ -1,12 +1,16 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, SyntheticEvent } from "react";
 
-import { Snackbar, SnackbarProps, Typography } from "@material-ui/core";
+import {
+	Snackbar,
+	SnackbarProps,
+	Typography,
+	SnackbarCloseReason,
+} from "@material-ui/core";
 import { Alert as MUIAlert, AlertProps } from "@material-ui/lab";
 
 const Alert = ({
-	autoHideDuration,
 	message,
-	severity,
+	...props
 }: {
 	message:
 		| string
@@ -16,16 +20,21 @@ const Alert = ({
 } & AlertProps &
 	SnackbarProps): JSX.Element => {
 	const [openAlert, setOpenAlert] = useState(true);
-	const handleClose = () => {
+	const handleClose = (
+		_event: SyntheticEvent<any, Event>,
+		reason: SnackbarCloseReason
+	) => {
 		setOpenAlert(false);
+		if (props.onClose) props.onClose(_event, reason);
 	};
 	return (
 		<Snackbar
-			autoHideDuration={autoHideDuration}
+			anchorOrigin={props.anchorOrigin}
+			autoHideDuration={props.autoHideDuration}
 			onClose={handleClose}
 			open={openAlert}
 		>
-			<MUIAlert severity={severity} variant="filled">
+			<MUIAlert severity={props.severity} variant="filled">
 				{typeof message === "object"
 					? Object.keys(message).map((key) => {
 							const lines = message[key];
