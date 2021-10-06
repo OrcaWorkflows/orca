@@ -13,6 +13,7 @@ export const useSignin = (): UseMutationResult<
 	unknown
 > => {
 	const history = useHistory();
+
 	const signin = useMutation(
 		async ({ username, password }: Values) =>
 			axios(
@@ -24,9 +25,8 @@ export const useSignin = (): UseMutationResult<
 				false
 			),
 		{
-			onSuccess: (response, variables) => {
+			onSuccess: (response) => {
 				localStorage.setItem("token", response.data.key);
-				localStorage.setItem("username", variables.username);
 				history.push("/home");
 			},
 		}

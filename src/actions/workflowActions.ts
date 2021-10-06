@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { AxiosResponse } from "axios";
-import { useSnackbar } from "notistack";
 import { Elements } from "react-flow-renderer";
 import {
 	useMutation,
@@ -12,8 +11,7 @@ import {
 	UseInfiniteQueryResult,
 	UseQueryResult,
 } from "react-query";
-import { useParams } from "react-router";
-import { useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { IArgoWorkflow, IWorkflow } from "interfaces";
 import { axios } from "utils";
@@ -200,26 +198,6 @@ export function usePaginatedGetWorkflows({
 	return workflows;
 }
 
-// Used to get first workflow, implemented it separately from usePaginatedGetWorkflows for simplicity
-export function useGetFirstWorkflow(): UseQueryResult<{
-	totalCount: number;
-	workflows: IWorkflow[];
-}> {
-	// 0th page with size of 1
-	const workflows = useQuery(["workflows", 0, 1], async () => {
-		const { data } = await axios({
-			method: "get",
-			url: process.env.REACT_APP_API + "/api/workflow",
-			params: {
-				pageNumber: 0,
-				pageSize: 1,
-			},
-		});
-		return data;
-	});
-	return workflows;
-}
-
 export const useSubmitWorkflow = (): UseMutationResult<
 	AxiosResponse,
 	unknown,
@@ -334,17 +312,22 @@ export const useInfoOfWorkflow = (
 	{
 		argoWorkflowName,
 		infoType,
-		enqueuedNodes,
-		setEnqueuedNodes,
+		enqueuedEdgeStatus,
+		setEnqueuedEdgeStatus,
 	}: {
 		argoWorkflowName: string;
 		infoType: infoType;
-		enqueuedNodes?: { displayName: string }[];
-		setEnqueuedNodes?: Dispatch<SetStateAction<{ displayName: string }[]>>;
+		enqueuedEdgeStatus: {
+			displayName: string;
+			isSeen: boolean;
+			phase: string;
+		}[];
+		setEnqueuedEdgeStatus: Dispatch<
+			SetStateAction<{ displayName: string; isSeen: boolean; phase: string }[]>
+		>;
 	},
 	enabled: boolean
 ): UseQueryResult<any> => {
-	const { enqueueSnackbar } = useSnackbar();
 	const infoOfWorkflow = useQuery(
 		[`workflow/info/${infoType}`, argoWorkflowName],
 		async () => {
@@ -360,22 +343,26 @@ export const useInfoOfWorkflow = (
 			refetchInterval: 4000,
 			onSuccess: (data): void => {
 				const nodes = Object.values<any>(data?.nodes ?? {});
+				// "nodes" actually stands for the edges, it's just how endpoint indicates them
 				nodes
 					.filter((node) => node.type === "Pod")
 					.map((node: any) => {
 						if (
-							!enqueuedNodes?.includes(node?.displayName) &&
-							(node?.phase === "Succeeded" || node?.phase === "Failed")
+							node &&
+							!enqueuedEdgeStatus?.some(
+								(edge) => edge.displayName === node?.displayName
+							) &&
+							(node.phase === "Succeeded" || node.phase === "Failed")
 						) {
-							if (setEnqueuedNodes)
-								setEnqueuedNodes((prevEnqueuedNodes) => [
+							if (setEnqueuedEdgeStatus)
+								setEnqueuedEdgeStatus((prevEnqueuedNodes) => [
 									...prevEnqueuedNodes,
-									node?.displayName,
+									{
+										displayName: node.displayName,
+										isSeen: false,
+										phase: node.phase,
+									},
 								]);
-							enqueueSnackbar(`${node?.displayName} ${node?.phase}`, {
-								anchorOrigin: { vertical: "bottom", horizontal: "center" },
-								variant: node?.phase === "Succeeded" ? "success" : "error",
-							});
 						}
 					});
 			},

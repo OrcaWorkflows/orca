@@ -10,7 +10,7 @@ const Logout = (): JSX.Element => {
 	const queryClient = useQueryClient();
 	const logout = () => {
 		localStorage.removeItem("token");
-		localStorage.removeItem("username");
+		localStorage.removeItem("user");
 		queryClient.clear();
 		history.push("/");
 	};

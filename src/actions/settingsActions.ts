@@ -45,6 +45,7 @@ export function useGetOperatorConfig({
 }
 
 type ConfigParameters = {
+	id?: number;
 	hostList?: { host: string }[];
 	name: string;
 	operatorName: string;
@@ -52,15 +53,17 @@ type ConfigParameters = {
 	property?: unknown;
 	username?: string;
 };
-export const useUpsertOperatorConfig = ({
-	configID,
-}: {
-	configID?: number;
-}): UseMutationResult<IOperatorConfig, unknown, ConfigParameters, unknown> => {
+export const useUpsertOperatorConfig = (): UseMutationResult<
+	IOperatorConfig,
+	unknown,
+	ConfigParameters,
+	unknown
+> => {
 	const queryClient = useQueryClient();
 
 	const upsertOperatorConfig = useMutation(
 		async ({
+			id,
 			name,
 			hostList = [], // Required by endpoint for any type of operatorName
 			operatorName,
@@ -72,7 +75,7 @@ export const useUpsertOperatorConfig = ({
 				method: "post",
 				url: process.env.REACT_APP_API + "/api/system-config",
 				data: {
-					id: configID,
+					id,
 					hostList,
 					name,
 					operatorName,
@@ -92,18 +95,19 @@ export const useUpsertOperatorConfig = ({
 	return upsertOperatorConfig;
 };
 
-export const useDeleteOperatorConfig = ({
-	configID,
-}: {
-	configID: number;
-}): UseMutationResult<AxiosResponse, unknown, void, unknown> => {
+export const useDeleteOperatorConfig = (): UseMutationResult<
+	AxiosResponse,
+	unknown,
+	{ id: number },
+	unknown
+> => {
 	const queryClient = useQueryClient();
 
 	const deleteOperatorConfig = useMutation(
-		async () => {
+		async ({ id }: { id: number }) => {
 			const { data } = await axios({
 				method: "delete",
-				url: process.env.REACT_APP_API + `/api/system-config/${configID}`,
+				url: process.env.REACT_APP_API + `/api/system-config/${id}`,
 			});
 			return data;
 		},

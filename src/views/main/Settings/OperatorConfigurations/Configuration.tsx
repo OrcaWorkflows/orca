@@ -14,17 +14,16 @@ import {
 import { useFormik } from "formik";
 import { Info, Trash2 } from "react-feather";
 import { useQueryClient } from "react-query";
+import * as yup from "yup";
 
 import {
 	useDeleteOperatorConfig,
 	useUpsertOperatorConfig,
 } from "actions/settingsActions";
-import { AddTooltip, ServerError, TextDialog } from "components";
+import { AddTooltip, Alert, ServerError, TextDialog } from "components";
 import { IOperatorConfig } from "interfaces";
 import * as serverConfigurationsInitialData from "utils/serverConfigurationsInitialData";
-import ConfigurationName, {
-	configurationNameValidationSchema,
-} from "views/main/Settings/OperatorConfigurations/ConfigurationName";
+import ConfigurationName from "views/main/Settings/OperatorConfigurations/ConfigurationName";
 import {
 	AWS,
 	AWSValidationSchema,
@@ -65,10 +64,14 @@ const Configuration = ({
 
 	const {
 		isError: isErrorUpsertOperatorConfig,
+		isSuccess: isSuccessUpsertOperatorConfig,
 		mutateAsync: upsertOperatorConfig,
-	} = useUpsertOperatorConfig({ configID });
+	} = useUpsertOperatorConfig();
 
 	const queryClient = useQueryClient();
+	const allOperatorConfigs = queryClient.getQueryData([
+		"allOperatorConfigs",
+	]) as IOperatorConfig[];
 	const selectedConfigData: IOperatorConfig | undefined =
 		queryClient.getQueryData(["operatorConfig", configID]);
 
@@ -96,6 +99,7 @@ const Configuration = ({
 	const AWSOperators: { name: string; categoryName: string }[] | undefined =
 		queryClient.getQueryData("AWS");
 
+	// Keep all types of props in initialData to have "controlled inputs" in all cases
 	const initialValues: any = {
 		hostList: isHostListRequired
 			? selectedConfigData?.hostList ?? [
@@ -110,48 +114,101 @@ const Configuration = ({
 					},
 			  ]
 			: [],
-		username: selectedConfigData?.username ?? "",
-		password: selectedConfigData?.password ?? "",
-		property: isAWS
-			? {
-					AWS_REGION_NAME: selectedConfigData?.property.AWS_REGION_NAME ?? "",
-					AWS_ACCESS_KEY_ID:
-						selectedConfigData?.property.AWS_ACCESS_KEY_ID ?? "",
-					AWS_ACCESS_SECRET_KEY:
-						selectedConfigData?.property.AWS_ACCESS_SECRET_KEY ?? "",
-			  }
-			: {},
 		name: selectedConfigData?.name ?? "",
 		operatorName: selectedConfigData?.operatorName ?? operatorName,
+		username: selectedConfigData?.username ?? "",
+		password: selectedConfigData?.password ?? "",
+		property: {
+			AWS_REGION_NAME: selectedConfigData?.property?.AWS_REGION_NAME ?? "",
+			AWS_ACCESS_KEY_ID: selectedConfigData?.property?.AWS_ACCESS_KEY_ID ?? "",
+			AWS_ACCESS_SECRET_KEY:
+				selectedConfigData?.property?.AWS_ACCESS_SECRET_KEY ?? "",
+		},
 	};
 
 	const handleSubmit = async (values: typeof initialValues) => {
 		if (isAWS) {
-			if (AWSOperators)
-				for (const operator of AWSOperators) {
-					upsertOperatorConfig({
-						hostList: values.hostList,
-						name: values.name,
-						operatorName: operator.name,
-						password: values.password,
-						property: values.property,
-						username: values.username,
-					}).then((data) => {
-						if (data?.id) setConfigID(data.id);
+			if (AWSOperators) {
+				if (selectedConfigData) {
+					const AWSOperatorConfigsToUpdate = allOperatorConfigs?.filter(
+						(config) => config.name === selectedConfigData?.name
+					);
+					for (const operator of AWSOperatorConfigsToUpdate) {
+						upsertOperatorConfig({
+							id: operator.id,
+							hostList: values.hostList,
+							name: values.name,
+							operatorName: operator.name,
+							property: values.property,
+						}).then((data) => {
+							if (data?.id) setConfigID(data.id);
+						});
+					}
+				} else
+					for (const operator of AWSOperators) {
+						upsertOperatorConfig({
+							hostList: values.hostList,
+							name: values.name,
+							operatorName: operator.name,
+							property: values.property,
+						}).then((data) => {
+							if (data?.id) setConfigID(data.id);
+						});
+					}
+			}
+		} else {
+			if (isCredentialsRequired) {
+				upsertOperatorConfig({
+					id: configID,
+					hostList: values.hostList,
+					name: values.name,
+					operatorName,
+					password: values.password,
+					username: values.username,
+				}).then((data) => {
+					if (data?.id) setConfigID(data.id);
+				});
+			} else {
+				upsertOperatorConfig({
+					id: configID,
+					hostList: values.hostList,
+					name: values.name,
+					operatorName,
+				}).then((data) => {
+					if (data?.id) setConfigID(data.id);
+				});
+			}
+		}
+	};
+
+	const handleDeleteConfirm = () => {
+		if (isAWS) {
+			if (AWSOperators) {
+				const AWSOperatorConfigsToDelete = allOperatorConfigs?.filter(
+					(config) => config.name === selectedConfigData?.name
+				);
+				for (const operator of AWSOperatorConfigsToDelete) {
+					deleteOperatorConfig({
+						id: operator.id,
 					});
 				}
-		} else
-			upsertOperatorConfig({
-				hostList: values.hostList,
-				name: values.name,
-				operatorName,
-				password: values.password,
-				property: values.property,
-				username: values.username,
-			}).then((data) => {
-				if (data?.id) setConfigID(data.id);
-			});
+			}
+		} else deleteOperatorConfig({ id: configID as number });
 	};
+
+	// Defined here because of async dependencies
+	const configurationNameValidationSchema = yup.object({
+		name: yup
+			.string()
+			.required("Configuration Name is a required field")
+			.test(
+				"nameNotUnique",
+				"Configuration Name is not unique",
+				function (value) {
+					return !allOperatorConfigs?.some((config) => config.name === value);
+				}
+			),
+	});
 
 	let validationSchema = configurationNameValidationSchema;
 	if (isAWS) validationSchema = validationSchema.concat(AWSValidationSchema);
@@ -169,8 +226,8 @@ const Configuration = ({
 	});
 
 	const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
-	const { isError: deleteOperatorConfigError, mutate } =
-		useDeleteOperatorConfig({ configID } as { configID: number });
+	const { isError: deleteOperatorConfigError, mutate: deleteOperatorConfig } =
+		useDeleteOperatorConfig();
 
 	return (
 		<>
@@ -261,7 +318,7 @@ const Configuration = ({
 				open={openRemoveDialog}
 				onClose={() => setOpenRemoveDialog(false)}
 				onConfirm={() => {
-					mutate();
+					handleDeleteConfirm();
 					setOpenRemoveDialog(false);
 					setConfigID(undefined);
 				}}
@@ -270,6 +327,13 @@ const Configuration = ({
 			/>
 			{deleteOperatorConfigError && <ServerError />}
 			{isErrorUpsertOperatorConfig && <ServerError />}
+			{isSuccessUpsertOperatorConfig && (
+				<Alert
+					autoHideDuration={3000}
+					message="Submitted successfuly!"
+					severity="success"
+				/>
+			)}
 		</>
 	);
 };

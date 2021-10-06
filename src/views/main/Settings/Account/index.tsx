@@ -11,7 +11,6 @@ import * as yup from "yup";
 // import { useQueryClient } from "react-query";
 
 import { useUpdateUser } from "actions/auth/useUpdateUser";
-import { useUserMe } from "actions/auth/useUserMe";
 import { ServerError } from "components";
 import ChangeEmail from "views/main/Settings/Account/ChangeEmail";
 import ChangePassword from "views/main/Settings/Account/ChangePassword";
@@ -93,6 +92,8 @@ const accountValidationSchema = yup.object({
 export const Account = (): JSX.Element => {
 	const classes = useStyles();
 
+	const user = JSON.parse(localStorage.getItem("user") as string);
+
 	const { isError: isErrorUpdateUser, mutateAsync: updateUser } =
 		useUpdateUser();
 
@@ -123,8 +124,6 @@ export const Account = (): JSX.Element => {
 		validationSchema: accountValidationSchema,
 	});
 
-	const { data: userMe, isError: isErrorUserMe } = useUserMe();
-
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<Grid container direction="column" spacing={2}>
@@ -133,10 +132,10 @@ export const Account = (): JSX.Element => {
 						Update your account
 					</Typography>
 					<Typography className={classes.bold} variant="h4">
-						{localStorage.getItem("username")}
+						{user.username}
 					</Typography>
-					{userMe?.email && (
-						<Typography variant="caption">{userMe?.email}</Typography>
+					{user.email && (
+						<Typography variant="caption">{user.email}</Typography>
 					)}
 				</Grid>
 				<Grid item xs>
@@ -171,9 +170,6 @@ export const Account = (): JSX.Element => {
 				</Grid>
 			</Grid>
 			{isErrorUpdateUser && <ServerError />}
-			{isErrorUserMe && (
-				<ServerError message="We've met an *unexpected server error* while retrieving the user information!" />
-			)}
 		</form>
 	);
 };

@@ -15,7 +15,7 @@ export const useUpdateUser = (): UseMutationResult<
 	Values,
 	unknown
 > => {
-	const username = localStorage.getItem("username");
+	const username = JSON.parse(localStorage.getItem("user") as string).username;
 
 	const signup = useMutation(async ({ email, password, phoneNumber }: Values) =>
 		axios({

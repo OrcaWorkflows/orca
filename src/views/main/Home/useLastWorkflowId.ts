@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
 
-function getWorkflowID() {
-	return JSON.parse(localStorage.getItem("lastWorkflowID") as string);
+function getWorkflowID(username: string | undefined) {
+	return JSON.parse(
+		localStorage.getItem(username + "-" + "lastVisitedWorkflowID") as string
+	);
 }
 
-const useLastWorkflowID = (): string => {
-	const [lastWorkflowID, setLastworkflowID] = useState(getWorkflowID());
+const useLastWorkflowID = (username: string | undefined): string => {
+	const [lastWorkflowID, setLastworkflowID] = useState(getWorkflowID(username));
 
 	useEffect(() => {
-		const handleChangeStorage = () => {
-			setLastworkflowID(getWorkflowID());
-		};
+		setLastworkflowID(getWorkflowID(username));
 
+		const handleChangeStorage = () => {
+			setLastworkflowID(getWorkflowID(username));
+		};
 		window.addEventListener("storage", () => handleChangeStorage);
 		return () =>
 			window.removeEventListener("storage", () => handleChangeStorage);
-	}, []);
+	}, [username]);
 
 	return lastWorkflowID;
 };
