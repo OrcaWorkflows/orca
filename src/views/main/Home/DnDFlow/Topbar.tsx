@@ -10,7 +10,7 @@ import {
 import clsx from "clsx";
 import { Elements } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 import {
 	useResumeWorkflow,
@@ -37,11 +37,19 @@ const useStyles = makeStyles((theme) => ({
 const TopBar = ({
 	nodes,
 	edges,
-	setEnqueuedNodes,
+	setEnqueuedEdgeStatus,
 }: {
 	nodes: Elements;
 	edges: Elements;
-	setEnqueuedNodes?: Dispatch<SetStateAction<{ displayName: string }[]>>;
+	setEnqueuedEdgeStatus: Dispatch<
+		SetStateAction<
+			{
+				displayName: string;
+				isSeen: boolean;
+				phase: string;
+			}[]
+		>
+	>;
 }): JSX.Element => {
 	const classes = useStyles();
 	const { workflowID } = useParams<HomeParams>();
@@ -118,7 +126,7 @@ const TopBar = ({
 								disabled={name === "" || edges.length === 0}
 								onClick={() => {
 									submitWorkflow({ workflow });
-									if (setEnqueuedNodes) setEnqueuedNodes([]);
+									if (setEnqueuedEdgeStatus) setEnqueuedEdgeStatus([]);
 								}}
 								variant="contained"
 							>

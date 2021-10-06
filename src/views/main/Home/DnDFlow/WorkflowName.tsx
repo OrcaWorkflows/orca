@@ -2,7 +2,7 @@ import { useEffect, useRef, KeyboardEventHandler } from "react";
 
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 
 import { useSetWorkflow } from "actions/workflowActions";

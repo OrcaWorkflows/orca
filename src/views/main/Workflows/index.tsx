@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Container, Grid, makeStyles } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useQueryClient } from "react-query";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { useInfiniteGetWorkFlows } from "actions/workflowActions";
 import { AddTooltip, ServerError } from "components";

@@ -8,7 +8,8 @@ import {
 	SetStateAction,
 } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { Snackbar, makeStyles } from "@material-ui/core";
+import { Alert as MuiAlert } from "@material-ui/lab";
 import ReactFlow, {
 	addEdge,
 	removeElements,
@@ -110,13 +111,32 @@ const DnDFlow = ({
 		workflowID,
 	]);
 	const argoWorkflowName = currentWorkflow?.argoWorkflowName ?? "";
-	const [enqueuedNodes, setEnqueuedNodes] = useState<{ displayName: string }[]>(
-		[]
-	);
+	const [currentEdgeStatus, setCurrentEdgeStatus] = useState<
+		| {
+				displayName: string;
+				isSeen: boolean;
+				phase: string;
+		  }
+		| undefined
+	>();
+	const [enqueuedEdgeStatus, setEnqueuedEdgeStatus] = useState<
+		{ displayName: string; isSeen: boolean; phase: string }[]
+	>([]);
 	const { data: statusData } = useInfoOfWorkflow(
-		{ argoWorkflowName, infoType: "status", enqueuedNodes, setEnqueuedNodes },
+		{
+			argoWorkflowName,
+			infoType: "status",
+			enqueuedEdgeStatus,
+			setEnqueuedEdgeStatus,
+		},
 		Boolean(argoWorkflowName)
 	);
+	useEffect(() => {
+		const edgeStatusNotSeen = enqueuedEdgeStatus.find((node) => !node.isSeen);
+		setCurrentEdgeStatus(
+			edgeStatusNotSeen ? { ...edgeStatusNotSeen } : undefined
+		);
+	}, [enqueuedEdgeStatus]);
 
 	useEffect(() => {
 		if (selectedEdgeCustomID) {
@@ -197,7 +217,11 @@ const DnDFlow = ({
 
 	return (
 		<>
-			<TopBar nodes={nodes} edges={edges} setEnqueuedNodes={setEnqueuedNodes} />
+			<TopBar
+				nodes={nodes}
+				edges={edges}
+				setEnqueuedEdgeStatus={setEnqueuedEdgeStatus}
+			/>
 			<div className={classes.reactFlowWrapper} ref={reactFlowWrapper}>
 				<ReactFlow
 					elements={nodes.concat(edges)}
@@ -231,6 +255,38 @@ const DnDFlow = ({
 					title="New workflow"
 				/>
 			</div>
+
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				autoHideDuration={2000}
+				onClose={() => {
+					if (currentEdgeStatus) {
+						const currentEdgeStatusIndex = enqueuedEdgeStatus.findIndex(
+							(edgeStatus) =>
+								edgeStatus.displayName === currentEdgeStatus.displayName
+						);
+						const newEnqueuedEdgeStatus = [...enqueuedEdgeStatus];
+						newEnqueuedEdgeStatus[currentEdgeStatusIndex] = {
+							...currentEdgeStatus,
+							isSeen: true,
+						};
+
+						setEnqueuedEdgeStatus(newEnqueuedEdgeStatus);
+						setCurrentEdgeStatus(undefined);
+					}
+				}}
+				open={Boolean(currentEdgeStatus)}
+			>
+				{currentEdgeStatus && (
+					<MuiAlert
+						severity={
+							currentEdgeStatus?.phase === "Succeeded" ? "success" : "error"
+						}
+					>
+						{currentEdgeStatus.displayName + " " + currentEdgeStatus.phase}
+					</MuiAlert>
+				)}
+			</Snackbar>
 
 			{getWorkflowError && (
 				<Alert

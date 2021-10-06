@@ -75,10 +75,6 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 	return (
 		<Drawer
 			variant="permanent"
-			className={clsx({
-				[classes.drawerOpen]: open,
-				[classes.drawerClose]: !open,
-			})}
 			classes={{
 				paper: clsx({
 					[classes.drawerOpen]: open,

@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 	succeeded: {
 		stroke: theme.palette.success.main,
 		strokeWidth: 2,
-		strokeDasharray: "10 4",
 	},
 	failed: {
 		stroke: theme.palette.error.main,
@@ -60,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 	omitted: {
 		stroke: theme.palette.primary.light,
 		strokeWidth: 2,
-		strokeDasharray: "5%",
+		strokeDasharray: "10 4",
 	},
 	selected: {
 		stroke: theme.palette.warning.light,

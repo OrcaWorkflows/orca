@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { format } from "date-fns";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 import { useLogOfPod } from "actions/workflowActions";
 // import { ServerError } from "components";

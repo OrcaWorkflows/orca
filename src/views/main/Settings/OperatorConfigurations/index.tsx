@@ -50,6 +50,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+const getUniqueBy = (arr: any[], prop: string) => {
+	const set = new Set();
+	return arr.filter((o) => !set.has(o[prop]) && set.add(o[prop]));
+};
+
 const systemWideConfiguredPlatforms = platforms.filter(
 	(platform) => platform.text !== "Amazon Web Services"
 );
@@ -118,7 +123,7 @@ export const OperatorConfigurations = (): JSX.Element => {
 										selected={operatorName === "AWS"}
 									>
 										<ListItemIcon>
-											<img src={aws} style={{ height: 24 }} draggable={false} />
+											<img src={aws} style={{ height: 24 }} />
 										</ListItemIcon>
 										<ListItemText primary="AWS" />
 									</ListItem>
@@ -148,10 +153,10 @@ export const OperatorConfigurations = (): JSX.Element => {
 					<Grid item xs={3} className={classes.fullHeight}>
 						{allOperatorConfigs?.filter((config) => {
 							/* Handle AWS */
-							if (operatorName === "AWS") {
-								if (AWSOperators)
-									for (const operator of AWSOperators)
-										return config.operatorName === operator.name;
+							if (operatorName === "AWS" && AWSOperators) {
+								for (const operator of AWSOperators) {
+									return config.operatorName === operator.name;
+								}
 							} else return config.operatorName === operatorName;
 						}).length ? (
 							<List
@@ -165,17 +170,21 @@ export const OperatorConfigurations = (): JSX.Element => {
 									</>
 								}
 							>
-								{allOperatorConfigs
-									.filter((config) => {
-										/* Handle AWS */
-										if (operatorName === "AWS") {
-											if (AWSOperators)
-												for (const operator of AWSOperators)
-													return config.operatorName === operator.name;
-										} else return config.operatorName === operatorName;
-									})
-									.sort((config) => -Number(config.createdAt))
-									.map((config) => (
+								{
+									/* Handle AWS */
+									(operatorName === "AWS" && AWSOperators
+										? getUniqueBy(
+												allOperatorConfigs.filter((config) => {
+													return AWSOperators.find(
+														(operator) => config.operatorName === operator.name
+													);
+												}),
+												"name"
+										  )
+										: allOperatorConfigs.filter(
+												(config) => config.operatorName === operatorName
+										  )
+									).map((config) => (
 										<ListItem
 											key={config.id}
 											button
@@ -189,7 +198,8 @@ export const OperatorConfigurations = (): JSX.Element => {
 												{config.name}
 											</ListItemText>
 										</ListItem>
-									))}
+									))
+								}
 							</List>
 						) : (
 							<Box

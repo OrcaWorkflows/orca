@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 
-import { Grid, Divider, Paper, makeStyles } from "@material-ui/core";
-import clsx from "clsx";
+import { Grid, Paper, makeStyles } from "@material-ui/core";
 import { ReactFlowProvider } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-import { useGetFirstWorkflow } from "actions/workflowActions";
+import { Me } from "actions/auth/useUserMe";
 import DnDFlow from "views/main/Home/DnDFlow";
 import Sidebar from "views/main/Home/Sidebar";
+import useLastWorkflowID from "views/main/Home/useLastWorkflowId";
 import WorkflowLog from "views/main/Home/WorkflowLog";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	fullHeight: { height: "100%" },
 	root: { height: "calc(100vh - 48px)" },
-	sidebar: {
-		width: theme.spacing(30),
-	},
 	DnDFlow: {
 		margin: 20,
 	},
@@ -29,33 +26,27 @@ export type HomeParams = {
 const Home = (): JSX.Element => {
 	const classes = useStyles();
 	const history = useHistory();
-	const location = useLocation();
 	const { workflowID } = useParams<HomeParams>();
 
 	const [selectedEdgeCustomID, setSelectedEdgeCustomID] = useState("");
 	const [loggedPodName, setLoggedPodName] = useState<string | undefined>();
 	const [openLog, setOpenLog] = useState(false);
 
-	const workflows = useGetFirstWorkflow().data?.workflows;
-	const lastCreatedWorkflowID = workflows?.length ? workflows[0].id : undefined;
-
 	const queryClient = useQueryClient();
+	const userMe = queryClient.getQueryData<Me>("me");
 	useEffect(() => {
-		if (
-			lastCreatedWorkflowID &&
-			!(
-				location as {
-					pathname: string;
-					state: { addNew: boolean } | undefined;
-				}
-			).state?.addNew
-		) {
-			if (!workflowID) history.replace(`/home/${lastCreatedWorkflowID}`);
-			return () => {
-				queryClient.resetQueries(["workflows", 0, 1]);
-			};
-		}
-	}, [lastCreatedWorkflowID, location]);
+		if (workflowID && userMe)
+			localStorage.setItem(
+				userMe.username + "-" + "lastVisitedWorkflowID",
+				workflowID
+			);
+	}, [workflowID, userMe]);
+
+	const lastWorkflowID = useLastWorkflowID(userMe?.username);
+	useEffect(() => {
+		if (!workflowID && lastWorkflowID)
+			history.replace(`/home/${lastWorkflowID}`);
+	}, [lastWorkflowID]);
 
 	return (
 		<>
@@ -65,14 +56,9 @@ const Home = (): JSX.Element => {
 					className={classes.fullHeight}
 					justifyContent="space-between"
 				>
-					<Grid
-						item
-						className={clsx(classes.fullHeight, classes.sidebar)}
-						xs="auto"
-					>
+					<Grid item className={classes.fullHeight} xs="auto">
 						<Sidebar />
 					</Grid>
-					<Divider flexItem orientation="vertical" />
 					<Grid item className={(classes.fullHeight, classes.DnDFlow)} xs>
 						<Paper className={classes.fullHeight} variant="outlined">
 							<ReactFlowProvider>

@@ -1,8 +1,11 @@
-import { useState, PropsWithChildren } from "react";
+import { useState, useEffect, PropsWithChildren } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { LinearProgress, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
+import { useQueryClient } from "react-query";
+import { useHistory } from "react-router-dom";
 
+import { useUserMe } from "actions/auth/useUserMe";
 import Header from "layouts/Main/Header";
 import Sidebar from "layouts/Main/Sidebar";
 
@@ -26,9 +29,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = (props: PropsWithChildren<Record<never, never>>): JSX.Element => {
 	const classes = useStyles();
+	const history = useHistory();
 	const [drawerOpen, setDrawerOpen] = useState(false);
 
-	return (
+	const { isError: isErrorUserMe, isLoading: isLoadingUserMe } = useUserMe();
+
+	const queryClient = useQueryClient();
+	useEffect(() => {
+		// Will be abstracted later on
+		if (isErrorUserMe) {
+			localStorage.removeItem("token");
+			localStorage.removeItem("user");
+			queryClient.clear();
+			history.push("/");
+		}
+	}, [isErrorUserMe]);
+
+	return isLoadingUserMe ? (
+		<LinearProgress />
+	) : (
 		<>
 			<Header />
 			<Sidebar open={drawerOpen} setOpen={setDrawerOpen} />
@@ -38,7 +57,7 @@ const Main = (props: PropsWithChildren<Record<never, never>>): JSX.Element => {
 					[classes.drawerClose]: !drawerOpen,
 				})}
 			>
-				<>{props.children}</>
+				{props.children}
 			</div>
 		</>
 	);

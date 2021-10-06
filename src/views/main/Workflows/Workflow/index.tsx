@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Edit, MoreVertical, Trash2 } from "react-feather";
 import { ReactFlowProvider } from "react-flow-renderer";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { useDeleteWorkflow } from "actions/workflowActions";
 import { ServerError, TextDialog } from "components";
