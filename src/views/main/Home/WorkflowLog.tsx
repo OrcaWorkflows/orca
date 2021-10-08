@@ -8,6 +8,7 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { format } from "date-fns";
+import { useStoreActions } from "react-flow-renderer";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 
@@ -84,6 +85,10 @@ const WorkflowLog = ({
 		Boolean(podName)
 	);
 
+	const resetSelectedElements = useStoreActions(
+		(actions) => actions.resetSelectedElements
+	);
+
 	return (
 		<>
 			<Drawer
@@ -92,6 +97,7 @@ const WorkflowLog = ({
 				open={openLog}
 				onClose={() => {
 					setOpenLog(false);
+					resetSelectedElements();
 				}}
 			>
 				<Typography variant="h5" gutterBottom>
@@ -142,13 +148,15 @@ const WorkflowLog = ({
 						</Box>
 					) : logData ? (
 						<>
-							{logData.split("\n").map((line: string, index: number) => {
-								return (
-									<Typography key={index} variant="caption">
-										{line ? JSON.parse(line).result.content : "End"}
-									</Typography>
-								);
-							})}
+							{logData.split("\n")
+								? logData.split("\n").map((line: string, index: number) => {
+										return (
+											<Typography key={index} variant="caption">
+												{line ? JSON.parse(line).result.content : "End"}
+											</Typography>
+										);
+								  })
+								: logData}
 						</>
 					) : null
 				) : null}

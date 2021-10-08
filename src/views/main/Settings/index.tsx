@@ -10,7 +10,7 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import clsx from "clsx";
-import { User, Tool, HelpCircle } from "react-feather";
+import { FiUser, FiTool, FiHelpCircle } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
 
 import Account from "views/main/Settings/Account";
@@ -51,7 +51,7 @@ export const Settings = (): JSX.Element => {
 							divider
 						>
 							<ListItemIcon>
-								<User />
+								<FiUser />
 							</ListItemIcon>
 							<ListItemText
 								primaryTypographyProps={{
@@ -69,7 +69,7 @@ export const Settings = (): JSX.Element => {
 							divider
 						>
 							<ListItemIcon>
-								<Tool />
+								<FiTool />
 							</ListItemIcon>
 							<ListItemText
 								primaryTypographyProps={{
@@ -89,7 +89,7 @@ export const Settings = (): JSX.Element => {
 							divider
 						>
 							<ListItemIcon>
-								<HelpCircle />
+								<FiHelpCircle />
 							</ListItemIcon>
 							<ListItemText
 								primaryTypographyProps={{

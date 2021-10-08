@@ -11,10 +11,9 @@ import {
 	Tooltip,
 	Typography,
 } from "@material-ui/core";
-import { useFormik } from "formik";
-import { Info, Trash2 } from "react-feather";
+import { useFormik, validateYupSchema, yupToFormErrors } from "formik";
+import { FiInfo, FiTrash2 } from "react-icons/fi";
 import { useQueryClient } from "react-query";
-import * as yup from "yup";
 
 import {
 	useDeleteOperatorConfig,
@@ -22,6 +21,7 @@ import {
 } from "actions/settingsActions";
 import { AddTooltip, Alert, ServerError, TextDialog } from "components";
 import { IOperatorConfig } from "interfaces";
+import { yup } from "utils";
 import * as serverConfigurationsInitialData from "utils/serverConfigurationsInitialData";
 import ConfigurationName from "views/main/Settings/OperatorConfigurations/ConfigurationName";
 import {
@@ -75,7 +75,7 @@ const Configuration = ({
 	const selectedConfigData: IOperatorConfig | undefined =
 		queryClient.getQueryData(["operatorConfig", configID]);
 
-	const isHostListRequired =
+	const includesHostList =
 		operatorName === "elasticsearch" ||
 		operatorName === "kafka" ||
 		operatorName === "mongodb" ||
@@ -86,7 +86,7 @@ const Configuration = ({
 		operatorName === "oracle" ||
 		operatorName === "postgresql";
 
-	const isCredentialsRequired =
+	const includesCredentials =
 		operatorName === "redis" ||
 		operatorName === "mariadb" ||
 		operatorName === "mssql" ||
@@ -96,12 +96,13 @@ const Configuration = ({
 
 	// Handle AWS
 	const isAWS = operatorName === "AWS";
+
 	const AWSOperators: { name: string; categoryName: string }[] | undefined =
 		queryClient.getQueryData("AWS");
 
 	// Keep all types of props in initialData to have "controlled inputs" in all cases
 	const initialValues: any = {
-		hostList: isHostListRequired
+		hostList: includesHostList
 			? selectedConfigData?.hostList ?? [
 					{
 						host: `:${
@@ -157,7 +158,7 @@ const Configuration = ({
 					}
 			}
 		} else {
-			if (isCredentialsRequired) {
+			if (includesCredentials) {
 				upsertOperatorConfig({
 					id: configID,
 					hostList: values.hostList,
@@ -200,29 +201,56 @@ const Configuration = ({
 	const configurationNameValidationSchema = yup.object({
 		name: yup
 			.string()
-			.required("Configuration Name is a required field")
+			.required()
 			.test(
 				"nameNotUnique",
 				"Configuration Name is not unique",
 				function (value) {
-					return !allOperatorConfigs?.some((config) => config.name === value);
+					let occurences = 0;
+					if (allOperatorConfigs) {
+						for (const config of allOperatorConfigs) {
+							if (config.name === value) occurences++;
+						}
+					}
+					if (selectedConfigData) {
+						if (isAWS) return occurences > 5 ? false : true;
+						else return occurences > 1 ? false : true;
+					} else {
+						if (isAWS) return occurences === 5 ? false : true;
+						else return occurences === 1 ? false : true;
+					}
 				}
 			),
 	});
-
-	let validationSchema = configurationNameValidationSchema;
-	if (isAWS) validationSchema = validationSchema.concat(AWSValidationSchema);
-	if (isHostListRequired)
-		validationSchema = validationSchema.concat(hostListValidationSchema);
-	if (isCredentialsRequired)
-		validationSchema = validationSchema.concat(credentialsValidationSchema);
 
 	const formik = useFormik<typeof initialValues>({
 		initialValues,
 		enableReinitialize: true,
 		onSubmit: handleSubmit,
 		validateOnMount: true,
-		validationSchema,
+		validate: (values: typeof initialValues) => {
+			let validationSchema = configurationNameValidationSchema;
+			if (isAWS)
+				validationSchema = validationSchema.concat(AWSValidationSchema);
+			if (includesHostList)
+				validationSchema = validationSchema.concat(hostListValidationSchema);
+			if (includesCredentials) {
+				validationSchema = validationSchema.concat(credentialsValidationSchema);
+			}
+			try {
+				validateYupSchema<typeof initialValues>(
+					values,
+					validationSchema,
+					true,
+					{
+						operatorName,
+					}
+				);
+			} catch (err) {
+				return yupToFormErrors(err);
+			}
+			return {};
+		},
 	});
 
 	const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
@@ -260,7 +288,9 @@ const Configuration = ({
 												style={{ margin: 3 }}
 												title="You can create your own custom configurations here and use them to populate many instances while creating your workflow later on."
 											>
-												<Info />
+												<div>
+													<FiInfo />
+												</div>
 											</Tooltip>
 										</Grid>
 									</Grid>
@@ -275,7 +305,7 @@ const Configuration = ({
 											onClick={() => setOpenRemoveDialog(true)}
 											disabled={!configID}
 										>
-											<Trash2 />
+											<FiTrash2 />
 										</IconButton>
 									)}
 								</Grid>
@@ -287,12 +317,12 @@ const Configuration = ({
 										<AWS formik={formik} />
 									</Grid>
 								)}
-								{isCredentialsRequired && (
+								{includesCredentials && (
 									<Grid item xs={12}>
-										<Credentials formik={formik} />
+										<Credentials formik={formik} operatorName={operatorName} />
 									</Grid>
 								)}
-								{isHostListRequired && (
+								{includesHostList && (
 									<Grid item xs={12}>
 										<HostList formik={formik} operatorName={operatorName} />
 									</Grid>

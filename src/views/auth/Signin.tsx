@@ -7,13 +7,13 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
-import { Key } from "react-feather";
+import { FiKey } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
-import * as yup from "yup";
 
 import { useSignin, Values } from "actions/auth/useSignin";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
 import { Alert, TextField } from "components";
+import { yup } from "utils";
 
 const useStyles = makeStyles((theme) => ({
 	fullHeight: { height: "100%" },
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const signinValidationSchema = yup.object({
-	username: yup.string().required("User Name is a required field"),
-	password: yup.string().required("Password is a required field"),
+	username: yup.string().required(),
+	password: yup.string().required(),
 });
 
 const Signin = (): JSX.Element => {
@@ -131,7 +131,7 @@ const Signin = (): JSX.Element => {
 										color="secondary"
 										fontSize="small"
 									>
-										<Key />
+										<FiKey />
 									</SvgIcon>
 								</Link>
 							</Grid>

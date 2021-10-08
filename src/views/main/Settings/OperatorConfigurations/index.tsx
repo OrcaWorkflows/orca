@@ -15,7 +15,7 @@ import {
 	CircularProgress,
 } from "@material-ui/core";
 import clsx from "clsx";
-import { ArrowDown, ArrowUp } from "react-feather";
+import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 
 import { useGetOperatorNamesByCategory } from "actions/operatorActions";
 import {
@@ -113,7 +113,7 @@ export const OperatorConfigurations = (): JSX.Element => {
 									primaryTypographyProps={{ className: classes.bold }}
 									primary="Amazon Web Services"
 								/>
-								{open ? <ArrowUp /> : <ArrowDown />}
+								{open ? <FiArrowUp /> : <FiArrowDown />}
 							</ListItem>
 							<Collapse in={open} timeout="auto">
 								<List disablePadding>

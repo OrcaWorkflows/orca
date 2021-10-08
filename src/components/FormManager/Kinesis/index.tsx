@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const KinesisValidationSchema = yup.object({
-	stream_name: yup.string().required("Stream Name is a required field"),
+	stream_name: yup.string().required(),
 });
 
 const Kinesis = ({

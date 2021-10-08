@@ -7,14 +7,14 @@ import {
 	SvgIcon,
 } from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
-import { LogIn } from "react-feather";
+import { FiLogIn } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
-import * as yup from "yup";
 import "yup-phone";
 
 import { useSignup, Values } from "actions/auth/useSignup";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
 import { ServerError, TextField } from "components";
+import { yup } from "utils";
 
 const useStyles = makeStyles({
 	fullHeight: { height: "100%" },
@@ -30,11 +30,11 @@ const useStyles = makeStyles({
 });
 
 const signupValidationSchema = yup.object({
-	email: yup.string().required("Email is a required field").email(),
-	username: yup.string().required("User Name is a required field"),
+	email: yup.string().required().email(),
+	username: yup.string().required(),
 	password: yup
 		.string()
-		.required("Password is a required field")
+		.required()
 		.matches(
 			/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&* ])/,
 			"Please put at least one char. of each category below: \n [a-z], [A-Z], [0,9], [[!@#$%^&*]]"
@@ -190,7 +190,7 @@ const Signup = (): JSX.Element => {
 										color="secondary"
 										fontSize="small"
 									>
-										<LogIn />
+										<FiLogIn />
 									</SvgIcon>
 								</Link>
 							</Grid>

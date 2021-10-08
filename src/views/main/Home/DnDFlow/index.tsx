@@ -41,8 +41,6 @@ import InfoTooltip from "views/main/Home/DnDFlow/InfoTooltip";
 import TopBar from "views/main/Home/DnDFlow/Topbar";
 import WorkflowName from "views/main/Home/DnDFlow/WorkflowName";
 
-// import useLastworkflowID from "views/main/home/useLastworkflowID"; Not used right now
-
 const useStyles = makeStyles((theme) => ({
 	reactFlowWrapper: { height: "calc(100% - 40px)", position: "relative" }, // Subtract topbar's height
 	controls: {
@@ -250,7 +248,7 @@ const DnDFlow = ({
 				<InfoTooltip />
 				<AddTooltip
 					onClick={() => {
-						history.push({ pathname: "/home", state: { addNew: true } });
+						history.push({ pathname: "/home", state: { new: true } });
 					}}
 					title="New workflow"
 				/>

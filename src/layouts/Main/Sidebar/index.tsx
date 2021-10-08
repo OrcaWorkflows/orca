@@ -11,14 +11,14 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import {
-	ArrowUpRight,
-	ArrowDownLeft,
-	Book,
-	Clock,
-	Home,
-	List,
-	Settings,
-} from "react-feather";
+	FiArrowUpRight,
+	FiArrowDownLeft,
+	FiBook,
+	FiClock,
+	FiHome,
+	FiList,
+	FiSettings,
+} from "react-icons/fi";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +84,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 		>
 			<div className={classes.icon}>
 				<IconButton onClick={handleDrawerClick}>
-					{open ? <ArrowUpRight /> : <ArrowDownLeft />}
+					{open ? <FiArrowUpRight /> : <FiArrowDownLeft />}
 				</IconButton>
 			</div>
 			<Divider />
@@ -96,7 +96,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/home"
 			>
 				<ListItemIcon>
-					<Home />
+					<FiHome />
 				</ListItemIcon>
 				<ListItemText primary="Home" />
 			</ListItem>
@@ -109,7 +109,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/workflows"
 			>
 				<ListItemIcon>
-					<Book />
+					<FiBook />
 				</ListItemIcon>
 				<ListItemText primary="Workflows" />
 			</ListItem>
@@ -122,7 +122,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/monitor"
 			>
 				<ListItemIcon>
-					<List />
+					<FiList />
 				</ListItemIcon>
 				<ListItemText primary="Monitor" />
 			</ListItem>
@@ -136,7 +136,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/schedule"
 			>
 				<ListItemIcon>
-					<Clock />
+					<FiClock />
 				</ListItemIcon>
 				<ListItemText primary="Schedule" />
 			</ListItem>
@@ -149,7 +149,7 @@ const Sidebar = ({ open, setOpen }: Props): JSX.Element => {
 				to="/settings"
 			>
 				<ListItemIcon>
-					<Settings />
+					<FiSettings />
 				</ListItemIcon>
 				<ListItemText primary="Settings" />
 			</ListItem>

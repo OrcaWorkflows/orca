@@ -9,7 +9,7 @@ import {
 	ListItemText,
 	makeStyles,
 } from "@material-ui/core";
-import { ArrowDown, ArrowUp } from "react-feather";
+import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 
 import DraggableListItem from "./DraggableListItem";
 
@@ -51,7 +51,7 @@ const CollapsibleStack = ({
 					primaryTypographyProps={{ className: classes.bold }}
 					primary={data.text}
 				/>
-				{open ? <ArrowUp /> : <ArrowDown />}
+				{open ? <FiArrowUp /> : <FiArrowDown />}
 			</ListItem>
 			<Collapse in={open} timeout="auto">
 				<List disablePadding>

@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const PubSubValidationSchema = yup.object({
-	project_id: yup.string().required("Project id is a required field"),
-	topic: yup.string().required("Topic is a required field"),
-	topic_action: yup.string().required("Topic action is a required field"),
+	project_id: yup.string().required(),
+	topic: yup.string().required(),
+	topic_action: yup.string().required(),
 });
 
 const PubSub = ({

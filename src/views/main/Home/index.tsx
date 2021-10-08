@@ -44,9 +44,13 @@ const Home = (): JSX.Element => {
 
 	const lastWorkflowID = useLastWorkflowID(userMe?.username);
 	useEffect(() => {
-		if (!workflowID && lastWorkflowID)
+		if (
+			!workflowID &&
+			lastWorkflowID &&
+			!(history.location.state as { new: boolean })?.new
+		)
 			history.replace(`/home/${lastWorkflowID}`);
-	}, [lastWorkflowID]);
+	}, [history.location, lastWorkflowID]);
 
 	return (
 		<>
@@ -68,17 +72,17 @@ const Home = (): JSX.Element => {
 									setOpenLog={setOpenLog}
 									setLoggedPodName={setLoggedPodName}
 								/>
+								<WorkflowLog
+									selectedEdgeCustomID={selectedEdgeCustomID}
+									openLog={openLog}
+									setOpenLog={setOpenLog}
+									podName={loggedPodName}
+								/>
 							</ReactFlowProvider>
 						</Paper>
 					</Grid>
 				</Grid>
 			</Paper>
-			<WorkflowLog
-				selectedEdgeCustomID={selectedEdgeCustomID}
-				openLog={openLog}
-				setOpenLog={setOpenLog}
-				podName={loggedPodName}
-			/>
 		</>
 	);
 };

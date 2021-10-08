@@ -1,17 +1,13 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const AWSValidationSchema = yup.object({
 	property: yup.object({
-		AWS_REGION_NAME: yup.string().required("Region Name is a required field"),
-		AWS_ACCESS_KEY_ID: yup
-			.string()
-			.required("Access Key ID is a required field"),
-		AWS_ACCESS_SECRET_KEY: yup
-			.string()
-			.required("Access Secret Key is a required field"),
+		AWS_REGION_NAME: yup.string().required(),
+		AWS_ACCESS_KEY_ID: yup.string().required(),
+		AWS_ACCESS_SECRET_KEY: yup.string().required(),
 	}),
 });
 

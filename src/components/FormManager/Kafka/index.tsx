@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const KafkaValidationSchema = yup.object({
-	topic_name: yup.string().required("Topic Name is a required field"),
+	topic_name: yup.string().required(),
 });
 
 const Kafka = ({

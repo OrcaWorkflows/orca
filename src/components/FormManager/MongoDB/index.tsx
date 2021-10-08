@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const MongoDBValidationSchema = yup.object({
-	database_name: yup.string().required("Database Name is a required field"),
-	collection_name: yup.string().required("Collection Name is a required field"),
+	database_name: yup.string().required(),
+	collection_name: yup.string().required(),
 });
 
 const MongoDB = ({

@@ -7,10 +7,10 @@ import {
 	FieldArray,
 	FieldArrayRenderProps,
 } from "formik";
-import { Plus, Delete } from "react-feather";
-import * as yup from "yup";
+import { FiPlus, FiDelete } from "react-icons/fi";
 
 import { TextField } from "components";
+import { yup } from "utils";
 import * as serverConfigurationsInitialData from "utils/serverConfigurationsInitialData";
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
@@ -22,7 +22,7 @@ export const hostListValidationSchema = yup.object({
 			host: yup
 				.string()
 				.matches(ipRegex(), "Please use {IPv4 | IPv6}:PORT format")
-				.required("Please use {IPv4 | IPv6}:PORT format"),
+				.required(),
 		})
 	),
 });
@@ -55,7 +55,7 @@ const HostList = ({
 													disabled={formik.values.hostList.length === 1}
 													onClick={() => remove(index)}
 												>
-													<Delete />
+													<FiDelete />
 												</IconButton>
 											),
 										}}
@@ -79,7 +79,7 @@ const HostList = ({
 							})
 						}
 					>
-						<Plus />
+						<FiPlus />
 					</IconButton>
 				</Fragment>
 			)}

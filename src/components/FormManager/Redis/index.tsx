@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const RedisValidationSchema = yup.object({
-	database: yup.string().required("Database is a required field"),
+	database: yup.string().required(),
 });
 
 const Redis = ({

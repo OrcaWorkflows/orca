@@ -1,15 +1,15 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const LambdaValidationSchema = yup.object({
-	function_name: yup.string().required("Function Name is a required field"),
-	runtime: yup.string().required("Runtime is a required field"),
-	role: yup.string().required("Role Arn is a required field"),
-	handler: yup.string().required("Handler is a required field"),
-	code_s3_bucket: yup.string().required("S3 Bucket is a required field"),
-	code_s3_key: yup.string().required("S3 Key is a required field"),
+	function_name: yup.string().required(),
+	runtime: yup.string().required(),
+	role: yup.string().required(),
+	handler: yup.string().required(),
+	code_s3_bucket: yup.string().required(),
+	code_s3_key: yup.string().required(),
 	payload: yup.string(),
 });
 

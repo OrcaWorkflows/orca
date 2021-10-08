@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const ElasticSearchValidationSchema = yup.object({
-	index_name: yup.string().required("Index Name is a required field"),
+	index_name: yup.string().required(),
 });
 
 const ElasticSearch = ({

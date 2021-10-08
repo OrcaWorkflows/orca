@@ -1,13 +1,13 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const BigQueryValidationSchema = yup.object({
-	project_id: yup.string().required("Project ID is a required field"),
-	dataset_id: yup.string().required("Dataset ID is a required field"),
-	table_id: yup.string().required("Table ID is a required field"),
-	query: yup.string().required("Query is a required field"),
+	project_id: yup.string().required(),
+	dataset_id: yup.string().required(),
+	table_id: yup.string().required(),
+	query: yup.string().required(),
 });
 
 const BigQuery = ({

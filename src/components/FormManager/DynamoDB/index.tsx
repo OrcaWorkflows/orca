@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const DynamoDBValidationSchema = yup.object({
-	table_name: yup.string().required("Table Name is a required field"),
-	batch_size: yup.number().integer().required("Batch Size is a required field"),
+	table_name: yup.string().required(),
+	batch_size: yup.number().integer().required(),
 });
 
 const DynamoDB = ({

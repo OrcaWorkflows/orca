@@ -6,12 +6,12 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 // import { useQueryClient } from "react-query";
 
 import { useUpdateUser } from "actions/auth/useUpdateUser";
 import { ServerError } from "components";
+import { yup } from "utils";
 import ChangeEmail from "views/main/Settings/Account/ChangeEmail";
 import ChangePassword from "views/main/Settings/Account/ChangePassword";
 import ChangePhoneNumber from "views/main/Settings/Account/ChangePhoneNumber";
