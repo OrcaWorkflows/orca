@@ -7,7 +7,7 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { BsFillHandIndexThumbFill } from "react-icons/bs";
-import { FiInfo, FiMousePointer, FiDelete, FiPlusCircle } from "react-icons/fi";
+import { FiInfo, FiDelete, FiPlusCircle } from "react-icons/fi";
 import { ImShift } from "react-icons/im";
 import { RiDragDropLine } from "react-icons/ri";
 
