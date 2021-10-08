@@ -6,14 +6,10 @@ import {
 	Tooltip,
 	Typography,
 } from "@material-ui/core";
-import { PanTool } from "@material-ui/icons";
-import {
-	Info,
-	MousePointer,
-	Delete,
-	ArrowUpCircle,
-	PlusCircle,
-} from "react-feather";
+import { BsFillHandIndexThumbFill } from "react-icons/bs";
+import { FiInfo, FiMousePointer, FiDelete, FiPlusCircle } from "react-icons/fi";
+import { ImShift } from "react-icons/im";
+import { RiDragDropLine } from "react-icons/ri";
 
 const useStyles = makeStyles((theme) => ({
 	infoIcon: {
@@ -29,7 +25,7 @@ const infoTooltipTitle = (
 	<List dense>
 		<ListItem divider>
 			<ListItemIcon>
-				<PanTool />
+				<RiDragDropLine />
 			</ListItemIcon>
 			<Typography variant="caption">
 				Add a node by dragging it from the specified service categories.
@@ -37,7 +33,7 @@ const infoTooltipTitle = (
 		</ListItem>
 		<ListItem divider>
 			<ListItemIcon>
-				<Info />
+				<FiInfo />
 			</ListItemIcon>
 			<Typography variant="caption">
 				Nodes that are faded require configuration.
@@ -45,7 +41,7 @@ const infoTooltipTitle = (
 		</ListItem>
 		<ListItem divider>
 			<ListItemIcon>
-				<MousePointer />
+				<BsFillHandIndexThumbFill />
 			</ListItemIcon>
 			<Typography variant="caption">
 				Click on a node to select and configure.
@@ -53,23 +49,31 @@ const infoTooltipTitle = (
 		</ListItem>
 		<ListItem divider>
 			<ListItemIcon>
-				<Delete />
+				<BsFillHandIndexThumbFill />
 			</ListItemIcon>
 			<Typography variant="caption">
-				Remove a selected node by pressing backspace.
+				Click on a edge to select and see the related logs.
 			</Typography>
 		</ListItem>
 		<ListItem divider>
 			<ListItemIcon>
-				<ArrowUpCircle />
+				<FiDelete />
 			</ListItemIcon>
 			<Typography variant="caption">
-				Hold shift to select and remove multiple nodes.
+				Remove the selected elements by pressing backspace.
+			</Typography>
+		</ListItem>
+		<ListItem divider>
+			<ListItemIcon>
+				<ImShift />
+			</ListItemIcon>
+			<Typography variant="caption">
+				Hold shift to select and remove multiple elements.
 			</Typography>
 		</ListItem>
 		<ListItem>
 			<ListItemIcon>
-				<PlusCircle />
+				<FiPlusCircle />
 			</ListItemIcon>
 			<Typography variant="caption">Add a new workflow.</Typography>
 		</ListItem>
@@ -80,7 +84,9 @@ const InfoTooltip = (): JSX.Element => {
 	const classes = useStyles();
 	return (
 		<Tooltip title={infoTooltipTitle}>
-			<Info className={classes.infoIcon} />
+			<div className={classes.infoIcon}>
+				<FiInfo />
+			</div>
 		</Tooltip>
 	);
 };

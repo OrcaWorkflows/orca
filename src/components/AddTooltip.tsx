@@ -1,7 +1,7 @@
 import { MouseEvent } from "react";
 
 import { Fab, makeStyles, Tooltip } from "@material-ui/core";
-import { Plus } from "react-feather";
+import { FiPlus } from "react-icons/fi";
 
 const useStyles = makeStyles(() => ({
 	addIcon: {
@@ -31,7 +31,7 @@ const AddTooltip = ({
 				color="secondary"
 				onClick={onClick}
 			>
-				<Plus />
+				<FiPlus />
 			</Fab>
 		</Tooltip>
 	);

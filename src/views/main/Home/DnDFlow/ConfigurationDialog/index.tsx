@@ -11,12 +11,12 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useFormik } from "formik";
 import { Elements, FlowElement, Node } from "react-flow-renderer";
-import * as yup from "yup";
 
 import { useGetAllOperatorConfigs } from "actions/settingsActions";
 import { useSetWorkflow } from "actions/workflowActions";
 import { ServerError, TextField } from "components";
 import FormManager from "components/FormManager";
+import { yup } from "utils";
 
 export const configIDValidationSchema = yup.object({
 	config: yup
@@ -25,7 +25,7 @@ export const configIDValidationSchema = yup.object({
 			name: yup.string(),
 		})
 		.nullable()
-		.required("Configuration Name is a required field"),
+		.required(),
 });
 
 const ConfigurationDialog = ({

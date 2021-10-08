@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const S3ValidationSchema = yup.object({
-	bucket_name: yup.string().required("Bucket Name is a required field"),
-	file_path: yup.string().required("File Path is a required field"),
-	file_type: yup.string().required("File Type is a required field"),
+	bucket_name: yup.string().required(),
+	file_path: yup.string().required(),
+	file_type: yup.string().required(),
 });
 
 const S3 = ({

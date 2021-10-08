@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const SQLValidationSchema = yup.object({
-	databasename: yup.string().required("Database Name is a required field"),
-	query: yup.string().required("Query is a required field"),
-	tablename: yup.string().required("Table Name is a required field"),
+	databasename: yup.string().required(),
+	query: yup.string().required(),
+	tablename: yup.string().required(),
 });
 
 const SQL = ({

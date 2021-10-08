@@ -1,6 +1,7 @@
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { getUnixTime } from "date-fns";
 import jwtDecoder from "jwt-decode";
+import { IconContext } from "react-icons";
 import {
 	useHistory,
 	BrowserRouter as Router,
@@ -25,7 +26,6 @@ interface MyToken {
 	exp: number;
 }
 const NotFoundRedirect = () => <Redirect to="/" />;
-
 const App = (): JSX.Element => {
 	const history = useHistory();
 
@@ -45,24 +45,26 @@ const App = (): JSX.Element => {
 		<>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Router>
-					<Switch>
-						<AuthRoute component={Signin} path="/" exact />
-						<AuthRoute component={Signup} path="/signup" exact />
-						<MainRoute component={Home} path="/home/:workflowID?" exact />
-						<MainRoute component={Workflows} path="/workflows" exact />
-						<MainRoute component={Monitor} path="/monitor" protect exact />
-						<MainRoute component={Schedule} path="/schedule" protect exact />
-						<MainRoute component={Settings} path="/settings" protect exact />
-						<MainRoute
-							component={OperatorConfigurations}
-							path="/settings/operator-configurations"
-							protect
-							exact
-						/>
-						<Route component={NotFoundRedirect} />
-					</Switch>
-				</Router>
+				<IconContext.Provider value={{ size: "24px" }}>
+					<Router>
+						<Switch>
+							<AuthRoute component={Signin} path="/" exact />
+							<AuthRoute component={Signup} path="/signup" exact />
+							<MainRoute component={Home} path="/home/:workflowID?" exact />
+							<MainRoute component={Workflows} path="/workflows" exact />
+							<MainRoute component={Monitor} path="/monitor" protect exact />
+							<MainRoute component={Schedule} path="/schedule" protect exact />
+							<MainRoute component={Settings} path="/settings" protect exact />
+							<MainRoute
+								component={OperatorConfigurations}
+								path="/settings/operator-configurations"
+								protect
+								exact
+							/>
+							<Route component={NotFoundRedirect} />
+						</Switch>
+					</Router>
+				</IconContext.Provider>
 			</ThemeProvider>
 		</>
 	);

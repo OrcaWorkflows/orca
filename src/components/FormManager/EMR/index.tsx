@@ -1,21 +1,14 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
 export const EMRValidationSchema = yup.object({
-	script_uri: yup.string().required("Script URI is a required field"),
-	input_uri: yup.string().required("Input URI is a required field"),
-	master_instance_type: yup
-		.string()
-		.required("Master Instance Type is a required field"),
-	slave_instance_type: yup
-		.string()
-		.required("Slave Instance Type is a required field"),
-	instance_count: yup
-		.number()
-		.integer()
-		.required("Instance Count is a required field"),
+	script_uri: yup.string().required(),
+	input_uri: yup.string().required(),
+	master_instance_type: yup.string().required(),
+	slave_instance_type: yup.string().required(),
+	instance_count: yup.number().integer().required(),
 });
 
 const EMR = ({

@@ -3,15 +3,15 @@ import { useEffect, useRef, KeyboardEventHandler } from "react";
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 
 import { useSetWorkflow } from "actions/workflowActions";
 import { ServerError, TextField } from "components";
 import { IWorkflow } from "interfaces";
+import { yup } from "utils";
 import { HomeParams } from "views/main/Home";
 
 const workflowNameValidationSchema = yup.object({
-	name: yup.string().required("Workflow Name is a required field"),
+	name: yup.string().required(),
 });
 
 const WorkflowName = (): JSX.Element => {

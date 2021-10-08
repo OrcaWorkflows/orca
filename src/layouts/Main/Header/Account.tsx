@@ -1,11 +1,11 @@
 import { IconButton, useTheme } from "@material-ui/core";
-import { User } from "react-feather";
+import { FiUser } from "react-icons/fi";
 
 const Account = (): JSX.Element => {
 	const theme = useTheme();
 	return (
 		<IconButton style={{ marginRight: 20 }}>
-			<User color={theme.palette.text.primary} />
+			<FiUser color={theme.palette.text.primary} />
 		</IconButton>
 	);
 };

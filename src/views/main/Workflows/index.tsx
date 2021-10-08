@@ -83,7 +83,7 @@ const Workflows = (): JSX.Element => {
 			<AddTooltip
 				className={classes.addIcon}
 				onClick={() => {
-					history.push({ pathname: "/home", state: { addNew: true } });
+					history.push({ pathname: "/home", state: { new: true } });
 				}}
 				title="New workflow"
 			/>

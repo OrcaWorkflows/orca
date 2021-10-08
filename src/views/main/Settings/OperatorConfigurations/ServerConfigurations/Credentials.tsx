@@ -1,17 +1,33 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import { TextField } from "components";
+import { yup } from "utils";
 
-export const credentialsValidationSchema = yup.object({
-	username: yup.string().required("Username is a required field"),
-	password: yup.string().required("Password is a required field"),
-});
+interface CredentialsSchema {
+	username?: string;
+	password?: string;
+}
+
+export const credentialsValidationSchema: yup.SchemaOf<CredentialsSchema> =
+	yup.object({
+		username: yup
+			.string()
+			.when("$operatorName", (operatorName, schema) =>
+				operatorName === "redis" ? schema.optional() : schema.required()
+			),
+		password: yup
+			.string()
+			.when("$operatorName", (operatorName, schema) =>
+				operatorName === "redis" ? schema.optional() : schema.required()
+			),
+	});
 
 const Credentials = ({
 	formik,
+	operatorName,
 }: {
 	formik: ReturnType<typeof useFormik>;
+	operatorName: string;
 }): JSX.Element => (
 	<>
 		<TextField
@@ -22,8 +38,8 @@ const Credentials = ({
 				...formik.getFieldMeta("username"),
 			}}
 			fullWidth
+			{...(operatorName !== "redis" ? { required: true } : {})}
 			label="Username"
-			required
 		/>
 		<TextField
 			fieldInputProps={{
@@ -34,7 +50,7 @@ const Credentials = ({
 			}}
 			fullWidth
 			label="Password"
-			required
+			{...(operatorName !== "redis" ? { required: true } : {})}
 			type="password"
 		/>
 	</>

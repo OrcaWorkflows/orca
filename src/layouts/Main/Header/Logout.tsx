@@ -1,5 +1,5 @@
 import { IconButton, useTheme } from "@material-ui/core";
-import { LogOut } from "react-feather";
+import { FiLogOut } from "react-icons/fi";
 import { useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const Logout = (): JSX.Element => {
 
 	return (
 		<IconButton onClick={logout}>
-			<LogOut color={theme.palette.text.primary} />
+			<FiLogOut color={theme.palette.text.primary} />
 		</IconButton>
 	);
 };

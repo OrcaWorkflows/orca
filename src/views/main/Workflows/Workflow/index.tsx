@@ -10,8 +10,8 @@ import {
 	makeStyles,
 	Typography,
 } from "@material-ui/core";
-import { Edit, MoreVertical, Trash2 } from "react-feather";
 import { ReactFlowProvider } from "react-flow-renderer";
+import { FiEdit, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
 
 import { useDeleteWorkflow } from "actions/workflowActions";
@@ -97,7 +97,7 @@ const Workflow = ({ workflow }: { workflow: IWorkflow }): JSX.Element => {
 						className={classes.cardActionArea}
 						onClick={handleDirectToWorkflowClick}
 					>
-						{/* Provides is required for fitView to function on load */}
+						{/* Provider is required for fitView to function on load */}
 						<ReactFlowProvider>
 							<Flow workflow={workflow} />
 						</ReactFlowProvider>
@@ -111,16 +111,16 @@ const Workflow = ({ workflow }: { workflow: IWorkflow }): JSX.Element => {
 				</Typography>
 				<Paper className={classes.actions}>
 					<IconButton size="small" onClick={() => setOpenRemoveDialog(true)}>
-						<Trash2 size={20} />
+						<FiTrash2 size={20} />
 					</IconButton>
 					<IconButton
 						size="small"
 						onClick={() => history.push(`home/${workflow.id}`)}
 					>
-						<Edit size={20} />
+						<FiEdit size={20} />
 					</IconButton>
 					<IconButton size="small" onClick={() => console.log("more")}>
-						<MoreVertical size={20} />
+						<FiMoreVertical size={20} />
 					</IconButton>
 				</Paper>
 			</Card>
