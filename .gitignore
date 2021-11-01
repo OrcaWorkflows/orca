@@ -221,7 +221,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env.production
 .env.test
 .env.production
 

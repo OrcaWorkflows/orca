@@ -42,6 +42,7 @@ const mongodb = {
 	// port: "MONGODB_PORT",
 	database_name: "MONGODB_DATABASE_NAME",
 	collection_name: "MONGODB_COLLECTION_NAME",
+	query: "MONGODB_QUERY"
 };
 const pubsub = {
 	project_id: "GOOGLE_PUBSUB_PROJECT_ID",

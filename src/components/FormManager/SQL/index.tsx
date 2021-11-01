@@ -5,8 +5,8 @@ import { yup } from "utils";
 
 export const SQLValidationSchema = yup.object({
 	databasename: yup.string().required(),
-	query: yup.string().required(),
-	tablename: yup.string().required(),
+	query: yup.string(),
+	tablename: yup.string(),
 });
 
 const SQL = ({
@@ -28,14 +28,12 @@ const SQL = ({
 			fullWidth
 			label="Query"
 			multiline
-			required
 		/>
 		<TextField
 			fieldInputProps={{ ...formik.getFieldProps("tablename") }}
 			fieldMetaProps={{ ...formik.getFieldMeta("tablename") }}
 			fullWidth
 			label="Table Name"
-			required
 		/>
 	</>
 );

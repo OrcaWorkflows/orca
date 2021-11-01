@@ -40,6 +40,7 @@ const mongodb = {
 	config: null,
 	database_name: "",
 	collection_name: "",
+	query: "{}",
 };
 const pubsub = {
 	config: null,

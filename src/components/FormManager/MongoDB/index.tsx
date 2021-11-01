@@ -6,6 +6,7 @@ import { yup } from "utils";
 export const MongoDBValidationSchema = yup.object({
 	database_name: yup.string().required(),
 	collection_name: yup.string().required(),
+	query: yup.string(),
 });
 
 const MongoDB = ({
@@ -27,6 +28,13 @@ const MongoDB = ({
 			fullWidth
 			label="Collection Name"
 			required
+		/>
+		<TextField
+			fieldInputProps={{ ...formik.getFieldProps("query") }}
+			fieldMetaProps={{ ...formik.getFieldMeta("query") }}
+			fullWidth
+			label="Query"
+			multiline
 		/>
 	</>
 );

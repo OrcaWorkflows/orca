@@ -4,7 +4,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
-
+ENV REACT_APP_API http://192.168.1.199:30301
 COPY ./ /usr/src/app
 
 COPY package.json /usr/src/app/package.json
