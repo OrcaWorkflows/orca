@@ -42,7 +42,8 @@ import TopBar from "views/main/Home/DnDFlow/Topbar";
 import WorkflowName from "views/main/Home/DnDFlow/WorkflowName";
 
 const useStyles = makeStyles((theme) => ({
-	reactFlowWrapper: { height: "calc(100% - 40px)", position: "relative" }, // Subtract topbar's height
+	reactFlowWrapper: { height: "calc(100% - 40px)", position: "relative" ,
+						background: theme.palette.background.default}, // Subtract topbar's height
 	controls: {
 		"& > *": {
 			backgroundColor: theme.palette.secondary.main,

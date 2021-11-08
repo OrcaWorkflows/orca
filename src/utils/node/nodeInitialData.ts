@@ -13,6 +13,7 @@ const dynamodb = {
 const elasticsearch = {
 	config: null,
 	index_name: "",
+	query: "{\"query\": {\"match_all\": {}}}"
 };
 const emr = {
 	config: null,

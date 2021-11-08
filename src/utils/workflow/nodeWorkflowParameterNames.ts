@@ -11,8 +11,8 @@ const dynamodb = {
 	batch_size: "AWS_DYNAMODB_BATCH_SIZE",
 };
 const elasticsearch = {
-	// host: "ELASTICSEARCH_HOST",
 	index_name: "ELASTICSEARCH_INDEX",
+	query: "ELASTICSEARCH_QUERY"
 };
 const emr = {
 	script_uri: "AWS_EMR_STEP_SCRIPT_URI",
@@ -22,8 +22,7 @@ const emr = {
 	instance_count: "AWS_EMR_INSTANCE_COUNT",
 };
 const kafka = {
-	topic_name: "KAFKA_TOPIC",
-	// broker_host: "BOOTSTRAP_SERVERS",
+	topic_name: "KAFKA_TOPIC"
 };
 const kinesis = {
 	stream_name: "AWS_KINESIS_STREAM_NAME",
@@ -38,8 +37,6 @@ const lambda = {
 	payload: "AWS_LAMBDA_PAYLOAD",
 };
 const mongodb = {
-	// host: "MONGODB_HOST",
-	// port: "MONGODB_PORT",
 	database_name: "MONGODB_DATABASE_NAME",
 	collection_name: "MONGODB_COLLECTION_NAME",
 	query: "MONGODB_QUERY"
@@ -50,10 +47,7 @@ const pubsub = {
 	topic_action: "GOOGLE_PUBSUB_TOPIC_ACTION",
 };
 const redis = {
-	// host: "REDIS_HOST",
-	// port: "REDIS_PORT",
-	database: "REDIS_DATABASE",
-	// password: "REDIS_PASSWORD",
+	database: "REDIS_DATABASE"
 };
 const s3 = {
 	bucket_name: "AWS_S3_BUCKET_NAME",
@@ -61,10 +55,6 @@ const s3 = {
 	file_type: "AWS_S3_FILE_TYPE",
 };
 const sql = {
-	// host: "SQL_HOST",
-	// port: "SQL_PORT",
-	// username: "SQL_USERNAME",
-	// password: "SQL_PASSWORD",
 	databasename: "SQL_DATABASE",
 	query: "SQL_TEXT",
 	tablename: "SQL_TABLENAME",
