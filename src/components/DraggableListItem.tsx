@@ -15,8 +15,8 @@ type StyleProps = {
 
 const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 	unusable: {
-		WebkitFilter: "blur(1px) grayscale(100%)" /* Safari 6.0 - 9.0 */,
-		filter: "blur(1px) grayscale(100%)",
+		WebkitFilter: "grayscale(100%)" /* Safari 6.0 - 9.0 */,
+		filter: "grayscale(100%)",
 	},
 	draggable: {
 		borderLeft: `4px solid ${theme.palette.secondary.main}`,
