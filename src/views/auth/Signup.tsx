@@ -6,6 +6,7 @@ import {
 	makeStyles,
 	SvgIcon,
 } from "@material-ui/core";
+import {AxiosError} from "axios";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { FiLogIn } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
@@ -62,7 +63,7 @@ const Signup = (): JSX.Element => {
 		emptyPhoneNumber: true,
 	};
 
-	const { isError, mutate } = useSignup();
+	const { isError, error, mutate } = useSignup();
 	const handleSubmit = async (values: Values) => mutate(values);
 
 	return (
@@ -198,7 +199,7 @@ const Signup = (): JSX.Element => {
 					</Form>
 				)}
 			</Formik>
-			{isError && <ServerError />}
+			{isError && <ServerError message={(error as AxiosError)?.response?.data.message} />}
 		</>
 	);
 };
