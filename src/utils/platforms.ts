@@ -161,4 +161,15 @@ export const platforms = [
 			},
 		],
 	},
+	{
+		text: "Snowflake",
+		options: [
+			{
+				type: "snowflake",
+				icon: nodeImages.snowflake,
+				supported: true,
+				text: "Snowflake",
+			},
+		],
+	},
 ];

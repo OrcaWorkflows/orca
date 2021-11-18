@@ -66,6 +66,12 @@ const sqlInitialData = {
 	query: "",
 	tablename: "",
 };
+const snowflake = {
+	database: "",
+	schema: "PUBLIC",
+	table_name: "",
+	query: "",
+};
 const [mariadb, mssql, mysql, oracle, postgresql] = [...Array(5)].map(
 	() => sqlInitialData
 );
@@ -87,4 +93,5 @@ export {
 	mysql,
 	oracle,
 	postgresql,
+	snowflake,
 };

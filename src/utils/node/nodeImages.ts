@@ -19,6 +19,7 @@ import memorystore from "assets/GCP/memorystore.svg";
 import pubsub from "assets/GCP/pubsub.svg";
 import mongodb from "assets/MongoDB/mongodb.png";
 import redis from "assets/Redis/redis.png";
+import snowflake from "assets/Snowflake/snowflake.png";
 import mariadb from "assets/SQL/mariadb.png";
 import mssql from "assets/SQL/mssql.png";
 import mysql from "assets/SQL/mysql.png";
@@ -52,4 +53,5 @@ export {
 	mysql,
 	oracle,
 	postgresql,
+	snowflake,
 };

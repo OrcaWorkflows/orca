@@ -19,6 +19,7 @@ import MongoDB, {
 import PubSub, { PubSubValidationSchema } from "components/FormManager/PubSub";
 import Redis, { RedisValidationSchema } from "components/FormManager/Redis";
 import S3, { S3ValidationSchema } from "components/FormManager/S3";
+import Snowflake, {SnowflakeValidationSchema} from "components/FormManager/Snowflake";
 import SQL, { SQLValidationSchema } from "components/FormManager/SQL";
 
 const FormManager = (
@@ -82,6 +83,10 @@ const FormManager = (
 		case "mssql":
 			Form = SQL;
 			validationSchema = SQLValidationSchema;
+			break;
+		case "snowflake":
+			Form = Snowflake;
+			validationSchema = SnowflakeValidationSchema;
 			break;
 		default:
 			return {
