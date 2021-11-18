@@ -59,6 +59,12 @@ const sql = {
 	query: "SQL_TEXT",
 	tablename: "SQL_TABLENAME",
 };
+const snowflake = {
+	database: "SNOWFLAKE_DATABASE",
+	schema: "SNOWFLAKE_SCHEMA",
+	table_name: "SNOWFLAKE_TABLE_NAME",
+	query: "SNOWFLAKE_STATEMENT"
+}
 const [mariadb, mssql, mysql, oracle, postgresql] = [...Array(5)].map(
 	() => sql
 );
@@ -80,4 +86,5 @@ export {
 	mysql,
 	oracle,
 	postgresql,
+	snowflake
 };

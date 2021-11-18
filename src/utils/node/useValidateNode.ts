@@ -11,7 +11,9 @@ import { MongoDBValidationSchema } from "components/FormManager/MongoDB";
 import { PubSubValidationSchema } from "components/FormManager/PubSub";
 import { RedisValidationSchema } from "components/FormManager/Redis";
 import { S3ValidationSchema } from "components/FormManager/S3";
+import { SnowflakeValidationSchema } from "components/FormManager/Snowflake";
 import { SQLValidationSchema } from "components/FormManager/SQL";
+
 
 const useValidateNode = (
 	type: string,
@@ -35,6 +37,7 @@ const useValidateNode = (
 			| typeof RedisValidationSchema
 			| typeof S3ValidationSchema
 			| typeof SQLValidationSchema
+			| typeof SnowflakeValidationSchema
 			| undefined;
 
 		if (type === "bigquery") schema = BigQueryValidationSchema;
@@ -56,6 +59,7 @@ const useValidateNode = (
 			type === "postgresql"
 		)
 			schema = SQLValidationSchema;
+		if (type === "snowflake") schema = SnowflakeValidationSchema;
 
 		schema?.validate(data).catch((err) => {
 			if (isMounted) setNodeValidationErrors(err.errors);

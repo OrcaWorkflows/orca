@@ -31,6 +31,8 @@ import {
 	credentialsValidationSchema,
 	HostList,
 	hostListValidationSchema,
+	Snowflake,
+	SnowflakeValidationSchema,
 } from "views/main/Settings/OperatorConfigurations/ServerConfigurations";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +50,15 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: "auto",
 	},
 }));
+
+const filterPropertiesByPlatform = (property:any, platform:string) :any => {  // Must include the name of platform inside the attribute
+	const filteredProperties :Record<string,any> = {}
+	for (const key of Object.keys(property)) {
+		if(key.toLowerCase().includes(platform.toLowerCase()))
+			filteredProperties[key] = property[key]
+	}
+	return filteredProperties
+}
 
 const Configuration = ({
 	configID,
@@ -92,10 +103,12 @@ const Configuration = ({
 		operatorName === "mssql" ||
 		operatorName === "mysql" ||
 		operatorName === "oracle" ||
-		operatorName === "postgresql";
+		operatorName === "postgresql" ||
+		operatorName === "snowflake";
 
 	// Handle AWS
 	const isAWS = operatorName === "AWS";
+	const isSnowflake = operatorName === "snowflake";
 
 	const AWSOperators: { name: string; categoryName: string }[] | undefined =
 		queryClient.getQueryData("AWS");
@@ -124,6 +137,8 @@ const Configuration = ({
 			AWS_ACCESS_KEY_ID: selectedConfigData?.property?.AWS_ACCESS_KEY_ID ?? "",
 			AWS_ACCESS_SECRET_KEY:
 				selectedConfigData?.property?.AWS_ACCESS_SECRET_KEY ?? "",
+			SNOWFLAKE_WAREHOUSE: selectedConfigData?.property?.SNOWFLAKE_WAREHOUSE ?? "",
+			SNOWFLAKE_ACCOUNT_IDENTIFIER: selectedConfigData?.property?.SNOWFLAKE_ACCOUNT_IDENTIFIER ?? "",
 		},
 	};
 
@@ -140,7 +155,7 @@ const Configuration = ({
 							hostList: values.hostList,
 							name: values.name,
 							operatorName: operator.name,
-							property: values.property,
+							property: filterPropertiesByPlatform(values.property, "AWS")
 						}).then((data) => {
 							if (data?.id) setConfigID(data.id);
 						});
@@ -151,12 +166,24 @@ const Configuration = ({
 							hostList: values.hostList,
 							name: values.name,
 							operatorName: operator.name,
-							property: values.property,
+							property: filterPropertiesByPlatform(values.property, "AWS")
 						}).then((data) => {
 							if (data?.id) setConfigID(data.id);
 						});
 					}
 			}
+		} else if(isSnowflake) {
+			upsertOperatorConfig({
+				id: configID,
+				hostList: values.hostList,
+				name: values.name,
+				operatorName,
+				password: values.password,
+				username: values.username,
+				property: filterPropertiesByPlatform(values.property, "Snowflake")
+			}).then((data) => {
+				if (data?.id) setConfigID(data.id);
+			});
 		} else {
 			if (includesCredentials) {
 				upsertOperatorConfig({
@@ -166,6 +193,7 @@ const Configuration = ({
 					operatorName,
 					password: values.password,
 					username: values.username,
+					property: values.property,
 				}).then((data) => {
 					if (data?.id) setConfigID(data.id);
 				});
@@ -174,6 +202,7 @@ const Configuration = ({
 					id: configID,
 					hostList: values.hostList,
 					name: values.name,
+					property: values.property,
 					operatorName,
 				}).then((data) => {
 					if (data?.id) setConfigID(data.id);
@@ -232,6 +261,8 @@ const Configuration = ({
 			let validationSchema = configurationNameValidationSchema;
 			if (isAWS)
 				validationSchema = validationSchema.concat(AWSValidationSchema);
+			if (isSnowflake)
+				validationSchema = validationSchema.concat(SnowflakeValidationSchema);
 			if (includesHostList)
 				validationSchema = validationSchema.concat(hostListValidationSchema);
 			if (includesCredentials) {
@@ -315,6 +346,11 @@ const Configuration = ({
 								{isAWS && (
 									<Grid item xs={12}>
 										<AWS formik={formik} />
+									</Grid>
+								)}
+								{isSnowflake && (
+									<Grid item xs={12}>
+										<Snowflake formik={formik} />
 									</Grid>
 								)}
 								{includesCredentials && (
