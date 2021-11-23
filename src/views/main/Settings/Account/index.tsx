@@ -13,8 +13,8 @@ import { useUpdateUser } from "actions/auth/useUpdateUser";
 import { ServerError } from "components";
 import { yup } from "utils";
 import ChangeEmail from "views/main/Settings/Account/ChangeEmail";
-import ChangePassword from "views/main/Settings/Account/ChangePassword";
 import ChangeOrganizationName from "views/main/Settings/Account/ChangeOrganizatinonName";
+import ChangePassword from "views/main/Settings/Account/ChangePassword";
 
 const useStyles = makeStyles((theme) => ({
 	bold: { fontWeight: theme.typography.fontWeightBold },
