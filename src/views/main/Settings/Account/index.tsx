@@ -14,7 +14,7 @@ import { ServerError } from "components";
 import { yup } from "utils";
 import ChangeEmail from "views/main/Settings/Account/ChangeEmail";
 import ChangePassword from "views/main/Settings/Account/ChangePassword";
-import ChangePhoneNumber from "views/main/Settings/Account/ChangePhoneNumber";
+import ChangeOrganizationName from "views/main/Settings/Account/ChangeOrganizatinonName";
 
 const useStyles = makeStyles((theme) => ({
 	bold: { fontWeight: theme.typography.fontWeightBold },
@@ -78,15 +78,7 @@ const accountValidationSchema = yup.object({
 			if (new_password) return value === new_password;
 			return true;
 		}),
-	new_phone_number: yup
-		.string()
-		.when("emptyPhoneNumber", (empty) =>
-			empty
-				? yup.string()
-				: yup
-						.string()
-						.phone("phone", true, "Please use the international format")
-		),
+	new_organization_name: yup.string(),
 });
 
 export const Account = (): JSX.Element => {
@@ -102,16 +94,16 @@ export const Account = (): JSX.Element => {
 		password: "",
 		new_password: "",
 		reentered_new_password: "",
-		new_phone_number: "",
-		emptyPhoneNumber: true,
+		new_organization_name: "",
+		emptyOrganizationName: true,
 	};
 
 	const handleSubmit = async (values: typeof initialValues) => {
 		return updateUser({
 			...(values.new_email ? { email: values.new_email } : {}),
 			...(values.new_password ? { password: values.new_password } : {}),
-			...(values.new_phone_number
-				? { phoneNumber: values.new_phone_number }
+			...(values.new_organization_name
+				? { organizationName: values.new_organization_name }
 				: {}),
 		});
 	};
@@ -154,10 +146,10 @@ export const Account = (): JSX.Element => {
 				</Grid>
 				<Grid item xs>
 					<Typography className={classes.bold} gutterBottom variant="h6">
-						Change your phone number
+						Change your organization name
 					</Typography>
 					<Divider />
-					<ChangePhoneNumber formik={formik} />
+					<ChangeOrganizationName formik={formik} />
 				</Grid>
 				<Grid item>
 					<Button

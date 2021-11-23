@@ -6,7 +6,7 @@ import { axios } from "utils";
 export type Values = {
 	email?: string;
 	password?: string;
-	phoneNumber?: string;
+	organizationName?: string;
 };
 
 export const useUpdateUser = (): UseMutationResult<
@@ -17,14 +17,14 @@ export const useUpdateUser = (): UseMutationResult<
 > => {
 	const username = JSON.parse(localStorage.getItem("user") as string).username;
 
-	const signup = useMutation(async ({ email, password, phoneNumber }: Values) =>
+	const signup = useMutation(async ({ email, password, organizationName }: Values) =>
 		axios({
 			method: "post",
 			url: process.env.REACT_APP_API + `/users/user/${username}`,
 			data: {
 				email,
 				password,
-				phoneNumber,
+				organizationName,
 			},
 		})
 	);

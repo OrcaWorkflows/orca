@@ -10,7 +10,6 @@ import {AxiosError} from "axios";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { FiLogIn } from "react-icons/fi";
 import { Link as RouterLink } from "react-router-dom";
-import "yup-phone";
 
 import { useSignup, Values } from "actions/auth/useSignup";
 import { ReactComponent as OrcaLogo } from "assets/logo/vector/default-monochrome-black.svg";
@@ -41,15 +40,7 @@ const signupValidationSchema = yup.object({
 			"Please put at least one char. of each category below: \n [a-z], [A-Z], [0,9], [[!@#$%^&*]]"
 		)
 		.min(8),
-	phoneNumber: yup
-		.string()
-		.when("emptyPhoneNumber", (empty) =>
-			empty
-				? yup.string()
-				: yup
-						.string()
-						.phone("phone", true, "Please use the international format")
-		),
+	organizationName: yup.string(),
 });
 
 const Signup = (): JSX.Element => {
@@ -59,8 +50,8 @@ const Signup = (): JSX.Element => {
 		email: "",
 		username: "",
 		password: "",
-		phoneNumber: "",
-		emptyPhoneNumber: true,
+		organizationName: "",
+		emptyOrganizationName: true,
 	};
 
 	const { isError, error, mutate } = useSignup();
@@ -143,7 +134,7 @@ const Signup = (): JSX.Element => {
 								</Field>
 							</Grid>
 							<Grid item>
-								<Field name="phoneNumber">
+								<Field name="organizationName">
 									{({
 										field,
 										meta,
@@ -158,15 +149,15 @@ const Signup = (): JSX.Element => {
 												event.target.value.length
 													? setValues({
 															...values,
-															emptyPhoneNumber: false,
+															emptyOrganizationName: false,
 													  })
 													: setValues({
 															...values,
-															emptyPhoneNumber: true,
+															emptyOrganizationName: true,
 													  });
 												field.onChange(event);
 											}}
-											label="Phone Number"
+											label="Organization Name"
 										/>
 									)}
 								</Field>

@@ -8,7 +8,7 @@ export type Values = {
 	email: string;
 	username: string;
 	password: string;
-	phoneNumber: string;
+	organizationName: string;
 };
 
 export const useSignup = (): UseMutationResult<
@@ -19,7 +19,7 @@ export const useSignup = (): UseMutationResult<
 > => {
 	const history = useHistory();
 	const signup = useMutation(
-		async ({ email, username, password, phoneNumber }: Values) =>
+		async ({ email, username, password, organizationName }: Values) =>
 			axios(
 				{
 					method: "post",
@@ -28,7 +28,7 @@ export const useSignup = (): UseMutationResult<
 						email,
 						username,
 						password,
-						phoneNumber,
+						organizationName,
 					},
 				},
 				false
