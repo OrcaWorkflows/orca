@@ -5,7 +5,7 @@ import { axios } from "utils";
 export type Me = {
 	createdAt: number;
 	email: string;
-	phoneNumber: string;
+	organizationName: string;
 	updatedAt: number;
 	username: string;
 };

@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 
 import { TextField } from "components";
 
-const ChangePhoneNumber = ({
+const ChangeOrganizationName = ({
 	formik,
 }: {
 	formik: ReturnType<typeof useFormik>;
@@ -11,23 +11,23 @@ const ChangePhoneNumber = ({
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={8}>
-				<Typography variant="subtitle2">Enter your new phone number</Typography>
+				<Typography variant="subtitle2">Enter your new organization name</Typography>
 				<TextField
-					fieldInputProps={{ ...formik.getFieldProps("new_phone_number") }}
-					fieldMetaProps={{ ...formik.getFieldMeta("new_phone_number") }}
+					fieldInputProps={{ ...formik.getFieldProps("new_organization_name") }}
+					fieldMetaProps={{ ...formik.getFieldMeta("new_organization_name") }}
 					fullWidth
-					label="New Phone Number"
+					label="New Organization Name"
 					onChange={(event) => {
 						event.target.value.length
 							? formik.setValues({
 									...formik.values,
-									emptyPhoneNumber: false,
+									emptyOrganizationName: false,
 							  })
 							: formik.setValues({
 									...formik.values,
-									emptyPhoneNumber: true,
+									emptyOrganizationName: true,
 							  });
-						formik.getFieldProps("new_phone_number").onChange(event);
+						formik.getFieldProps("new_organization_name").onChange(event);
 					}}
 				/>
 			</Grid>
@@ -35,4 +35,4 @@ const ChangePhoneNumber = ({
 	);
 };
 
-export default ChangePhoneNumber;
+export default ChangeOrganizationName;
