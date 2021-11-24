@@ -11,7 +11,6 @@ import {
 } from "react-flow-renderer";
 
 import * as nodeImages from "utils/node/nodeImages";
-import useValidateNode from "utils/node/useValidateNode";
 
 type nodeTypes = {
 	[key in keyof typeof nodeImages]?: FunctionComponent<NodeProps>;
@@ -41,11 +40,7 @@ const useStyles = makeStyles((theme) => ({
 		height: props.selected ? 48 : 36,
 		margin: 5,
 		padding: props.selected ? 4 : "unset",
-	}),
-	unusable: {
-		WebkitFilter: "grayscale(85%)" /* Safari 6.0 - 9.0 */,
-		filter: "grayscale(85%)",
-	},
+	})
 }));
 
 const getNodeTypes = (): nodeTypes => {
@@ -57,18 +52,12 @@ const getNodeTypes = (): nodeTypes => {
 		nodeTypes[node] = (props: NodeProps) => {
 			const classes = useStyles({ selected: props.selected });
 
-			const [nodeValidationErrors] = useValidateNode(props.type, props.data);
-			const unusable = !!nodeValidationErrors.length;
-
 			return (
 				<>
 					<Handle
-						className={clsx(classes.handle, classes.targetHandle, {
-							[classes.unusable]: unusable,
-						})}
+						className={clsx(classes.handle, classes.targetHandle, {})}
 						type="target"
 						id=":operator_target"
-						isConnectable={!unusable}
 						position={Position.Top}
 					/>
 					<Tooltip
@@ -78,9 +67,7 @@ const getNodeTypes = (): nodeTypes => {
 						placement="right"
 					>
 						<img
-							className={clsx(classes.nodeImg, {
-								[classes.unusable]: unusable,
-							})}
+							className={clsx(classes.nodeImg, {})}
 							src={src}
 							draggable={false}
 							onDragStart={(event) => {
@@ -90,12 +77,9 @@ const getNodeTypes = (): nodeTypes => {
 						/>
 					</Tooltip>
 					<Handle
-						className={clsx(classes.handle, classes.sourceHandle, {
-							[classes.unusable]: unusable,
-						})}
+						className={clsx(classes.handle, classes.sourceHandle, {})}
 						type="source"
 						id=":operator_source"
-						isConnectable={!unusable}
 						position={Position.Bottom}
 					/>
 				</>
