@@ -146,7 +146,7 @@ const WorkflowLog = ({
 						<Box m="auto">
 							<CircularProgress />
 						</Box>
-					) : logData ? (
+					) : logData && typeof(logData) === "string" ? (
 						<>
 							{logData.split("\n")
 								? logData.split("\n").map((line: string, index: number) => {
@@ -158,7 +158,8 @@ const WorkflowLog = ({
 								  })
 								: logData}
 						</>
-					) : null
+					) :
+							"Unable to retrieve logs."
 				) : null}
 			</Drawer>
 			{/*	isErrorLog && (
