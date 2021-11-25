@@ -43,7 +43,7 @@ import WorkflowName from "views/main/Home/DnDFlow/WorkflowName";
 
 const useStyles = makeStyles((theme) => ({
 	reactFlowWrapper: { height: "calc(100% - 40px)", position: "relative" ,
-						background: theme.palette.background.default}, // Subtract topbar's height
+						background: "radial-gradient(ellipse at bottom right, #637164, #696666 50%, transparent);"},
 	controls: {
 		"& > *": {
 			backgroundColor: theme.palette.secondary.main,
