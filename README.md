@@ -63,12 +63,11 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
+<p align="center">
 [![Product Demo][product-screenshot]](https://orcaworkflows.com)
+</p>
 
 Orca Workflows is no-code data orchestration platform which allows users to data workflows with no learning curve.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
