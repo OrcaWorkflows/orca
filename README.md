@@ -64,7 +64,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Screen Shot][product-screenshot]](https://orcaworkflows.com)
+[![Product Demo][product-screenshot]](https://orcaworkflows.com)
 
 Orca Workflows is no-code data orchestration platform which allows users to data workflows with no learning curve.
 
@@ -83,8 +83,8 @@ OrcaWorkflows runs on Kubernetes cluster powered with Argo.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. 
+2. Clone the charts repo
    ```sh
    git clone https://github.com/your_username_/Project-Name.git
    ```
@@ -104,9 +104,7 @@ OrcaWorkflows runs on Kubernetes cluster powered with Argo.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_Check out demo and blogs. [Orca Workflows Demo](https://orcaworkflows.com)_
+_Check out demo and blogs. [Orca Workflows Demo](https://www.orcaworkflows.com/#about)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -167,4 +165,4 @@ Burak Altas - [@BurakkAltas](https://twitter.com/BurakkAltas) - burak.altas@gmai
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: images/s3-psql-succ.png
+[product-screenshot]: public/demo.gif
