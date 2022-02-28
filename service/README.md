@@ -44,7 +44,11 @@ Orca Service repository is source of OrcaWorkflows' backend component implemente
 
 <!-- BUILDING DOCKER IMAGE -->
 ### Building Docker Image
-1. Build Orca Service image.
+1. Compile and Install maven
+```sh
+  mvn clean install
+```
+2. Build Orca Service image.
 ```sh
   docker build -t orca/orca-service:latest service/Dockerfile
 ```
