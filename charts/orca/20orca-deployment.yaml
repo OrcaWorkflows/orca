@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orca
+spec:
+  selector:
+    matchLabels:
+      app: orca
+  template:
+    metadata:
+      labels:
+        app: orca
+    spec:
+      containers:
+        - image: orca/orca
+          name: orca
+          ports:
+          - containerPort: 3000
+            name: http
+          env:
+          - name: REACT_APP_API
+            value: "http://HOST_IP:30301"
+          imagePullPolicy: IfNotPresent

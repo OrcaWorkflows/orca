@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orca-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orca-service
+  template:
+    metadata:
+      labels:
+        app: orca-service
+    spec:
+      containers:
+        - name: orca-service
+          image: orca/orca-service:latest
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8080
+          env:
+          - name: POSTGRES_HOST
+            value: "orca-postgres:5432"
+          - name: POSTGRES_USERNAME
+            value: "postgres_usernae"
+          - name: POSTGRES_PASS
+            value: "PASSWORD"
+          - name: ARGO_URL
+            value: "http://argo-server:2746"

@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: Now-Medium
+font link: https://hanken.co/product/now/
+font author: Hanken Design Co.
+font author site: https://hanken.co/
+
+
+icon designer: Krishna Creative
+icon designer link: /krishnacreative
+        
+{"bg-gradient-0":"#182471","bg-gradient-1":"#2664C8","icon":"#fff","font":"#fff","slogan":"#1423ff"}
+      

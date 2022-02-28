@@ -1,0 +1,165 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: orca-operators
+  namespace: argo
+spec:
+  templates:
+    - name: orca-operators
+      arguments: {}
+      inputs:
+        parameters:
+          - name: OPERATOR_SOURCE
+          - name: OPERATOR_TARGET
+          - name: SOURCE_SYSTEM_CONFIG_ID
+          - name: TARGET_SYSTEM_CONFIG_ID
+          - name: AWS_S3_BUCKET_NAME
+          - name: AWS_S3_FILE_PATH
+          - name: AWS_S3_FILE_TYPE
+          - name: AWS_EMR_STEP_SCRIPT_URI
+          - name: AWS_EMR_STEP_INPUT_URI
+          - name: AWS_EMR_MASTER_INSTANCE_TYPE
+          - name: AWS_EMR_SLAVE_INSTANCE_TYPE
+          - name: AWS_EMR_INSTANCE_COUNT
+          - name: KAFKA_TOPIC
+          - name: ELASTICSEARCH_INDEX
+          - name: ELASTICSEARCH_QUERY
+          - name: GOOGLE_PUBSUB_PROJECT_ID
+          - name: GOOGLE_PUBSUB_TOPIC
+          - name: GOOGLE_PUBSUB_TOPIC_ACTION
+          - name: GOOGLE_BIGQUERY_PROJECT_ID
+          - name: GOOGLE_BIGQUERY_DATASET_ID
+          - name: GOOGLE_BIGQUERY_TABLE_ID
+          - name: GOOGLE_BIGQUERY_QUERY
+          - name: AWS_DYNAMODB_TABLE_NAME
+          - name: AWS_DYNAMODB_BATCH_SIZE
+          - name: AWS_KINESIS_STREAM_NAME
+          - name: MONGODB_DATABASE_NAME
+          - name: MONGODB_COLLECTION_NAME
+          - name: MONGODB_QUERY
+          - name: REDIS_DATABASE
+          - name: SQL_DATABASE
+          - name: SQL_TEXT
+          - name: SQL_TABLENAME
+          - name: AWS_LAMBDA_FUNC_NAME
+          - name: AWS_LAMBDA_RUNTIME
+          - name: AWS_LAMBDA_ROLE
+          - name: AWS_LAMBDA_HANDLER
+          - name: AWS_LAMBDA_CODE_S3_BUCKET
+          - name: AWS_LAMBDA_CODE_S3_KEY
+          - name: AWS_LAMBDA_PAYLOAD
+          - name: SNOWFLAKE_STATEMENT
+          - name: SNOWFLAKE_DATABASE
+          - name: SNOWFLAKE_SCHEMA
+          - name: SNOWFLAKE_TABLE_NAME
+      outputs: {}
+      metadata: {}
+      container:
+        name: orca-operator
+        image: orca/orca-operators
+        env:
+          - name: ORCA_SERVICE
+            value: 'http://SERVICE_HOST_IP:SERVICE_NODE_PORT'
+          - name: OPERATOR_SOURCE
+            value: '{{inputs.parameters.OPERATOR_SOURCE}}'
+          - name: OPERATOR_TARGET
+            value: '{{inputs.parameters.OPERATOR_TARGET}}'
+          - name: SOURCE_SYSTEM_CONFIG_ID
+            value: '{{inputs.parameters.SOURCE_SYSTEM_CONFIG_ID}}'
+          - name: TARGET_SYSTEM_CONFIG_ID
+            value: '{{inputs.parameters.TARGET_SYSTEM_CONFIG_ID}}'
+          - name: ORCA_SYSTEM_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: orca-system-access
+                key: TOKEN
+          - name: AWS_S3_BUCKET_NAME
+            value: '{{inputs.parameters.AWS_S3_BUCKET_NAME}}'
+          - name: AWS_S3_FILE_PATH
+            value: '{{inputs.parameters.AWS_S3_FILE_PATH}}'
+          - name: AWS_S3_FILE_TYPE
+            value: '{{inputs.parameters.AWS_S3_FILE_TYPE}}'
+          - name: AWS_EMR_STEP_SCRIPT_URI
+            value: '{{inputs.parameters.AWS_EMR_STEP_SCRIPT_URI}}'
+          - name: AWS_EMR_STEP_INPUT_URI
+            value: '{{inputs.parameters.AWS_EMR_STEP_INPUT_URI}}'
+          - name: AWS_EMR_MASTER_INSTANCE_TYPE
+            value: '{{inputs.parameters.AWS_EMR_MASTER_INSTANCE_TYPE}}'
+          - name: AWS_EMR_SLAVE_INSTANCE_TYPE
+            value: '{{inputs.parameters.AWS_EMR_SLAVE_INSTANCE_TYPE}}'
+          - name: AWS_EMR_INSTANCE_COUNT
+            value: '{{inputs.parameters.AWS_EMR_INSTANCE_COUNT}}'
+          - name: KAFKA_TOPIC
+            value: '{{inputs.parameters.KAFKA_TOPIC}}'
+          - name: ELASTICSEARCH_INDEX
+            value: '{{inputs.parameters.ELASTICSEARCH_INDEX}}'
+          - name: ELASTICSEARCH_QUERY
+            value: '{{inputs.parameters.ELASTICSEARCH_QUERY}}'
+          - name: GOOGLE_PUBSUB_PROJECT_ID
+            value: '{{inputs.parameters.GOOGLE_PUBSUB_PROJECT_ID}}'
+          - name: GOOGLE_PUBSUB_TOPIC
+            value: '{{inputs.parameters.GOOGLE_PUBSUB_TOPIC}}'
+          - name: GOOGLE_PUBSUB_TOPIC_ACTION
+            value: '{{inputs.parameters.GOOGLE_PUBSUB_TOPIC_ACTION}}'
+          - name: GOOGLE_BIGQUERY_PROJECT_ID
+            value: '{{inputs.parameters.GOOGLE_BIGQUERY_PROJECT_ID}}'
+          - name: GOOGLE_BIGQUERY_DATASET_ID
+            value: '{{inputs.parameters.GOOGLE_BIGQUERY_DATASET_ID}}'
+          - name: GOOGLE_BIGQUERY_TABLE_ID
+            value: '{{inputs.parameters.GOOGLE_BIGQUERY_TABLE_ID}}'
+          - name: GOOGLE_BIGQUERY_QUERY
+            value: '{{inputs.parameters.GOOGLE_BIGQUERY_QUERY}}'
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /root/gcp.json
+          - name: AWS_DYNAMODB_TABLE_NAME
+            value: '{{inputs.parameters.AWS_DYNAMODB_TABLE_NAME}}'
+          - name: AWS_DYNAMODB_BATCH_SIZE
+            value: '{{inputs.parameters.AWS_DYNAMODB_BATCH_SIZE}}'
+          - name: AWS_KINESIS_STREAM_NAME
+            value: '{{inputs.parameters.AWS_KINESIS_STREAM_NAME}}'
+          - name: AWS_LAMBDA_FUNC_NAME
+            value: '{{inputs.parameters.AWS_LAMBDA_FUNC_NAME}}'
+          - name: AWS_LAMBDA_RUNTIME
+            value: '{{inputs.parameters.AWS_LAMBDA_RUNTIME}}'
+          - name: AWS_LAMBDA_ROLE
+            value: '{{inputs.parameters.AWS_LAMBDA_ROLE}}'
+          - name: AWS_LAMBDA_HANDLER
+            value: '{{inputs.parameters.AWS_LAMBDA_HANDLER}}'
+          - name: AWS_LAMBDA_CODE_S3_BUCKET
+            value: '{{inputs.parameters.AWS_LAMBDA_CODE_S3_BUCKET}}'
+          - name: AWS_LAMBDA_CODE_S3_KEY
+            value: '{{inputs.parameters.AWS_LAMBDA_CODE_S3_KEY}}'
+          - name: AWS_LAMBDA_PAYLOAD
+            value: '{{inputs.parameters.AWS_LAMBDA_PAYLOAD}}'
+          - name: MONGODB_DATABASE_NAME
+            value: '{{inputs.parameters.MONGODB_DATABASE_NAME}}'
+          - name: MONGODB_COLLECTION_NAME
+            value: '{{inputs.parameters.MONGODB_COLLECTION_NAME}}'
+          - name: MONGODB_QUERY
+            value: '{{inputs.parameters.MONGODB_QUERY}}'
+          - name: REDIS_DATABASE
+            value: '{{inputs.parameters.REDIS_DATABASE}}'
+          - name: SQL_DATABASE
+            value: '{{inputs.parameters.SQL_DATABASE}}'
+          - name: SQL_TEXT
+            value: '{{inputs.parameters.SQL_TEXT}}'
+          - name: SQL_TABLENAME
+            value: '{{inputs.parameters.SQL_TABLENAME}}'
+          - name: SNOWFLAKE_STATEMENT
+            value: '{{inputs.parameters.SNOWFLAKE_STATEMENT}}'
+          - name: SNOWFLAKE_DATABASE
+            value: '{{inputs.parameters.SNOWFLAKE_DATABASE}}'
+          - name: SNOWFLAKE_TABLE_NAME
+            value: '{{inputs.parameters.SNOWFLAKE_TABLE_NAME}}'
+          - name: SNOWFLAKE_SCHEMA
+            value: '{{inputs.parameters.SNOWFLAKE_SCHEMA}}'
+        resources: {}
+        volumeMounts:
+          - name: gcp-volume
+            mountPath: /root/gcp.json
+            subPath: gcp.json
+        imagePullPolicy: IfNotPresent
+  entrypoint: orca-operators
+  arguments: {}
+  serviceAccountName: argo
+

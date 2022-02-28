@@ -1,0 +1,33 @@
+FROM node:12.13.0-stretch as build
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./ /usr/src/app
+
+COPY package.json /usr/src/app/package.json
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+ENV HTTPS true
+ENV SSL_CRT_FILE /usr/src/app/cert/server.crt
+ENV SSL_KEY_FILE /usr/src/app/cert/private.key
+ENV REACT_APP_API https://service.orcaworkflows.com
+
+RUN npm config set registry https://registry.npmjs.org/
+RUN npm install
+RUN npm run build
+
+
+FROM nginx:stable-alpine
+
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY nginx/nginx_https.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /usr/src/app/cert/server.crt /etc/nginx/conf.d/server.crt
+COPY --from=build /usr/src/app/cert/private.key /etc/nginx/conf.d/private.key
+
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
