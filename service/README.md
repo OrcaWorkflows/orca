@@ -44,11 +44,16 @@ Orca Service repository is source of OrcaWorkflows' backend component implemente
 
 <!-- BUILDING DOCKER IMAGE -->
 ### Building Docker Image
-1. Build Orca Service image.
+1. Configure application properties. Change elastic.apm.server-url with your Elasticsearch host and port for APM packages.
+2. Compile and Install maven
+```sh
+  mvn clean install
+```
+3. Build Orca Service image.
 ```sh
   docker build -t orca/orca-service:latest service/Dockerfile
 ```
-2. Push the image to your Docker Registry.
+4. Push the image to your Docker Registry.
 ```sh
   docker push -t orca/orca-service:latest service/Dockerfile
 ```

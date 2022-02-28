@@ -81,7 +81,7 @@ OrcaWorkflows runs on Kubernetes cluster. There are several repositories that fo
 * **[Orca Charts](https://github.com/OrcaWorkflows/orca/charts)**: Kubernetes charts for deployment.
 
 ### Prerequisites
-
+* Maven
 * Docker
 * Kubernetes cluster
 * Argo workflows
