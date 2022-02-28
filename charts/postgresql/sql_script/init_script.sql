@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 -- Name: argo_workflow; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.argo_workflow (
+CREATE TABLE public.argo_workflow (
     id integer NOT NULL,
     workflow_id integer,
     argo_name character varying NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE test.argo_workflow (
 -- Name: argo_workflow_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.argo_workflow_id_seq
+CREATE SEQUENCE public.argo_workflow_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -49,14 +49,14 @@ CREATE SEQUENCE test.argo_workflow_id_seq
 -- Name: argo_workflow_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.argo_workflow_id_seq OWNED BY test.argo_workflow.id;
+ALTER SEQUENCE public.argo_workflow_id_seq OWNED BY public.argo_workflow.id;
 
 
 --
 -- Name: workflow; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.workflow (
+CREATE TABLE public.workflow (
     id integer NOT NULL,
     property jsonb NOT NULL,
     user_id integer NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE test.workflow (
 -- Name: canvas_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.canvas_id_seq
+CREATE SEQUENCE public.canvas_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -84,14 +84,14 @@ CREATE SEQUENCE test.canvas_id_seq
 -- Name: canvas_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.canvas_id_seq OWNED BY test.workflow.id;
+ALTER SEQUENCE public.canvas_id_seq OWNED BY public.workflow.id;
 
 
 --
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.hibernate_sequence
+CREATE SEQUENCE public.hibernate_sequence
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -103,7 +103,7 @@ CREATE SEQUENCE test.hibernate_sequence
 -- Name: host; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.host (
+CREATE TABLE public.host (
     id integer NOT NULL,
     host character varying,
     system_config_id integer
@@ -114,7 +114,7 @@ CREATE TABLE test.host (
 -- Name: hosts_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.hosts_id_seq
+CREATE SEQUENCE public.hosts_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -127,14 +127,14 @@ CREATE SEQUENCE test.hosts_id_seq
 -- Name: hosts_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.hosts_id_seq OWNED BY test.host.id;
+ALTER SEQUENCE public.hosts_id_seq OWNED BY public.host.id;
 
 
 --
 -- Name: operator; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.operator (
+CREATE TABLE public.operator (
     id integer NOT NULL,
     name character varying NOT NULL,
     category_id integer NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE test.operator (
 -- Name: operator_category; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.operator_category (
+CREATE TABLE public.operator_category (
     id integer NOT NULL,
     category character varying
 );
@@ -156,7 +156,7 @@ CREATE TABLE test.operator_category (
 -- Name: operator_category_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.operator_category_id_seq
+CREATE SEQUENCE public.operator_category_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -169,14 +169,14 @@ CREATE SEQUENCE test.operator_category_id_seq
 -- Name: operator_category_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.operator_category_id_seq OWNED BY test.operator_category.id;
+ALTER SEQUENCE public.operator_category_id_seq OWNED BY public.operator_category.id;
 
 
 --
 -- Name: operator_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.operator_id_seq
+CREATE SEQUENCE public.operator_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -189,14 +189,14 @@ CREATE SEQUENCE test.operator_id_seq
 -- Name: operator_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.operator_id_seq OWNED BY test.operator.id;
+ALTER SEQUENCE public.operator_id_seq OWNED BY public.operator.id;
 
 
 --
 -- Name: required_operator_variables; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.required_operator_variables (
+CREATE TABLE public.required_operator_variables (
     id integer NOT NULL,
     name character varying NOT NULL,
     "default" character varying DEFAULT 'None'::character varying,
@@ -208,14 +208,14 @@ CREATE TABLE test.required_operator_variables (
 -- Name: COLUMN required_operator_variables."default"; Type: COMMENT; Schema: test; Owner: postgres
 --
 
-COMMENT ON COLUMN test.required_operator_variables."default" IS 'None';
+COMMENT ON COLUMN public.required_operator_variables."default" IS 'None';
 
 
 --
 -- Name: required_operator_variables_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.required_operator_variables_id_seq
+CREATE SEQUENCE public.required_operator_variables_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -228,14 +228,14 @@ CREATE SEQUENCE test.required_operator_variables_id_seq
 -- Name: required_operator_variables_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.required_operator_variables_id_seq OWNED BY test.required_operator_variables.id;
+ALTER SEQUENCE public.required_operator_variables_id_seq OWNED BY public.required_operator_variables.id;
 
 
 --
 -- Name: schedule; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.schedule (
+CREATE TABLE public.schedule (
     id integer NOT NULL,
     workflow_id integer,
     cron_expression character varying NOT NULL,
@@ -252,7 +252,7 @@ CREATE TABLE test.schedule (
 -- Name: schedule_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.schedule_id_seq
+CREATE SEQUENCE public.schedule_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -265,14 +265,14 @@ CREATE SEQUENCE test.schedule_id_seq
 -- Name: schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.schedule_id_seq OWNED BY test.schedule.id;
+ALTER SEQUENCE public.schedule_id_seq OWNED BY public.schedule.id;
 
 
 --
 -- Name: system_config; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test.system_config (
+CREATE TABLE public.system_config (
     id integer NOT NULL,
     name character varying NOT NULL,
     username character varying,
@@ -289,7 +289,7 @@ CREATE TABLE test.system_config (
 -- Name: system_config_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.system_config_id_seq
+CREATE SEQUENCE public.system_config_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -302,14 +302,14 @@ CREATE SEQUENCE test.system_config_id_seq
 -- Name: system_config_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.system_config_id_seq OWNED BY test.system_config.id;
+ALTER SEQUENCE public.system_config_id_seq OWNED BY public.system_config.id;
 
 
 --
 -- Name: user; Type: TABLE; Schema: test; Owner: postgres
 --
 
-CREATE TABLE test."user" (
+CREATE TABLE public."user" (
     id integer NOT NULL,
     email character varying NOT NULL,
     username character varying NOT NULL,
@@ -324,7 +324,7 @@ CREATE TABLE test."user" (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: test; Owner: postgres
 --
 
-CREATE SEQUENCE test.users_id_seq
+CREATE SEQUENCE public.users_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -333,83 +333,83 @@ CREATE SEQUENCE test.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE test.users_id_seq OWNER TO postgres;
+ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgres
 --
 
-ALTER SEQUENCE test.users_id_seq OWNED BY test."user".id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public."user".id;
 
 
 --
 -- Name: argo_workflow id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.argo_workflow ALTER COLUMN id SET DEFAULT nextval('test.argo_workflow_id_seq'::regclass);
+ALTER TABLE ONLY public.argo_workflow ALTER COLUMN id SET DEFAULT nextval('public.argo_workflow_id_seq'::regclass);
 
 
 --
 -- Name: host id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.host ALTER COLUMN id SET DEFAULT nextval('test.hosts_id_seq'::regclass);
+ALTER TABLE ONLY public.host ALTER COLUMN id SET DEFAULT nextval('public.hosts_id_seq'::regclass);
 
 
 --
 -- Name: operator id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.operator ALTER COLUMN id SET DEFAULT nextval('test.operator_id_seq'::regclass);
+ALTER TABLE ONLY public.operator ALTER COLUMN id SET DEFAULT nextval('public.operator_id_seq'::regclass);
 
 
 --
 -- Name: operator_category id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.operator_category ALTER COLUMN id SET DEFAULT nextval('test.operator_category_id_seq'::regclass);
+ALTER TABLE ONLY public.operator_category ALTER COLUMN id SET DEFAULT nextval('public.operator_category_id_seq'::regclass);
 
 
 --
 -- Name: required_operator_variables id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.required_operator_variables ALTER COLUMN id SET DEFAULT nextval('test.required_operator_variables_id_seq'::regclass);
+ALTER TABLE ONLY public.required_operator_variables ALTER COLUMN id SET DEFAULT nextval('public.required_operator_variables_id_seq'::regclass);
 
 
 --
 -- Name: schedule id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.schedule ALTER COLUMN id SET DEFAULT nextval('test.schedule_id_seq'::regclass);
+ALTER TABLE ONLY public.schedule ALTER COLUMN id SET DEFAULT nextval('public.schedule_id_seq'::regclass);
 
 
 --
 -- Name: system_config id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.system_config ALTER COLUMN id SET DEFAULT nextval('test.system_config_id_seq'::regclass);
+ALTER TABLE ONLY public.system_config ALTER COLUMN id SET DEFAULT nextval('public.system_config_id_seq'::regclass);
 
 
 --
 -- Name: user id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test."user" ALTER COLUMN id SET DEFAULT nextval('test.users_id_seq'::regclass);
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
 -- Name: workflow id; Type: DEFAULT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.workflow ALTER COLUMN id SET DEFAULT nextval('test.canvas_id_seq'::regclass);
+ALTER TABLE ONLY public.workflow ALTER COLUMN id SET DEFAULT nextval('public.canvas_id_seq'::regclass);
 
 
 --
 -- Data for Name: operator; Type: TABLE DATA; Schema: test; Owner: postgres
 --
 
-INSERT INTO test.operator (id, name, category_id, label)
+INSERT INTO public.operator (id, name, category_id, label)
 VALUES (10,	'dataflow',	2,	'Dataflow'),
 (11,	'spark',	3,	'Spark'),
 (5,	'emr',	1,	'EMR'),
@@ -438,7 +438,7 @@ VALUES (10,	'dataflow',	2,	'Dataflow'),
 -- Data for Name: operator_category; Type: TABLE DATA; Schema: test; Owner: postgres
 --
 
-INSERT INTO test.operator_category (id, category)
+INSERT INTO public.operator_category (id, category)
 VALUES (1,	'AWS'),
 (2,	'GCP'),
 (3,	'ApacheStack'),
@@ -453,7 +453,7 @@ VALUES (1,	'AWS'),
 -- Data for Name: required_operator_variables; Type: TABLE DATA; Schema: test; Owner: postgres
 --
 
-INSERT INTO test.required_operator_variables (id, name, "default", operator_id)
+INSERT INTO public.required_operator_variables (id, name, "default", operator_id)
 VALUES (7,	'ELASTICSEARCH_INDEX',	NULL,	14),
 (5,	'KAFKA_TOPIC',	NULL,	12),
 (2,	'AWS_S3_FILE_PATH',	NULL,	1),
@@ -511,77 +511,77 @@ VALUES (7,	'ELASTICSEARCH_INDEX',	NULL,	14),
 -- Name: argo_workflow_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.argo_workflow_id_seq', 1, true);
+SELECT pg_catalog.setval('public.argo_workflow_id_seq', 1, true);
 
 
 --
 -- Name: canvas_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.canvas_id_seq', 1, true);
+SELECT pg_catalog.setval('public.canvas_id_seq', 1, true);
 
 
 --
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.hibernate_sequence', 1, true);
+SELECT pg_catalog.setval('public.hibernate_sequence', 1, true);
 
 
 --
 -- Name: hosts_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.hosts_id_seq', 1, true);
+SELECT pg_catalog.setval('public.hosts_id_seq', 1, true);
 
 
 --
 -- Name: operator_category_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.operator_category_id_seq', 9, true);
+SELECT pg_catalog.setval('public.operator_category_id_seq', 9, true);
 
 
 --
 -- Name: operator_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.operator_id_seq', 23, true);
+SELECT pg_catalog.setval('public.operator_id_seq', 23, true);
 
 
 --
 -- Name: required_operator_variables_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.required_operator_variables_id_seq', 52, true);
+SELECT pg_catalog.setval('public.required_operator_variables_id_seq', 52, true);
 
 
 --
 -- Name: schedule_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.schedule_id_seq', 1, true);
+SELECT pg_catalog.setval('public.schedule_id_seq', 1, true);
 
 
 --
 -- Name: system_config_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.system_config_id_seq', 1, true);
+SELECT pg_catalog.setval('public.system_config_id_seq', 1, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: test; Owner: postgres
 --
 
-SELECT pg_catalog.setval('test.users_id_seq', 2, true);
+SELECT pg_catalog.setval('public.users_id_seq', 2, true);
 
 
 --
 -- Name: argo_workflow argo_workflow_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.argo_workflow
+ALTER TABLE ONLY public.argo_workflow
     ADD CONSTRAINT argo_workflow_pk PRIMARY KEY (id);
 
 
@@ -589,7 +589,7 @@ ALTER TABLE ONLY test.argo_workflow
 -- Name: workflow canvas_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.workflow
+ALTER TABLE ONLY public.workflow
     ADD CONSTRAINT canvas_pk PRIMARY KEY (id);
 
 
@@ -597,7 +597,7 @@ ALTER TABLE ONLY test.workflow
 -- Name: host hosts_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.host
+ALTER TABLE ONLY public.host
     ADD CONSTRAINT hosts_pk PRIMARY KEY (id);
 
 
@@ -605,7 +605,7 @@ ALTER TABLE ONLY test.host
 -- Name: operator_category operator_category_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.operator_category
+ALTER TABLE ONLY public.operator_category
     ADD CONSTRAINT operator_category_pk PRIMARY KEY (id);
 
 
@@ -613,7 +613,7 @@ ALTER TABLE ONLY test.operator_category
 -- Name: operator operator_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.operator
+ALTER TABLE ONLY public.operator
     ADD CONSTRAINT operator_pk PRIMARY KEY (id);
 
 
@@ -621,7 +621,7 @@ ALTER TABLE ONLY test.operator
 -- Name: required_operator_variables required_operator_variables_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.required_operator_variables
+ALTER TABLE ONLY public.required_operator_variables
     ADD CONSTRAINT required_operator_variables_pk PRIMARY KEY (id);
 
 
@@ -629,7 +629,7 @@ ALTER TABLE ONLY test.required_operator_variables
 -- Name: schedule schedule_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.schedule
+ALTER TABLE ONLY public.schedule
     ADD CONSTRAINT schedule_pk PRIMARY KEY (id);
 
 
@@ -637,7 +637,7 @@ ALTER TABLE ONLY test.schedule
 -- Name: system_config system_config_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.system_config
+ALTER TABLE ONLY public.system_config
     ADD CONSTRAINT system_config_pk PRIMARY KEY (id);
 
 
@@ -645,7 +645,7 @@ ALTER TABLE ONLY test.system_config
 -- Name: user users_pk; Type: CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test."user"
+ALTER TABLE ONLY public."user"
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
 
 
@@ -653,78 +653,78 @@ ALTER TABLE ONLY test."user"
 -- Name: user_email_uindex; Type: INDEX; Schema: test; Owner: postgres
 --
 
-CREATE UNIQUE INDEX user_email_uindex ON test."user" USING btree (email);
+CREATE UNIQUE INDEX user_email_uindex ON public."user" USING btree (email);
 
 
 --
 -- Name: user_username_uindex; Type: INDEX; Schema: test; Owner: postgres
 --
 
-CREATE UNIQUE INDEX user_username_uindex ON test."user" USING btree (username);
+CREATE UNIQUE INDEX user_username_uindex ON public."user" USING btree (username);
 
 
 --
 -- Name: argo_workflow argo_workflow_workflow_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.argo_workflow
-    ADD CONSTRAINT argo_workflow_workflow_id_fk FOREIGN KEY (workflow_id) REFERENCES test.workflow(id);
+ALTER TABLE ONLY public.argo_workflow
+    ADD CONSTRAINT argo_workflow_workflow_id_fk FOREIGN KEY (workflow_id) REFERENCES public.workflow(id);
 
 
 --
 -- Name: workflow canvas_user_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.workflow
-    ADD CONSTRAINT canvas_user_id_fk FOREIGN KEY (user_id) REFERENCES test."user"(id);
+ALTER TABLE ONLY public.workflow
+    ADD CONSTRAINT canvas_user_id_fk FOREIGN KEY (user_id) REFERENCES public."user"(id);
 
 
 --
 -- Name: host hosts_system_config_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.host
-    ADD CONSTRAINT hosts_system_config_id_fk FOREIGN KEY (system_config_id) REFERENCES test.system_config(id);
+ALTER TABLE ONLY public.host
+    ADD CONSTRAINT hosts_system_config_id_fk FOREIGN KEY (system_config_id) REFERENCES public.system_config(id);
 
 
 --
 -- Name: operator operator_operator_category_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.operator
-    ADD CONSTRAINT operator_operator_category_id_fk FOREIGN KEY (category_id) REFERENCES test.operator_category(id);
+ALTER TABLE ONLY public.operator
+    ADD CONSTRAINT operator_operator_category_id_fk FOREIGN KEY (category_id) REFERENCES public.operator_category(id);
 
 
 --
 -- Name: required_operator_variables required_operator_variables_operator_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.required_operator_variables
-    ADD CONSTRAINT required_operator_variables_operator_id_fk FOREIGN KEY (operator_id) REFERENCES test.operator(id);
+ALTER TABLE ONLY public.required_operator_variables
+    ADD CONSTRAINT required_operator_variables_operator_id_fk FOREIGN KEY (operator_id) REFERENCES public.operator(id);
 
 
 --
 -- Name: schedule schedule_workflow_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.schedule
-    ADD CONSTRAINT schedule_workflow_id_fk FOREIGN KEY (workflow_id) REFERENCES test.workflow(id);
+ALTER TABLE ONLY public.schedule
+    ADD CONSTRAINT schedule_workflow_id_fk FOREIGN KEY (workflow_id) REFERENCES public.workflow(id);
 
 
 --
 -- Name: system_config system_config_operator_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.system_config
-    ADD CONSTRAINT system_config_operator_id_fk FOREIGN KEY (operator_id) REFERENCES test.operator(id);
+ALTER TABLE ONLY public.system_config
+    ADD CONSTRAINT system_config_operator_id_fk FOREIGN KEY (operator_id) REFERENCES public.operator(id);
 
 
 --
 -- Name: system_config system_config_user_id_fk; Type: FK CONSTRAINT; Schema: test; Owner: postgres
 --
 
-ALTER TABLE ONLY test.system_config
-    ADD CONSTRAINT system_config_user_id_fk FOREIGN KEY (user_id) REFERENCES test."user"(id);
+ALTER TABLE ONLY public.system_config
+    ADD CONSTRAINT system_config_user_id_fk FOREIGN KEY (user_id) REFERENCES public."user"(id);
 
 
 --

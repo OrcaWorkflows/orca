@@ -76,9 +76,9 @@ Orca Workflows is no-code data orchestration platform which allows users to buil
 OrcaWorkflows runs on Kubernetes cluster. There are several repositories that forms Orca Workflows as a system.
 
 * **[Orca](https://github.com/OrcaWorkflows/orca)**: User interface of the system.
-* **[Orca Service](https://github.com/OrcaWorkflows/orca-service)**: Backend service based on Spring Boot framework.
-* **[Orca Operators](https://github.com/OrcaWorkflows/orca-operators)**: Modules responsible for data operations invoked by Argo.
-* **[Orca Charts](https://github.com/OrcaWorkflows/charts)**: Kubernetes charts for deployment.
+* **[Orca Service](https://github.com/OrcaWorkflows/orca/service)**: Backend service based on Spring Boot framework.
+* **[Orca Operators](https://github.com/OrcaWorkflows/orca/operators)**: Modules responsible for data operations invoked by Argo.
+* **[Orca Charts](https://github.com/OrcaWorkflows/orca/charts)**: Kubernetes charts for deployment.
 
 ### Prerequisites
 

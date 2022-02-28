@@ -1,5 +1,5 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Workflow
+kind: WorkflowTemplate
 metadata:
   name: orca-operators
   namespace: argo
@@ -59,7 +59,7 @@ spec:
         image: orca/orca-operators
         env:
           - name: ORCA_SERVICE
-            value: 'http://192.168.1.199:30301'
+            value: 'http://SERVICE_HOST_IP:SERVICE_NODE_PORT'
           - name: OPERATOR_SOURCE
             value: '{{inputs.parameters.OPERATOR_SOURCE}}'
           - name: OPERATOR_TARGET

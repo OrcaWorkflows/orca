@@ -62,12 +62,37 @@ several deployment/configuration files and scripts.
 
 #### Deploy PostgreSQL
 
-1. Change directory to PostgreSQL file directory.
+This section does not cover how to deploy a PostgreSQL on Kubernetes.
+
+Just make sure, you apply sql script lying under charts/postgresql/sql_scripts
+
+#### Deploy Orca Service
+1. Configure 10orca-service-deployment.yaml and 20orca-service-svc.yaml according to your cluster configurations.
+2. Create deployment of Orca Service.
 ```sh
-  cd charts/postgresql/
+  kubectl -n argo apply -f 10orca-service-deployment.yaml
 ```
-2. Create config map
+3. Create service of Orca Service.
 ```sh
-  kubectl apply -f 10orca-psql-config-map.yaml
+  kubectl -n argo apply -f 20orca-service-svc.yaml
 ```
 
+#### Deploy Orca
+1. Configure 10orca-svc.yaml and 20orca-deployment.yaml according to your cluster configurations.
+2. Create service of Orca Frontend.
+```sh
+  kubectl -n argo apply -f 10orca-svc.yaml
+```
+3. Create deployment of Orca Service.
+```sh
+  kubectl -n argo apply -f 20orca-deployment.yaml
+```
+
+#### Configure Argo Workflows for Orca Operator template.
+1. Please configure ORCA_SERVICE environment variable in orca-operators.yaml.
+2. Create Argo Workflows template simply by
+```sh
+  kubectl -n argo apply -f orca-operators.yaml
+```
+
+Keep in mind that the default service account name of Argo Workflows is argo.

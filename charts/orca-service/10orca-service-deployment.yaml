@@ -22,8 +22,8 @@ spec:
           - name: POSTGRES_HOST
             value: "orca-postgres:5432"
           - name: POSTGRES_USERNAME
-            value: "postgres"
+            value: "postgres_usernae"
           - name: POSTGRES_PASS
-            value: "orca"
+            value: "PASSWORD"
           - name: ARGO_URL
             value: "http://argo-server:2746"
