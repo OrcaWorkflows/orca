@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "elastic.apm",
+      "type": "com.orca.service.general.config.ElasticApmConfig",
+      "sourceType": "com.orca.service.general.config.ElasticApmConfig"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

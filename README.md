@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://orcaworkflows.com">
-    <img src="public/logo_simple.png" alt="Logo" width="80" height="80">
+    <img src="orca/public/logo_simple.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Orca Workflows</h3>
@@ -16,15 +16,16 @@
     <br />
     <br />
     <a>
-    This repository is UI of the Orca Workflows. Please refer to below for 
-    other components.
+    This repository consists of all of Orca Workflows' components. Please refer to below
     </a>
     <br />
-    <a href="https://github.com/OrcaWorkflows/orca-service">Orca Service</a>
+    <a href="https://github.com/OrcaWorkflows/orca/orca">Orca</a>
     |
-    <a href="https://github.com/OrcaWorkflows/orca-operators">Orca Operators</a>
+    <a href="https://github.com/OrcaWorkflows/orca/service">Orca Service</a>
     |
-    <a href="https://www.orcaworkflows.com/#about">Orca Operators</a>
+    <a href="https://github.com/OrcaWorkflows/orca/operators">Orca Operators</a>
+    |
+    <a href="https://github.com/OrcaWorkflows/orca/charts">Orca Charts</a>
     <br />
     <br />
     <a href="https://www.orcaworkflows.com/#about">View Demo</a>
@@ -64,15 +65,20 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <p align="center">
-    <img src="public/demo.gif"/>
+    <img src="orca/public/demo.gif"/>
 </p>
 
-Orca Workflows is no-code data orchestration platform which allows users to data workflows with no learning curve.
+Orca Workflows is no-code data orchestration platform which allows users to build data workflows with no learning curve.
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-OrcaWorkflows runs on Kubernetes cluster powered with Argo. 
+OrcaWorkflows runs on Kubernetes cluster. There are several repositories that forms Orca Workflows as a system.
+
+* **[Orca](https://github.com/OrcaWorkflows/orca)**: User interface of the system.
+* **[Orca Service](https://github.com/OrcaWorkflows/orca-service)**: Backend service based on Spring Boot framework.
+* **[Orca Operators](https://github.com/OrcaWorkflows/orca-operators)**: Modules responsible for data operations invoked by Argo.
+* **[Orca Charts](https://github.com/OrcaWorkflows/charts)**: Kubernetes charts for deployment.
 
 ### Prerequisites
 
@@ -81,32 +87,19 @@ OrcaWorkflows runs on Kubernetes cluster powered with Argo.
 * Argo workflows
 
 ### Installation
-
-1. 
-2. Clone the charts repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
+1. Clone the repo
+      ```sh
+      git clone https://github.com/OrcaWorkflows/orca
+      ```
+2. Build&deploy docker images of operators, orca and service. Please refer to build&deploy instructions in their respective locations.
+3. Clone charts. To install all configurations and applications into Kubernetes cluster, please refer to the instructions in charts.
+4. Login to the system with admin credentials through [YOUR_K8S_HOST_IP:SERVICE_PORT(default=30300)].
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 _Check out demo and blogs. [Orca Workflows Demo](https://www.orcaworkflows.com/#about)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
@@ -115,6 +108,7 @@ _Check out demo and blogs. [Orca Workflows Demo](https://www.orcaworkflows.com/#
 - [x] Add Scheduling feature
     - [x] Backend
     - [ ] Frontend
+- [ ] Full GCP integration
 - [ ] UX Enhancements
 - [ ] Add data preview feature
     - [ ] A dynamic interface
@@ -124,10 +118,7 @@ _Check out demo and blogs. [Orca Workflows Demo](https://www.orcaworkflows.com/#
 
 See the [open issues](https://github.com/OrcaWorkflows/orca/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
+Note: GCP is not fully functional unless you specify your own GCP configuration via volume mounts.
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -142,17 +133,11 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch
 5. Open a Pull Request
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
@@ -164,4 +149,4 @@ Burak Altas - [@BurakkAltas](https://twitter.com/BurakkAltas) - burak.altas@gmai
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: public/demo.gif
+[product-screenshot]: orca/public/demo.gif

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orca-svc
+  labels:
+    app: orca
+spec:
+  selector:
+    app: orca
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+    nodePort: 30300
+  type: NodePort
+
