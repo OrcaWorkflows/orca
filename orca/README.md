@@ -16,7 +16,7 @@
     <br />
     <br />
     <a>
-    This is OrcaWorkflows' operators repository. Please refer to below for
+    This is OrcaWorkflows' frontend repository. Please refer to below for
     other components.
     </a>
     <br />
@@ -24,7 +24,7 @@
     |
     <a href="https://github.com/OrcaWorkflows/orca/charts">Orca Charts</a>
     |
-    <a href="https://github.com/OrcaWorkflows/orca/orca">Orca</a>
+    <a href="https://github.com/OrcaWorkflows/orca/operators">Orca Operators</a>
     <br />
     <br />
     <a href="https://www.orcaworkflows.com/#about">View Demo</a>
