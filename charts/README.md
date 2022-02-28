@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://orcaworkflows.com">
-    <img src="orca/public/logo_simple.png" alt="Logo" width="80" height="80">
+    <img src="../orca/public/logo_simple.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Orca Workflows</h3>
